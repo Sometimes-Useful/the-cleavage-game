@@ -1,0 +1,23 @@
+import { MessageForPlayer } from '../../../domain/entities/MessageForPlayer';
+import { ChatGateway, ChatStatus } from '../../../domain/ports/ChatGateway';
+
+export class FakeChatGateway implements ChatGateway {
+    isConnected(): Promise<boolean> {
+        return Promise.resolve(this.status === ChatStatus.CONNECTED)
+    }
+    sendMessageToPlayer(messageForPlayer: MessageForPlayer): Promise<void> {
+        this.messagesForPlayer.push(messageForPlayer)
+        return Promise.resolve()
+    }
+    disconnect(): Promise<void> {
+        this.status = ChatStatus.DISCONNECTED
+        return Promise.resolve()
+    }
+    connect(): Promise<void> {
+        this.status = ChatStatus.CONNECTED;
+        return Promise.resolve();
+    }
+    messagesForPlayer: MessageForPlayer[]=[]
+    public status: ChatStatus = ChatStatus.DISCONNECTED
+}
+

@@ -1,0 +1,36 @@
+{
+  "name": "the-cleavage-game",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha 'src/**/*.spec.ts'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bbohec/the-cleavage-game.git"
+  },
+  "author": "",
+  "license": "AGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/bbohec/the-cleavage-game/issues"
+  },
+  "mocha": {
+    "reporter": "spec",
+    "full-trace": true,
+    "require": [
+      "ts-node/register",
+      "source-map-support/register"
+    ]
+  },
+  "homepage": "https://github.com/bbohec/the-cleavage-game#readme",
+  "devDependencies": {
+    "@types/chai": "^4.3.0",
+    "@types/mocha": "^9.0.0",
+    "chai": "^4.3.4",
+    "mocha": "^9.1.3",
+    "source-map-support": "^0.5.21",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
+  }
+}
