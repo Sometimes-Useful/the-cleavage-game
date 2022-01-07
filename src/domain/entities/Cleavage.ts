@@ -1,11 +1,10 @@
-import { PlayerCleave } from "./PlayerCleave";
+import { PlayerCleave } from './PlayerCleave'
 
 export class Cleavage {
-    constructor(
+    constructor (
         public title: string,
         public cleaveLeft: number = 0,
         public cleaveRight: number = 0,
-        public cleaves: Map<string,PlayerCleave> = new Map()
+        public cleaves: Map<string, PlayerCleave> = new Map()
     ) { }
-    
 }

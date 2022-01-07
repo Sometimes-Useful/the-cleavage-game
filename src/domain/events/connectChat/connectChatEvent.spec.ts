@@ -1,13 +1,12 @@
 import { ConnectChatEvent } from './ConnectChatEvent'
-import { ChatStatus } from '../../ports/ChatGateway'
+import { ChatStatus } from '../../entities/ChatStatus'
 import { alreadyConnectedToChatNotification } from '../../entities/notification/notifications'
 import { Gherkin } from '../../tests/Gherkin'
 import { theChatGatewayHasExpectedStatus, whenEventOccurs, theNotificationGatewayHasNotifications } from '../../tests/unitTests'
 import { feature, scenario } from '../../tests/testSuites'
 
-
-feature(new ConnectChatEvent(),[
-    scenario("Scenario 1 : Connect Chat on chat DISCONNECTED", [
+feature(new ConnectChatEvent(), [
+    scenario('Scenario 1 : Connect Chat on chat DISCONNECTED', [
         application => theChatGatewayHasExpectedStatus(Gherkin.GIVEN, application.gateways.chat, ChatStatus.DISCONNECTED),
         application => whenEventOccurs(application.gateways.event, new ConnectChatEvent()),
         application => theChatGatewayHasExpectedStatus(Gherkin.THEN, application.gateways.chat, ChatStatus.CONNECTED)
@@ -19,6 +18,3 @@ feature(new ConnectChatEvent(),[
         application => theNotificationGatewayHasNotifications(Gherkin.AND_THEN, application.gateways.notification, alreadyConnectedToChatNotification)
     ])
 ])
-
-
-

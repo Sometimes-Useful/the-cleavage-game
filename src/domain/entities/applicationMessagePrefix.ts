@@ -1,1 +1,1 @@
-export const applicationMessagePrefix = "!";
+export const applicationMessagePrefix = '!'

@@ -1,4 +1,4 @@
-import { Cleavage } from "../entities/Cleavage";
+import { Cleavage } from '../entities/Cleavage'
 
 export interface CleavageRepository {
     load():Promise<Cleavage>;

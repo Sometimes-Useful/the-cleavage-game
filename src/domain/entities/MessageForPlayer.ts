@@ -1,3 +1,3 @@
 export class MessageForPlayer {
-    constructor(public player: string, public message: string) { }
+    constructor (public player: string, public message: string) { }
 }

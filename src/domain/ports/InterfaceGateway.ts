@@ -1,4 +1,4 @@
-import { InterfaceView } from "../entities/InterfaceView";
+import { InterfaceView } from '../entities/InterfaceView'
 
 export interface InterfaceGateway {
     updateCleavageTitle(cleavageTitle: string): Promise<void>;

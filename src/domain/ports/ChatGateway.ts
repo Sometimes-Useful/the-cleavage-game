@@ -1,4 +1,4 @@
-import { MessageForPlayer } from "../entities/MessageForPlayer";
+import { MessageForPlayer } from '../entities/MessageForPlayer'
 
 export interface ChatGateway {
     sendMessageToPlayer(messageForPlayer: MessageForPlayer): Promise<void>;
@@ -6,9 +6,4 @@ export interface ChatGateway {
     isConnected(): Promise<boolean>;
     connect(): Promise<void>;
 
-}
-
-export enum ChatStatus {
-    DISCONNECTED = "DISCONNECTED",
-    CONNECTED = "CONNECTED"
 }

@@ -1,0 +1,30 @@
+module.exports = {
+    env: {
+        browser: true,
+        es2021: true
+    },
+    extends: [
+        'standard'
+    ],
+    parser: '@typescript-eslint/parser',
+    parserOptions: {
+        ecmaVersion: 12,
+        sourceType: 'module'
+    },
+    plugins: [
+        '@typescript-eslint'
+    ],
+    rules: {
+        'no-useless-constructor': 'off',
+        curly: ['error', 'multi', 'consistent'],
+        indent: ['error', 4]
+    },
+    overrides: [
+        {
+            files: ['*.spec.ts'],
+            rules: {
+                'no-unused-expressions': 'off'
+            }
+        }
+    ]
+}

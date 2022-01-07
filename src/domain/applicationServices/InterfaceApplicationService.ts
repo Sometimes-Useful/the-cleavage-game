@@ -1,14 +1,13 @@
-import { InterfaceView } from "../entities/InterfaceView";
-import { InterfaceGateway } from "../ports/InterfaceGateway";
+import { InterfaceView } from '../entities/InterfaceView'
+import { InterfaceGateway } from '../ports/InterfaceGateway'
 
 export class InterfaceApplicationService {
-    
-    constructor(private interfaceGateway:InterfaceGateway){}
-    updateCleavageTitle(cleavageTitle: string):Promise<void> {
+    constructor (private interfaceGateway:InterfaceGateway) {}
+    updateCleavageTitle (cleavageTitle: string):Promise<void> {
         return this.interfaceGateway.updateCleavageTitle(cleavageTitle)
     }
-    changeView(interfaceView: InterfaceView): Promise<void> {
+
+    changeView (interfaceView: InterfaceView): Promise<void> {
         return this.interfaceGateway.changeView(interfaceView)
     }
-
 }
