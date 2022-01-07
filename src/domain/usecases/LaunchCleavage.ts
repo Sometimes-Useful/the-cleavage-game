@@ -1,9 +1,9 @@
 import { UseCase } from './UseCase'
-import { InterfaceApplicationService } from '../applicationServices/InterfaceApplicationService'
+import type { InterfaceApplicationService } from '../applicationServices/InterfaceApplicationService'
 import { InterfaceView } from '../entities/InterfaceView'
-import { ChatApplicationService } from '../applicationServices/ChatApplicationService'
-import { LaunchCleavageEvent } from '../events/launchCleavage/LaunchCleavageEvent'
-import { CleavageApplicationService } from '../applicationServices/CleavageService'
+import type { ChatApplicationService } from '../applicationServices/ChatApplicationService'
+import type { LaunchCleavageEvent } from '../events/launchCleavage/LaunchCleavageEvent'
+import type { CleavageApplicationService } from '../applicationServices/CleavageService'
 import { Cleavage } from '../entities/Cleavage'
 
 export class LaunchCleavage extends UseCase {
@@ -23,7 +23,7 @@ export class LaunchCleavage extends UseCase {
     private onConnected (event:LaunchCleavageEvent): Promise<void> {
         const cleavage = new Cleavage(event.cleavageTitle)
         return this.cleavageApplicationService.saveCleavage(cleavage)
-            .then(() => this.interfaceApplicationService.updateCleavageTitle(cleavage.title))
+            .then(() => this.interfaceApplicationService.updateCleavageTitle(cleavage))
             .then(() => this.interfaceApplicationService.changeView(InterfaceView.CURRENT_CLEAVAGE))
             .catch(error => Promise.reject(error))
     }

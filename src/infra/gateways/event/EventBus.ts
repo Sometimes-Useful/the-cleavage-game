@@ -1,6 +1,6 @@
-import { ApplicationEvent } from '../../../domain/events/GameEvent'
-import { ApplicationServices } from '../../../domain/ports/ApplicationServices'
-import { EventBusContract } from '../../../domain/ports/EventBusContract'
+import type { ApplicationEvent } from '../../../domain/events/GameEvent'
+import type { ApplicationServices } from '../../../domain/ports/ApplicationServices'
+import type { EventBusContract } from '../../../domain/ports/EventBusContract'
 import { PrimaryController } from '../../../domain/usecases/PrimaryController'
 
 export abstract class EventBus implements EventBusContract {

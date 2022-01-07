@@ -1,12 +1,16 @@
-import { InterfaceView } from '../../../domain/entities/InterfaceView'
-import { InterfaceGateway } from '../../../domain/ports/InterfaceGateway'
-
+import type { Cleavage } from '../../../domain/entities/Cleavage'
+import type { InterfaceView } from '../../../domain/entities/InterfaceView'
+import type { InterfaceGateway } from '../../../domain/ports/InterfaceGateway'
+import { cleavageStore, interfaceViewStore } from '../../../ui/stores/stores'
 export class SvelteInterfaceGateway implements InterfaceGateway {
-    updateCleavageTitle (cleavageTitle: string): Promise<void> {
-        throw new Error('Method not implemented.')
+    updateCleavage (cleavage: Cleavage): Promise<void> {
+        console.log('update cleavage with', cleavage)
+        cleavageStore.set(cleavage)
+        return Promise.resolve()
     }
 
     changeView (interfaceView: InterfaceView): Promise<void> {
-        throw new Error('Method not implemented.')
+        interfaceViewStore.set(interfaceView)
+        return Promise.resolve()
     }
 }

@@ -1,5 +1,5 @@
-import { Cleavage } from '../../../domain/entities/Cleavage'
-import { CleavageRepository } from '../../../domain/ports/CleavageRepository'
+import type { Cleavage } from '../../../domain/entities/Cleavage'
+import type { CleavageRepository } from '../../../domain/ports/CleavageRepository'
 
 export class InMemoryCleavageRepository implements CleavageRepository {
     load (): Promise<Cleavage> {
@@ -9,7 +9,6 @@ export class InMemoryCleavageRepository implements CleavageRepository {
     }
 
     save (cleavage: Cleavage): Promise<void> {
-        console.log('Cleavage saved.')
         this.cleavage = cleavage
         return Promise.resolve()
     }

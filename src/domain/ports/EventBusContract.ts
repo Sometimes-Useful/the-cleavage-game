@@ -1,5 +1,5 @@
-import { ApplicationEvent } from '../events/GameEvent'
-import { ApplicationServices } from './ApplicationServices'
+import type { ApplicationEvent } from '../events/GameEvent'
+import type { ApplicationServices } from './ApplicationServices'
 
 export interface EventBusContract {
     onEvent(event: ApplicationEvent): Promise<void>;

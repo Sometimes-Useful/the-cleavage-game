@@ -1,6 +1,6 @@
 import { UseCase } from './UseCase'
-import { CleavageApplicationService } from '../applicationServices/CleavageService'
-import { PlayerCleaveEvent } from '../events/playerCleave/PlayerCleaveEvent'
+import type { CleavageApplicationService } from '../applicationServices/CleavageService'
+import type { PlayerCleaveEvent } from '../events/playerCleave/PlayerCleaveEvent'
 
 export class PlayerCleaveUseCase extends UseCase {
     constructor (private cleavageApplicationService: CleavageApplicationService) { super() }

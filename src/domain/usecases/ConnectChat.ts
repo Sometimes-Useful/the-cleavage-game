@@ -1,6 +1,6 @@
-import { ApplicationEvent } from '../events/GameEvent'
+import type { ApplicationEvent } from '../events/GameEvent'
+import type { ChatApplicationService } from '../applicationServices/ChatApplicationService'
 import { UseCase } from './UseCase'
-import { ChatApplicationService } from '../applicationServices/ChatApplicationService'
 
 export class ConnectChat extends UseCase {
     constructor (private chatApplicationService: ChatApplicationService) {

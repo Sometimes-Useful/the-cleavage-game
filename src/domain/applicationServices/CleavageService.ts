@@ -1,9 +1,9 @@
-import { Cleavage } from '../entities/Cleavage'
+import type { Cleavage } from '../entities/Cleavage'
 import { MessageForPlayer } from '../entities/MessageForPlayer'
 import { PlayerCleave } from '../entities/PlayerCleave'
-import { PlayerCleaveEvent } from '../events/playerCleave/PlayerCleaveEvent'
-import { ChatGateway } from '../ports/ChatGateway'
-import { CleavageRepository } from '../ports/CleavageRepository'
+import type{ PlayerCleaveEvent } from '../events/playerCleave/PlayerCleaveEvent'
+import type{ ChatGateway } from '../ports/ChatGateway'
+import type{ CleavageRepository } from '../ports/CleavageRepository'
 
 export class CleavageApplicationService {
     constructor (private cleavageRepository: CleavageRepository, private chatGateway:ChatGateway) { }

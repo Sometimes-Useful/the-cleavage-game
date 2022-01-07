@@ -1,9 +1,10 @@
+import type { Cleavage } from '../../../domain/entities/Cleavage'
 import { InterfaceView } from '../../../domain/entities/InterfaceView'
-import { InterfaceGateway } from '../../../domain/ports/InterfaceGateway'
+import type { InterfaceGateway } from '../../../domain/ports/InterfaceGateway'
 
 export class FakeInterfaceGateway implements InterfaceGateway {
-    updateCleavageTitle (cleavageTitle: string): Promise<void> {
-        this.currentCleavageTitle = cleavageTitle
+    updateCleavage (cleavage: Cleavage): Promise<void> {
+        this.currentCleavageTitle = cleavage.title
         return Promise.resolve()
     }
 

@@ -1,12 +1,12 @@
+import type { UseCase } from './UseCase'
+import type { ApplicationEvent } from '../events/GameEvent'
+import type { ApplicationServices } from '../ports/ApplicationServices'
 import { ConnectChat } from './ConnectChat'
 import { EventType } from '../events/EventType'
-import { UseCase } from './UseCase'
 import { DisconnectChat } from './DisconnectChat'
 import { NewCleavage } from './NewCleavage'
 import { LaunchCleavage } from './LaunchCleavage'
-import { ApplicationEvent } from '../events/GameEvent'
 import { PlayerMessage } from './PlayerMessage'
-import { ApplicationServices } from '../ports/ApplicationServices'
 import { PlayerCleaveUseCase } from './PlayerCleaveUseCase'
 
 export class PrimaryController {

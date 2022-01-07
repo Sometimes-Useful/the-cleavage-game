@@ -1,5 +1,5 @@
-import { ProductionApplicationGateways } from '../../domain/ports/ApplicationGateways'
-import { ProductionApplicationRepositories } from '../../domain/ports/ApplicationRepositories'
+import type { ProductionApplicationGateways } from '../../domain/ports/ApplicationGateways'
+import type { ProductionApplicationRepositories } from '../../domain/ports/ApplicationRepositories'
 
 export class ProductionApplication {
     constructor (

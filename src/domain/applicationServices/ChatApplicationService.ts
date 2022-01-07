@@ -1,7 +1,7 @@
 import { alreadyConnectedToChatNotification, alreadyDisconnectedToChatNotification } from '../entities/notification/notifications'
-import { NotificationGateway } from '../ports/NotificationGateway'
-import { ChatGateway } from '../ports/ChatGateway'
-import { MessageForPlayer } from '../entities/MessageForPlayer'
+import type { NotificationGateway } from '../ports/NotificationGateway'
+import type { ChatGateway } from '../ports/ChatGateway'
+import type { MessageForPlayer } from '../entities/MessageForPlayer'
 
 export class ChatApplicationService {
     constructor (

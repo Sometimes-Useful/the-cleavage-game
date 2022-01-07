@@ -1,8 +1,8 @@
-import { UseCase } from './UseCase'
-import { ApplicationEvent } from '../events/GameEvent'
-import { InterfaceApplicationService } from '../applicationServices/InterfaceApplicationService'
+import type { ChatApplicationService } from '../applicationServices/ChatApplicationService'
+import type { ApplicationEvent } from '../events/GameEvent'
+import type { InterfaceApplicationService } from '../applicationServices/InterfaceApplicationService'
 import { InterfaceView } from '../entities/InterfaceView'
-import { ChatApplicationService } from '../applicationServices/ChatApplicationService'
+import { UseCase } from './UseCase'
 
 export class NewCleavage extends UseCase {
     constructor (private interfaceApplicationService: InterfaceApplicationService, private chatApplicationService:ChatApplicationService) {

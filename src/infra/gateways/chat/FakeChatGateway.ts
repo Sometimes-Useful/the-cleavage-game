@@ -1,5 +1,5 @@
-import { MessageForPlayer } from '../../../domain/entities/MessageForPlayer'
-import { ChatGateway } from '../../../domain/ports/ChatGateway'
+import type { MessageForPlayer } from '../../../domain/entities/MessageForPlayer'
+import type { ChatGateway } from '../../../domain/ports/ChatGateway'
 import { ChatStatus } from '../../../domain/entities/ChatStatus'
 
 export class FakeChatGateway implements ChatGateway {

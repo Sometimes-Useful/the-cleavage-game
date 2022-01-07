@@ -1,4 +1,4 @@
-import { PlayerCleave } from './PlayerCleave'
+import type { PlayerCleave } from './PlayerCleave'
 
 export class Cleavage {
     constructor (

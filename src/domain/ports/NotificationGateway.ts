@@ -1,4 +1,4 @@
-import { ApplicationNotification } from '../entities/notification/Notification'
+import type { ApplicationNotification } from '../entities/notification/Notification'
 
 export interface NotificationGateway {
     notify(notification:ApplicationNotification): Promise<void>;

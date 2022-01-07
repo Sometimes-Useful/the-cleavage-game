@@ -1,5 +1,5 @@
-import { FakeApplicationGateways } from '../../domain/ports/ApplicationGateways'
-import { FakeApplicationRepositories } from '../../domain/ports/ApplicationRepositories'
+import type { FakeApplicationGateways } from '../../domain/ports/ApplicationGateways'
+import type { FakeApplicationRepositories } from '../../domain/ports/ApplicationRepositories'
 
 export class FakeApplication {
     constructor (

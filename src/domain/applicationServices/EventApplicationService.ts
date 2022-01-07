@@ -1,5 +1,5 @@
-import { ApplicationEvent } from '../events/GameEvent'
-import { EventGateway } from '../ports/EventGateway'
+import type { ApplicationEvent } from '../events/GameEvent'
+import type { EventGateway } from '../ports/EventGateway'
 
 export class EventApplicationService {
     constructor (private eventGateway:EventGateway) {}

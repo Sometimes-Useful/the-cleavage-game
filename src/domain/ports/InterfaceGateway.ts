@@ -1,6 +1,7 @@
-import { InterfaceView } from '../entities/InterfaceView'
+import type { Cleavage } from '../entities/Cleavage'
+import type { InterfaceView } from '../entities/InterfaceView'
 
 export interface InterfaceGateway {
-    updateCleavageTitle(cleavageTitle: string): Promise<void>;
+    updateCleavage(cleavage: Cleavage): Promise<void>;
     changeView(interfaceView: InterfaceView): Promise<void>;
 }

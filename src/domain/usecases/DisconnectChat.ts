@@ -1,6 +1,6 @@
-import { ChatApplicationService } from '../applicationServices/ChatApplicationService'
+import type { ChatApplicationService } from '../applicationServices/ChatApplicationService'
+import type { ApplicationEvent } from '../events/GameEvent'
 import { UseCase } from './UseCase'
-import { ApplicationEvent } from '../events/GameEvent'
 
 export class DisconnectChat extends UseCase {
     constructor (private chatApplicationService: ChatApplicationService) {
