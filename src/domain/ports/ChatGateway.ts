@@ -3,5 +3,5 @@ export interface ChatGateway {
     sendMessageToPlayer(messageForPlayer: MessageForPlayer): Promise<void>;
     disconnect(): Promise<void>;
     isConnected(): Promise<boolean>;
-    connect(): Promise<void>;
+    connect(username:string, token:string, channel:string): Promise<void>;
 }

@@ -2,7 +2,6 @@ import { describe, Suite, Test } from 'mocha'
 import { ChatApplicationService } from '../applicationServices/ChatApplicationService'
 import { FakeEventGateway } from '../../infra/gateways/event/FakeEventGateway'
 import { FakeChatGateway } from '../../infra/gateways/chat/FakeChatGateway'
-import { FakeNotificationGateway } from '../../infra/gateways/notification/FakeNotificationGateway'
 import { FakeApplication } from '../../infra/applications/FakeApplication'
 import type { ApplicationEvent } from '../events/GameEvent'
 import { FakeInterfaceGateway } from '../../infra/gateways/interface/FakeInterfaceGateway'
@@ -22,7 +21,6 @@ export function scenario (scenarioTitle: string, tests: ((application: FakeAppli
     const eventGateway = new FakeEventGateway()
     const applicationGateways:FakeApplicationGateways = {
         chat: new FakeChatGateway(),
-        notification: new FakeNotificationGateway(),
         event: eventGateway,
         interface: new FakeInterfaceGateway()
     }
@@ -30,7 +28,7 @@ export function scenario (scenarioTitle: string, tests: ((application: FakeAppli
         cleavage: new InMemoryCleavageRepository()
     }
     const applicationServices:ApplicationServices = {
-        chat: new ChatApplicationService(applicationGateways.chat, applicationGateways.notification),
+        chat: new ChatApplicationService(applicationGateways.chat, applicationGateways.interface),
         event: new EventApplicationService(applicationGateways.event),
         cleavage: new CleavageApplicationService(applicationRepositories.cleavage, applicationGateways.chat),
         interface: new InterfaceApplicationService(applicationGateways.interface)

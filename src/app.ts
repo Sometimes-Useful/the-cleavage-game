@@ -8,14 +8,12 @@ import { ProductionApplication } from './infra/applications/ProductionApplicatio
 import { TwitchChatGateway } from './infra/gateways/chat/TwitchChatGateway'
 import { InMemoryProductionEventGateway } from './infra/gateways/event/InMemoryProductionEventGateway'
 import { SvelteInterfaceGateway } from './infra/gateways/interface/SvelteInterfaceGateway'
-import { SvelteNotificationGateway } from './infra/gateways/notification/SvelteNotificationGateway'
 import { InMemoryCleavageRepository } from './infra/repositories/cleavage/InMemoryCleavageRepository'
 import { applicationEventStore } from './ui/stores/stores'
 
 const eventGateway = new InMemoryProductionEventGateway()
 const applicationGateways:ProductionApplicationGateways = {
-    chat: new TwitchChatGateway(),
-    notification: new SvelteNotificationGateway(),
+    chat: new TwitchChatGateway(eventGateway),
     event: eventGateway,
     interface: new SvelteInterfaceGateway()
 }
@@ -23,7 +21,7 @@ const applicationRepositories:ProductionApplicationRepositories = {
     cleavage: new InMemoryCleavageRepository()
 }
 eventGateway.configureController({
-    chat: new ChatApplicationService(applicationGateways.chat, applicationGateways.notification),
+    chat: new ChatApplicationService(applicationGateways.chat, applicationGateways.interface),
     event: new EventApplicationService(applicationGateways.event),
     cleavage: new CleavageApplicationService(applicationRepositories.cleavage, applicationGateways.chat),
     interface: new InterfaceApplicationService(applicationGateways.interface)
@@ -36,9 +34,6 @@ const application = new ProductionApplication(
 export const applicationStart = () => {
     console.log('application started')
     applicationEventStore.subscribe(event => {
-        if (event) {
-            console.log('NEW EVENT', event)
-            application.gateways.event.onEvent(event)
-        }
+        if (event) application.gateways.event.sendEvent(event)
     })
 }

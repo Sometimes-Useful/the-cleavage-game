@@ -1,4 +1,4 @@
-import { theChatGatewayHasExpectedStatus, theCleavageRepositoryHasCurrentCleavage, theInterfaceCurrentCleavageTitleHasValue, theInterfaceGatewayHasCurrentView, whenEventOccurs } from '../../tests/unitTests'
+import { theChatGatewayHasExpectedStatus, theCleavageRepositoryHasCurrentCleavage, theInterfaceGatewayDontHaveCleavage, theInterfaceGatewayHasCurrentCleavage, theInterfaceGatewayHasCurrentView, whenEventOccurs } from '../../tests/unitTests'
 import { feature, scenario } from '../../tests/testSuites'
 import { Gherkin } from '../../tests/Gherkin'
 import { InterfaceView } from '../../entities/InterfaceView'
@@ -14,13 +14,13 @@ feature(new LaunchCleavageEvent(cleavageTitle), [
         application => whenEventOccurs(application.gateways.event, new LaunchCleavageEvent(cleavageTitle)),
         application => theInterfaceGatewayHasCurrentView(Gherkin.THEN, application.gateways.interface, InterfaceView.CURRENT_CLEAVAGE),
         application => theCleavageRepositoryHasCurrentCleavage(Gherkin.AND_THEN, application.repositories.cleavage, new Cleavage(cleavageTitle)),
-        application => theInterfaceCurrentCleavageTitleHasValue(Gherkin.AND_THEN, application.gateways.interface, cleavageTitle)
+        application => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_THEN, application.gateways.interface, new Cleavage(cleavageTitle))
     ]),
     scenario(`Scenario 2 : UI updated to ${InterfaceView.CONNECT_CHAT} when chat gateway is ${ChatStatus.DISCONNECTED}.`, [
         application => theInterfaceGatewayHasCurrentView(Gherkin.GIVEN, application.gateways.interface, InterfaceView.NEW_CLEAVAGE),
         application => theChatGatewayHasExpectedStatus(Gherkin.AND_GIVEN, application.gateways.chat, ChatStatus.DISCONNECTED),
         application => whenEventOccurs(application.gateways.event, new LaunchCleavageEvent(cleavageTitle)),
         application => theInterfaceGatewayHasCurrentView(Gherkin.THEN, application.gateways.interface, InterfaceView.CONNECT_CHAT),
-        application => theInterfaceCurrentCleavageTitleHasValue(Gherkin.AND_THEN, application.gateways.interface, '')
+        application => theInterfaceGatewayDontHaveCleavage(Gherkin.AND_THEN, application.gateways.interface)
     ])
 ])

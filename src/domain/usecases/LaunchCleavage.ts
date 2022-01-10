@@ -23,7 +23,7 @@ export class LaunchCleavage extends UseCase {
     private onConnected (event:LaunchCleavageEvent): Promise<void> {
         const cleavage = new Cleavage(event.cleavageTitle)
         return this.cleavageApplicationService.saveCleavage(cleavage)
-            .then(() => this.interfaceApplicationService.updateCleavageTitle(cleavage))
+            .then(() => this.interfaceApplicationService.updateCleavage(cleavage))
             .then(() => this.interfaceApplicationService.changeView(InterfaceView.CURRENT_CLEAVAGE))
             .catch(error => Promise.reject(error))
     }

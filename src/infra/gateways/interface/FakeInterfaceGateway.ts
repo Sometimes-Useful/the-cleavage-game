@@ -1,10 +1,16 @@
 import type { Cleavage } from '../../../domain/entities/Cleavage'
 import { InterfaceView } from '../../../domain/entities/InterfaceView'
+import type { ApplicationNotification } from '../../../domain/entities/notification/Notification'
 import type { InterfaceGateway } from '../../../domain/ports/InterfaceGateway'
 
 export class FakeInterfaceGateway implements InterfaceGateway {
+    notify (notification:ApplicationNotification): Promise<void> {
+        this.notifications.push(notification)
+        return Promise.resolve()
+    }
+
     updateCleavage (cleavage: Cleavage): Promise<void> {
-        this.currentCleavageTitle = cleavage.title
+        this.currentCleavage = cleavage
         return Promise.resolve()
     }
 
@@ -13,6 +19,7 @@ export class FakeInterfaceGateway implements InterfaceGateway {
         return Promise.resolve()
     }
 
-    currentCleavageTitle: string = ''
+    currentCleavage: Cleavage|undefined
+    notifications: ApplicationNotification[] = [];
     currentView: InterfaceView = InterfaceView.NONE;
 }

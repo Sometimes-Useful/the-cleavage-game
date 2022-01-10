@@ -1,4 +1,4 @@
-import SPA from './SPA.svelte'
+import SPA from './Main.svelte'
 
 const app = new SPA({
     target: document.body,

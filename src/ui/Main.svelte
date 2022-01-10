@@ -4,17 +4,19 @@
     import CurrentCleavage from "./views/CurrentCleavage.svelte"
     import { InterfaceView } from "../domain/entities/InterfaceView";
     import { NewCleavageEvent } from "../domain/events/newCleavage/NewCleavageEvent";
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import { applicationStart } from "../app";
     import { applicationEventStore, interfaceViewStore } from "./stores/stores";
+import { DisconnectChatEvent } from "../domain/events/disconnectChat.spec.ts/DisconnectChatEvent";
     onMount(() => {
         applicationStart()
 		$applicationEventStore =new NewCleavageEvent()
-	}); 
+	});
+    onDestroy(()=>$applicationEventStore = new DisconnectChatEvent())
 </script>
 
-<main>
-    {#if $interfaceViewStore === InterfaceView.CONNECT_CHAT}
+<main class="bg-black h-full w-full flex flex-col justify-evenly">
+    {#if $interfaceViewStore === InterfaceView.CONNECT_CHAT} 
 	    <ConnectChat/>
     {:else if $interfaceViewStore === InterfaceView.CURRENT_CLEAVAGE}
         <CurrentCleavage/>
@@ -23,6 +25,8 @@
     {/if}
 </main>
 
-<style>
-
-</style>
+<style lang="postcss" global>
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+  </style>

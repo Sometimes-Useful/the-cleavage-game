@@ -1,4 +1,4 @@
-import { theChatGatewayHasExpectedStatus, theNotificationGatewayHasNotifications, whenEventOccurs } from '../../tests/unitTests'
+import { theChatGatewayHasExpectedStatus, theInterfaceGatewayHasNotifications, whenEventOccurs } from '../../tests/unitTests'
 import { feature, scenario } from '../../tests/testSuites'
 import { Gherkin } from '../../tests/Gherkin'
 import { ChatStatus } from '../../entities/ChatStatus'
@@ -15,6 +15,6 @@ feature(new DisconnectChatEvent(), [
         application => theChatGatewayHasExpectedStatus(Gherkin.GIVEN, application.gateways.chat, ChatStatus.DISCONNECTED),
         application => whenEventOccurs(application.gateways.event, new DisconnectChatEvent()),
         application => theChatGatewayHasExpectedStatus(Gherkin.THEN, application.gateways.chat, ChatStatus.DISCONNECTED),
-        application => theNotificationGatewayHasNotifications(Gherkin.AND_THEN, application.gateways.notification, alreadyDisconnectedToChatNotification)
+        application => theInterfaceGatewayHasNotifications(Gherkin.AND_THEN, application.gateways.interface, alreadyDisconnectedToChatNotification)
     ])
 ])

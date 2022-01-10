@@ -8,7 +8,7 @@ import { Gherkin } from '../../tests/Gherkin'
 import { PlayerCleaveEvent } from '../playerCleave/PlayerCleaveEvent'
 import { MessageForPlayer } from '../../entities/MessageForPlayer'
 import { dontKnowWhatToDoWithThatMessage } from '../../entities/dontKnowWhatToDoWithThatMessage'
-import { player } from '../../tests/testContexts'
+import { player, player2 } from '../../tests/testContexts'
 
 feature(new PlayerMessageEvent(PlayerCleave.LEFT, player), [
     scenario(`Scenario 1 : ${applicationMessagePrefix + AuthorizedMessage.LEFT}`, [
@@ -26,5 +26,9 @@ feature(new PlayerMessageEvent(PlayerCleave.LEFT, player), [
     scenario(`Scenario 4 : ${AuthorizedMessage.UNSUPPORTED}`, [
         application => whenEventOccurs(application.gateways.event, new PlayerMessageEvent(AuthorizedMessage.UNSUPPORTED, player)),
         application => theChatGatewaySendMessageToPlayer(Gherkin.THEN, application.gateways.chat, [])
+    ]),
+    scenario(`Scenario 5 : ${applicationMessagePrefix + AuthorizedMessage.RIGHT} with another player ${player2}`, [
+        application => whenEventOccurs(application.gateways.event, new PlayerMessageEvent(applicationMessagePrefix + AuthorizedMessage.RIGHT, player2)),
+        application => theEventIsSent(Gherkin.THEN, application.gateways.event, new PlayerCleaveEvent(PlayerCleave.RIGHT, player2))
     ])
 ])

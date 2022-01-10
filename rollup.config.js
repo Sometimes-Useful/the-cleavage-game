@@ -31,7 +31,7 @@ function serve () {
 }
 
 export default {
-    input: 'src/ui/main.ts',
+    input: 'src/ui/svelteApp.ts',
     output: {
         sourcemap: true,
         format: 'iife',
@@ -40,7 +40,12 @@ export default {
     },
     plugins: [
         svelte({
-            preprocess: sveltePreprocess({ sourceMap: !production }),
+            preprocess: sveltePreprocess({
+                sourceMap: !production,
+                postcss: {
+                    plugins: [require('tailwindcss')(), require('autoprefixer')()]
+                }
+            }),
             compilerOptions: {
                 // enable run-time checks when not in production
                 dev: !production

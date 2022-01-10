@@ -7,6 +7,15 @@ import type{ CleavageRepository } from '../ports/CleavageRepository'
 
 export class CleavageApplicationService {
     constructor (private cleavageRepository: CleavageRepository, private chatGateway:ChatGateway) { }
+
+    loadCleavage ():Promise<Cleavage> {
+        return this.cleavageRepository.load()
+    }
+
+    hasCleavage (): Promise<boolean> {
+        return this.cleavageRepository.hasCleavage()
+    }
+
     playerCleave (event: PlayerCleaveEvent): Promise<void> {
         return this.cleavageRepository.load()
             .then(cleavage => this.onCleave(cleavage, event))

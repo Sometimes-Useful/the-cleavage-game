@@ -2,7 +2,6 @@ import { expect } from 'chai'
 import { Test, it } from 'mocha'
 import type { FakeChatGateway } from '../../infra/gateways/chat/FakeChatGateway'
 import type { FakeEventGateway } from '../../infra/gateways/event/FakeEventGateway'
-import type { FakeNotificationGateway } from '../../infra/gateways/notification/FakeNotificationGateway'
 import type { ApplicationNotification } from '../entities/notification/Notification'
 import type { ApplicationEvent } from '../events/GameEvent'
 import type { InterfaceView } from '../entities/InterfaceView'
@@ -19,10 +18,10 @@ export const theChatGatewayHasExpectedStatus = (gherkinPrefix: Gherkin, chatGate
         expect(chatGateway.status).equal(chatStatus)
     })
 
-export const theNotificationGatewayHasNotifications = (gherkinPrefix:Gherkin, notificationGateway: FakeNotificationGateway, notifications: ApplicationNotification[] | ApplicationNotification) =>
+export const theInterfaceGatewayHasNotifications = (gherkinPrefix:Gherkin, interfaceGateway: FakeInterfaceGateway, notifications: ApplicationNotification[] | ApplicationNotification) =>
     it(`${gherkinPrefix} the notifications are sents :
         ${(Array.isArray(notifications) ? notifications : [notifications]).map(notification => JSON.stringify(notification)).join(',\n')}`, () => {
-        expect(notificationGateway.notifications).deep.equal(Array.isArray(notifications) ? notifications : [notifications])
+        expect(interfaceGateway.notifications).deep.equal(Array.isArray(notifications) ? notifications : [notifications])
     })
 
 export const whenEventOccurs = (eventBus: FakeEventGateway, event: ApplicationEvent):Test =>
@@ -42,8 +41,15 @@ export const theEventIsSent = (gherkinPrefix:Gherkin, eventGateway:FakeEventGate
     })
 }
 
-export const theInterfaceCurrentCleavageTitleHasValue = (gherkinPrefix:Gherkin, interfaceGateway: FakeInterfaceGateway, expectedCleavageTitle: string):Test =>
-    it(`${gherkinPrefix} the interface gateway has the current cleavage title value set with '${expectedCleavageTitle}'.`, () => expect(interfaceGateway.currentCleavageTitle).equal(expectedCleavageTitle))
+export const theInterfaceGatewayHasCurrentCleavage = (gherkinPrefix:Gherkin, interfaceGateway: FakeInterfaceGateway, expectedCleavage: Cleavage):Test =>
+    it(`${gherkinPrefix} the interface gateway has the current cleavage : '${expectedCleavage}'.`, () => {
+        console.log(expectedCleavage)
+        console.log(interfaceGateway.currentCleavage)
+        expect(interfaceGateway.currentCleavage).deep.equal(expectedCleavage)
+    })
+
+export const theInterfaceGatewayDontHaveCleavage = (gherkinPrefix:Gherkin, interfaceGateway: FakeInterfaceGateway):Test =>
+    it(`${gherkinPrefix} the interface gateway don'ty have cleavage.`, () => expect(interfaceGateway.currentCleavage).equal(undefined))
 
 export const theChatGatewaySendMessageToPlayer = (gherkinPrefix:Gherkin, chatGateway:FakeChatGateway, expectedMessagesForPlayer:MessageForPlayer|MessageForPlayer[]) : Test => {
     const messagesForPlayer = Array.isArray(expectedMessagesForPlayer) ? expectedMessagesForPlayer : [expectedMessagesForPlayer]
@@ -54,6 +60,11 @@ export const theCleavageRepositoryHasCurrentCleavage = (gherkinPrefix: Gherkin, 
     it(`${gherkinPrefix} the cleavage repository has the following cleavage: ${expectedCleavage}`, () => {
         if (gherkinPrefix === Gherkin.GIVEN || gherkinPrefix === Gherkin.AND_GIVEN) cleavageRepository.cleavage = expectedCleavage
         expect(cleavageRepository.cleavage).deep.equal(expectedCleavage, cleavageDetailedComparisonMessage(cleavageRepository.cleavage, expectedCleavage))
+    })
+export const theCleavageRepositoryDontHaveCurrentCleavage = (gherkinPrefix: Gherkin, cleavageRepository: InMemoryCleavageRepository): Test =>
+    it(`${gherkinPrefix} the cleavage repository don't have a current cleavage.`, () => {
+        if (gherkinPrefix === Gherkin.GIVEN || gherkinPrefix === Gherkin.AND_GIVEN) cleavageRepository.cleavage = undefined
+        expect(cleavageRepository.cleavage).equal(undefined)
     })
 
 const cleavageDetailedComparisonMessage = (cleavage: Cleavage|undefined, expectedCleavage: Cleavage): string => `DETAILS\nexpected >>>>>>>> ${stringifyWithDetailledSetAndMap(cleavage)} \nto deeply equal > ${stringifyWithDetailledSetAndMap(expectedCleavage)} \n`

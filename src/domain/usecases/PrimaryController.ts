@@ -12,11 +12,11 @@ import { PlayerCleaveUseCase } from './PlayerCleaveUseCase'
 export class PrimaryController {
     constructor (private applicationServices:ApplicationServices) {
         this.useCases.set(EventType.DISCONNECT_CHAT, new DisconnectChat(this.applicationServices.chat))
-        this.useCases.set(EventType.CONNECT_CHAT, new ConnectChat(this.applicationServices.chat))
+        this.useCases.set(EventType.CONNECT_CHAT, new ConnectChat(this.applicationServices.chat, this.applicationServices.interface))
         this.useCases.set(EventType.NEW_CLEAVAGE, new NewCleavage(this.applicationServices.interface, this.applicationServices.chat))
         this.useCases.set(EventType.LAUNCH_CLEAVAGE, new LaunchCleavage(this.applicationServices.interface, this.applicationServices.chat, this.applicationServices.cleavage))
         this.useCases.set(EventType.PLAYER_MESSAGE, new PlayerMessage(this.applicationServices.event, this.applicationServices.chat))
-        this.useCases.set(EventType.PLAYER_CLEAVE, new PlayerCleaveUseCase(this.applicationServices.cleavage))
+        this.useCases.set(EventType.PLAYER_CLEAVE, new PlayerCleaveUseCase(this.applicationServices.cleavage, this.applicationServices.chat, this.applicationServices.interface))
     }
 
     executeEvent (event: ApplicationEvent): Promise<void> {
