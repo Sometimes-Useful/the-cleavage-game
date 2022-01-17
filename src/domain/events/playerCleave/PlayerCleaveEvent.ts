@@ -3,7 +3,7 @@ import { ApplicationEvent } from '../GameEvent'
 import type { PlayerCleave } from '../../entities/PlayerCleave'
 
 export class PlayerCleaveEvent extends ApplicationEvent {
-    constructor (public playerCleave: PlayerCleave, public player:string) {
+    constructor (public player:string, public playerCleave: PlayerCleave) {
         super()
     }
 

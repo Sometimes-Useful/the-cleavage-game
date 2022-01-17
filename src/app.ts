@@ -2,38 +2,49 @@ import { ChatApplicationService } from './domain/applicationServices/ChatApplica
 import { CleavageApplicationService } from './domain/applicationServices/CleavageService'
 import { EventApplicationService } from './domain/applicationServices/EventApplicationService'
 import { InterfaceApplicationService } from './domain/applicationServices/InterfaceApplicationService'
+import { ApplicationStartEvent } from './domain/events/applicationStart/ApplicationStartEvent'
 import type { ProductionApplicationGateways } from './domain/ports/ApplicationGateways'
 import type { ProductionApplicationRepositories } from './domain/ports/ApplicationRepositories'
 import { ProductionApplication } from './infra/applications/ProductionApplication'
 import { TwitchChatGateway } from './infra/gateways/chat/TwitchChatGateway'
 import { InMemoryProductionEventGateway } from './infra/gateways/event/InMemoryProductionEventGateway'
-import { SvelteInterfaceGateway } from './infra/gateways/interface/SvelteInterfaceGateway'
+import { SvelteAndToneInterfaceGateway } from './infra/gateways/interface/SvelteAndToneInterfaceGateway'
 import { InMemoryCleavageRepository } from './infra/repositories/cleavage/InMemoryCleavageRepository'
 import { applicationEventStore } from './ui/stores/stores'
 
 const eventGateway = new InMemoryProductionEventGateway()
+const interfaceGateway = new SvelteAndToneInterfaceGateway()
 const applicationGateways:ProductionApplicationGateways = {
     chat: new TwitchChatGateway(eventGateway),
     event: eventGateway,
-    interface: new SvelteInterfaceGateway()
+    interface: interfaceGateway
 }
+const cleavageRepository = new InMemoryCleavageRepository()
+
 const applicationRepositories:ProductionApplicationRepositories = {
-    cleavage: new InMemoryCleavageRepository()
+    cleavage: cleavageRepository
 }
-eventGateway.configureController({
-    chat: new ChatApplicationService(applicationGateways.chat, applicationGateways.interface),
-    event: new EventApplicationService(applicationGateways.event),
-    cleavage: new CleavageApplicationService(applicationRepositories.cleavage, applicationGateways.chat),
-    interface: new InterfaceApplicationService(applicationGateways.interface)
-})
+
 const application = new ProductionApplication(
     applicationGateways,
     applicationRepositories
 )
 
-export const applicationStart = () => {
+export const applicationStart = ():Promise<void> => {
     console.log('application started')
-    applicationEventStore.subscribe(event => {
-        if (event) application.gateways.event.sendEvent(event)
-    })
+    return interfaceGateway.load()
+        .then(() => {
+            eventGateway.configureController({
+                chat: new ChatApplicationService(applicationGateways.chat, applicationGateways.interface),
+                event: new EventApplicationService(applicationGateways.event),
+                cleavage: new CleavageApplicationService(applicationRepositories.cleavage, applicationGateways.chat),
+                interface: new InterfaceApplicationService(applicationGateways.interface)
+            })
+            applicationEventStore.subscribe(event => {
+                if (event) application.gateways.event.sendEvent(event)
+            })
+            applicationEventStore.set(new ApplicationStartEvent())
+            return Promise.resolve()
+        })
+        .catch(error => console.error(error))
 }

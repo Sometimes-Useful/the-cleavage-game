@@ -1,11 +1,10 @@
-import { EventType } from '../EventType'
 import { ApplicationEvent } from '../GameEvent'
+import { EventType } from '../EventType'
 
 export class PlayerMessageEvent extends ApplicationEvent {
-    constructor (
-        public message: string,
-        public player: string
-    ) { super() }
-
     eventType: EventType = EventType.PLAYER_MESSAGE;
+    constructor (
+        public player: string,
+        public message: string
+    ) { super() }
 }

@@ -4,8 +4,9 @@ import { Gherkin } from '../../tests/Gherkin'
 import { ChatStatus } from '../../entities/ChatStatus'
 import { alreadyDisconnectedToChatNotification } from '../../entities/notification/notifications'
 import { DisconnectChatEvent } from './DisconnectChatEvent'
+import { EventType } from '../EventType'
 
-feature(new DisconnectChatEvent(), [
+feature(EventType.DISCONNECT_CHAT, [
     scenario('Scenario 1 : Connect Chat on chat DISCONNECTED', [
         application => theChatGatewayHasExpectedStatus(Gherkin.GIVEN, application.gateways.chat, ChatStatus.CONNECTED),
         application => whenEventOccurs(application.gateways.event, new DisconnectChatEvent()),

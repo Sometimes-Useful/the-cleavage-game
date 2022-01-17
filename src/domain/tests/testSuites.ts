@@ -3,7 +3,6 @@ import { ChatApplicationService } from '../applicationServices/ChatApplicationSe
 import { FakeEventGateway } from '../../infra/gateways/event/FakeEventGateway'
 import { FakeChatGateway } from '../../infra/gateways/chat/FakeChatGateway'
 import { FakeApplication } from '../../infra/applications/FakeApplication'
-import type { ApplicationEvent } from '../events/GameEvent'
 import { FakeInterfaceGateway } from '../../infra/gateways/interface/FakeInterfaceGateway'
 import { InterfaceApplicationService } from '../applicationServices/InterfaceApplicationService'
 import { EventApplicationService } from '../applicationServices/EventApplicationService'
@@ -12,10 +11,11 @@ import { InMemoryCleavageRepository } from '../../infra/repositories/cleavage/In
 import type { ApplicationServices } from '../ports/ApplicationServices'
 import type { FakeApplicationGateways } from '../ports/ApplicationGateways'
 import type { FakeApplicationRepositories } from '../ports/ApplicationRepositories'
+import type { EventType } from '../events/EventType'
 
 type UnitTest = (application: FakeApplication) => Test;
 
-export const feature = (gameEvent: ApplicationEvent, scenarios: (() => void|Suite)[]) => describe(`Feature: ${gameEvent.eventType}`, () => scenarios.forEach(scenario => scenario()))
+export const feature = (eventType: EventType, scenarios: (() => void|Suite)[]) => describe(`Feature: ${eventType}`, () => scenarios.forEach(scenario => scenario()))
 
 export function scenario (scenarioTitle: string, tests: ((application: FakeApplication) => Test)[], skip?:boolean) {
     const eventGateway = new FakeEventGateway()

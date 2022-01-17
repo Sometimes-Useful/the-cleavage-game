@@ -7,17 +7,22 @@
     import { applicationEventStore, cleavageStore } from "../stores/stores";
     let leftPercentage:number
     let rightPercentage:number
+    let title:string
     cleavageStore.subscribe(cleavage => {
-        console.log("cleavageStore","UPDATE ON CURRENT CLEAVAGE",cleavage)
-        let totalCleave = cleavage.cleaveLeft + cleavage.cleaveRight
-        leftPercentage = totalCleave === 0 ? 0 : $cleavageStore.cleaveLeft / totalCleave *100
-        rightPercentage = totalCleave === 0 ? 0 : $cleavageStore.cleaveRight / totalCleave *100
+        if(cleavage) {
+            console.log("cleavageStore","UPDATE ON CURRENT CLEAVAGE",cleavage)
+            let totalCleave = cleavage.cleaveLeft + cleavage.cleaveRight
+            leftPercentage = totalCleave === 0 ? 0 : cleavage.cleaveLeft / totalCleave *100
+            rightPercentage = totalCleave === 0 ? 0 : cleavage.cleaveRight / totalCleave *100
+            title = cleavage.title
+        }
+        
     })
     const onClickButton = () => $applicationEventStore = new NewCleavageEvent()
 </script>
 <div class="flex flex-col w-full items-center">
     <Title/>
-    <Subtitle subtitle={$cleavageStore.title}/>
+    <Subtitle subtitle={title}/>
 </div>
 <div class="flex flex-col w-full  items-center">
     <CleavageModule {leftPercentage} {rightPercentage}/>

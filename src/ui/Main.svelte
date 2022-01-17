@@ -3,26 +3,39 @@
     import ConnectChat from "./views/ConnectChat.svelte"
     import CurrentCleavage from "./views/CurrentCleavage.svelte"
     import { InterfaceView } from "../domain/entities/InterfaceView";
-    import { NewCleavageEvent } from "../domain/events/newCleavage/NewCleavageEvent";
-    import { onDestroy, onMount } from 'svelte';
-    import { applicationStart } from "../app";
+    import { onDestroy } from 'svelte';
     import { applicationEventStore, interfaceViewStore } from "./stores/stores";
-import { DisconnectChatEvent } from "../domain/events/disconnectChat.spec.ts/DisconnectChatEvent";
-    onMount(() => {
-        applicationStart()
-		$applicationEventStore =new NewCleavageEvent()
-	});
+    import { DisconnectChatEvent } from "../domain/events/disconnectChat.spec.ts/DisconnectChatEvent";
+    import MainMenu from "./views/MainMenu.svelte";
+    import Studio from "./views/Studio.svelte";
+    let forceView:InterfaceView|undefined = undefined
+    interfaceViewStore.set(InterfaceView.STUDIO)
     onDestroy(()=>$applicationEventStore = new DisconnectChatEvent())
 </script>
 
 <main class="bg-black h-full w-full flex flex-col justify-evenly">
-    {#if $interfaceViewStore === InterfaceView.CONNECT_CHAT} 
-	    <ConnectChat/>
-    {:else if $interfaceViewStore === InterfaceView.CURRENT_CLEAVAGE}
-        <CurrentCleavage/>
-    {:else if $interfaceViewStore === InterfaceView.NEW_CLEAVAGE}
-        <NewCleavage/>
+    {#if  forceView } 
+        {#if  forceView === InterfaceView.CONNECT_CHAT } 
+            <ConnectChat/>
+        {:else if forceView === InterfaceView.CURRENT_CLEAVAGE }
+            <CurrentCleavage/>
+        {:else if forceView === InterfaceView.NEW_CLEAVAGE }
+            <NewCleavage/>
+        {/if}
+    {:else}
+        {#if $interfaceViewStore === InterfaceView.CONNECT_CHAT} 
+            <ConnectChat/>
+        {:else if  $interfaceViewStore === InterfaceView.CURRENT_CLEAVAGE}
+            <CurrentCleavage/>
+        {:else if  $interfaceViewStore === InterfaceView.NEW_CLEAVAGE}
+            <NewCleavage/>
+        {:else if  $interfaceViewStore === InterfaceView.MAIN_MENU}
+            <MainMenu/>
+        {:else if  $interfaceViewStore === InterfaceView.STUDIO}
+            <Studio/>
+        {/if}
     {/if}
+    
 </main>
 
 <style lang="postcss" global>

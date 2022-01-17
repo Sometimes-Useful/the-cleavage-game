@@ -2,11 +2,11 @@ import { describe, it } from 'mocha'
 import { expect } from 'chai'
 import { config } from 'dotenv'
 import type { ChatGateway } from '../../../domain/ports/ChatGateway'
-import { FakeChatGateway } from './FakeChatGateway'
-import { channel, integrationTestMessage, player, token, username } from '../../../domain/tests/testContexts'
 import type { MessageForPlayer } from '../../../domain/entities/MessageForPlayer'
-import { TwitchChatGateway } from './TwitchChatGateway'
+import { FakeChatGateway } from './FakeChatGateway'
+import { formatTwitchUserMessage, TwitchChatGateway } from './TwitchChatGateway'
 import { FakeEventGateway } from '../event/FakeEventGateway'
+import { channel, integrationTestMessage, player1, token, username } from '../../../domain/tests/testContexts'
 import { PlayerMessageEvent } from '../../../domain/events/playerMessage/PlayerMessageEvent'
 import { EnvironmentVariable } from './EnvironmentVariable'
 function retrieveEnvVariable (envVariableName:EnvironmentVariable) {
@@ -39,53 +39,32 @@ const twitch:IntegrationEnvironnement = {
 const envs = [fake, twitch]
 
 envs.forEach(environnement => {
-    describe('Chat Gateway - Integration Test', () => {
+    describe(`Chat Gateway - ${environnement.adapter.constructor.name} - Integration Test`, () => {
         describe('Connect', () => {
-            it('Given the adapter is disconnected.', () => {
-                return environnement.adapter.isConnected()
-                    .then(isConnected => expect(isConnected).to.be.false)
-            })
-            it('When connect occurs.', () => {
-                return environnement.adapter.connect(environnement.username, environnement.token, environnement.channel)
-            })
-            it('Then the adapter is connected.', () => {
-                return environnement.adapter.isConnected()
-                    .then(isConnected => expect(isConnected).to.be.true)
-            })
+            it('Given the adapter is disconnected.', () => environnement.adapter.isConnected().then(isConnected => expect(isConnected).to.be.false))
+            it('When connect occurs.', () => environnement.adapter.connect(environnement.username, environnement.token, environnement.channel))
+            it('Then the adapter is connected.', () => environnement.adapter.isConnected().then(isConnected => expect(isConnected).to.be.true))
         })
         describe('Send Message to player', () => {
-            const messageForPlayer:MessageForPlayer = {
-                player: player,
-                message: integrationTestMessage
-            }
-            it('Given the adapter is connected.', () => {
-                return environnement.adapter.isConnected()
-                    .then(isConnected => expect(isConnected).to.be.true)
-            })
-            it('When sendMessageToPlayer occurs.', () => environnement.adapter.sendMessageToPlayer(messageForPlayer)).timeout(5000)
-            it('Then the chat has the message.', () => {
-                if (environnement.adapter instanceof FakeChatGateway)
+            const messageForPlayer:MessageForPlayer = { player: player1, message: integrationTestMessage }
+            it('Given the adapter is connected.', () => environnement.adapter.isConnected().then(isConnected => { expect(isConnected).to.be.true }))
+            it('When sendMessageToPlayer occurs.', () => environnement.adapter.sendMessageToPlayer(messageForPlayer)).timeout(2000)
+            it('Then the chat has the message.', (done) => {
+                if (environnement.adapter instanceof FakeChatGateway) {
                     expect(environnement.adapter.messagesForPlayer).deep.equal([messageForPlayer])
-                if (environnement.adapter instanceof TwitchChatGateway) {
-                    const interval = setInterval(() => {
-                        if (inMemoryEventBus.events.includes(new PlayerMessageEvent(messageForPlayer.player, messageForPlayer.message))) {
-                            expect(inMemoryEventBus.events).deep.equal([new PlayerMessageEvent(messageForPlayer.player, messageForPlayer.message)])
-                            clearInterval(interval)
-                        }
-                    }, 100)
+                    done()
                 }
+                if (environnement.adapter instanceof TwitchChatGateway)
+                    setTimeout(() => {
+                        expect(inMemoryEventBus.events).deep.equal([new PlayerMessageEvent(environnement.username, formatTwitchUserMessage(messageForPlayer))])
+                        done()
+                    }, 20)
             })
         })
         describe('Disconnect', () => {
-            it('Given the adapter is connected.', () => {
-                return environnement.adapter.isConnected()
-                    .then(isConnected => expect(isConnected).to.be.true)
-            })
+            it('Given the adapter is connected.', () => environnement.adapter.isConnected().then(isConnected => expect(isConnected).to.be.true))
             it('When disconnect occurs.', () => environnement.adapter.disconnect())
-            it('Then the adapter is disconnected.', () => {
-                return environnement.adapter.isConnected()
-                    .then(isConnected => expect(isConnected).to.be.false)
-            })
+            it('Then the adapter is disconnected.', () => environnement.adapter.isConnected().then(isConnected => expect(isConnected).to.be.false))
         })
     })
 })

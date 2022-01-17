@@ -5,7 +5,7 @@ import type { FakeChatGateway } from '../../infra/gateways/chat/FakeChatGateway'
 import type { FakeInterfaceGateway } from '../../infra/gateways/interface/FakeInterfaceGateway'
 import type { FakeEventGateway } from '../../infra/gateways/event/FakeEventGateway'
 import type { TwitchChatGateway } from '../../infra/gateways/chat/TwitchChatGateway'
-import type { SvelteInterfaceGateway } from '../../infra/gateways/interface/SvelteInterfaceGateway'
+import type { SvelteAndToneInterfaceGateway } from '../../infra/gateways/interface/SvelteAndToneInterfaceGateway'
 import type { InMemoryProductionEventGateway } from '../../infra/gateways/event/InMemoryProductionEventGateway'
 
 export interface ApplicationGateways {
@@ -23,5 +23,5 @@ export interface FakeApplicationGateways extends ApplicationGateways {
 export interface ProductionApplicationGateways extends ApplicationGateways {
     chat: TwitchChatGateway;
     event: InMemoryProductionEventGateway;
-    interface: SvelteInterfaceGateway;
+    interface: SvelteAndToneInterfaceGateway;
 }

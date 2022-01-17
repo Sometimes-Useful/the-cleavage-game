@@ -6,6 +6,14 @@ import type{ ChatGateway } from '../ports/ChatGateway'
 import type{ CleavageRepository } from '../ports/CleavageRepository'
 
 export class CleavageApplicationService {
+    isPublicCleavageExist (cleavage: Cleavage):Promise<boolean> {
+        return this.cleavageRepository.isPublicCleavageExistByTitle(cleavage)
+    }
+
+    addPublicCleavage (cleavage: Cleavage):Promise<void> {
+        return this.cleavageRepository.addPublicCleavage(cleavage)
+    }
+
     constructor (private cleavageRepository: CleavageRepository, private chatGateway:ChatGateway) { }
 
     loadCleavage ():Promise<Cleavage> {
@@ -55,5 +63,9 @@ export class CleavageApplicationService {
         if (previousPlayerCleave === PlayerCleave.RIGHT)
             cleavage.cleaveRight--
         return Promise.resolve(cleavage)
+    }
+
+    nextPublicCleavage (): Promise<Cleavage|undefined> {
+        return this.cleavageRepository.nextPublicCleavage()
     }
 }

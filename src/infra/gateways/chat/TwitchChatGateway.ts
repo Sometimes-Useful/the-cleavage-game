@@ -1,76 +1,122 @@
-import type { MessageForPlayer } from '../../../domain/entities/MessageForPlayer'
-import type { ChatGateway } from '../../../domain/ports/ChatGateway'
-import { ChatUserstate, Client } from 'tmi.js'
+import { ChatUserstate, Client, Options } from 'tmi.js'
 import { PlayerMessageEvent } from '../../../domain/events/playerMessage/PlayerMessageEvent'
+import { MessageForPlayer } from '../../../domain/entities/MessageForPlayer'
+import type { ChatGateway } from '../../../domain/ports/ChatGateway'
 import type { InMemoryProductionEventGateway } from '../event/InMemoryProductionEventGateway'
 
+const noTwitchClientSet = 'No Twitch Client Set'
 export class TwitchChatGateway implements ChatGateway {
-    constructor (private eventBus:InMemoryProductionEventGateway) {}
+    constructor (
+        private eventBus:InMemoryProductionEventGateway,
+        private twitchClientDebug:boolean = false
+    ) {}
+
     connect (username: string, password: string, channel: string): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            this.client = new Client({ identity: { username, password }, channels: [channel] })
-            this.client.on('connected', (address: string, port: number) => {
+        const options:Options = {
+            identity: { username, password },
+            options: {
+                debug: this.twitchClientDebug
+            }
+        }
+
+        const tmiClient = new Client(options)
+        this.tmiClient = tmiClient
+        this.clientEvents()
+        return this.tmiClient.connect()
+            .then(([host, port]) => {
                 this.isClientConnected = true
+                return tmiClient.join(channel)
+            })
+            .then(result => {
                 this.channel = channel
-                console.log(twitchClientConnected)
-                resolve()
             })
-            this.client.on('connecting', (address: string, port: number) => {
-                console.log(twitchClientConnecting)
-            })
-            this.client.on('message', (channel: string, userstate: ChatUserstate, message: string, self: boolean) => {
-                console.log(twitchClientMessage, 'channel :', channel, 'userstate :', userstate, 'message :', message)
-                this.eventBus.sendEvent(new PlayerMessageEvent(message, userstate.username))
-            })
-            this.client.connect().catch(error => reject(error))
-        })
+            .catch(error => Promise.reject(error))
     }
 
     sendMessageToPlayer (messageForPlayer: MessageForPlayer): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            if (!this.client) reject(new Error(twitchClientNotSetErrorMessage))
-            if (!this.channel) reject(new Error(channelUndefinedErrorMessage))
-            if (!this.isClientConnected)reject(new Error(twitchClientNotConnectedErrorMessage))
-            this.client.say(this.channel, formatTwitchUserMessage(messageForPlayer))
-                .then(result => resolve())
-                .catch(error => reject(error))
-        })
+        if (this.tmiClient === null) return Promise.reject(new Error(noTwitchClientSet))
+        return !this.channel
+            ? Promise.reject(new Error(channelUndefinedErrorMessage))
+            : !this.isClientConnected
+                ? Promise.reject(new Error(twitchClientNotConnectedErrorMessage))
+                : this.sendMessage(this.tmiClient, this.channel, messageForPlayer)
+    }
+
+    private sendMessage (tmiClient:Client, channel:string, messageForPlayer: MessageForPlayer): Promise<void> {
+        const messages = messageForPlayer.message.split('\n')
+        messages[0] = formatTwitchUserMessage(new MessageForPlayer(messageForPlayer.player, messages[0]))
+
+        return Promise.all(messages.map(message => tmiClient.say(channel, message)))
+            .then(results => Promise.resolve())
+            .catch(error => Promise.reject(error))
     }
 
     disconnect (): Promise<void> {
-        console.info(twitchClientDisconnecting)
-        return new Promise<void>((resolve, reject) => {
-            if (!this.client) reject(new Error(twitchClientNotSetErrorMessage))
-            if (!this.isClientConnected) reject(new Error(twitchClientNotConnectedErrorMessage))
-            this.client.on('disconnected', reason => {
-                console.log(twitchClientDisconnect, 'Reason :', reason)
-                this.isClientConnected = false
-                this.client = undefined
-                this.channel = undefined
-                resolve()
-            })
-            this.client.disconnect().catch(error => reject(error))
-        })
+        if (this.tmiClient === null) return Promise.reject(new Error(noTwitchClientSet))
+        return !this.channel
+            ? Promise.reject(new Error(channelUndefinedErrorMessage))
+            : !this.isClientConnected
+                ? Promise.reject(new Error(twitchClientNotConnectedErrorMessage))
+                : this.tmiClient.part(this.channel)
+                    .then(channel => {
+                        console.info(twitchClientDisconnecting)
+                        return this.tmiClient === null
+                            ? Promise.reject(new Error(noTwitchClientSet))
+                            : this.tmiClient.disconnect()
+                    })
+                    .then(([host, port]) => {
+                        console.log(twitchClientDisconnect, 'host :', host, 'port :', port)
+                        this.isClientConnected = false
+                        this.tmiClient = null
+                        this.channel = null
+                        return Promise.resolve()
+                    })
+                    .catch(error => Promise.reject(error))
     }
 
     isConnected (): Promise<boolean> {
-        // return Promise.resolve(true)
         return Promise.resolve(this.isClientConnected)
     }
 
+    private clientEvents () {
+        if (this.tmiClient === null) throw new Error(noTwitchClientSet)
+        this.tmiClient.on('join', (channel: string, username: string, self: boolean) => {
+            console.log(twitchClientJoinChannelAsUser(channel, username))
+        })
+        this.tmiClient.on('part', (channel: string, username: string, self: boolean) => {
+            console.log(twitchClientLeaveChannelAsUser(channel, username))
+        })
+        this.tmiClient.on('connected', (host: string, port: number) => {
+            console.log(twitchClientConnected(host, port))
+        })
+        this.tmiClient.on('connecting', (host: string, port: number) => {
+            console.log(twitchClientConnecting(host, port))
+        })
+        this.tmiClient.on('disconnected', reason => {
+            console.log(twitchClientDisconnect, 'Reason :', reason)
+        })
+        this.tmiClient.on('message', (channel: string, userstate: ChatUserstate, message: string, self: boolean) => {
+            console.log(twitchClientMessage, { channel, userstate, message })
+            if (userstate.username) this.sendPlayerMessageEventOnEventBus(new PlayerMessageEvent(userstate.username, message))
+        })
+    }
+
+    private sendPlayerMessageEventOnEventBus (playerMessageEvent:PlayerMessageEvent) {
+        this.eventBus.sendEvent(playerMessageEvent)
+    }
+
     private isClientConnected = false
-    private client?:Client
-    private channel?:string
+    private tmiClient:Client|null = null
+    private channel:string|null = null
 }
 
-const twitchClientNotSetErrorMessage = 'Twitch client not set.'
 const channelUndefinedErrorMessage = 'Channel is undefined.'
-const twitchClientConnecting = 'Twitch client connecting...'
+const twitchClientConnecting = (host:string, port:number) => `Twitch client connecting on ${host}:${port} ...`
 const twitchClientNotConnectedErrorMessage = 'Client not connected.'
-const twitchClientConnected = 'Twitch client connected.'
+const twitchClientConnected = (host:string, port:number) => `Twitch client connected on ${host}:${port}.`
 const twitchClientMessage = 'Twitch client message'
-const twitchClientDisconnecting = 'Twitch client disconnecting...'
+const twitchClientDisconnecting = 'Twitch client disconnecting ...'
 const twitchClientDisconnect = 'Twitch client disconnected.'
-function formatTwitchUserMessage (messageForPlayer: MessageForPlayer): string {
-    return `@${messageForPlayer.player} : ${messageForPlayer.message}`
-}
+export const formatTwitchUserMessage = (messageForPlayer: MessageForPlayer): string => `@${messageForPlayer.player} >>> ${messageForPlayer.message}`
+const twitchClientJoinChannelAsUser = (channel: string, username: string): string => `Twitch client joint channel ${channel} as user ${username}`
+const twitchClientLeaveChannelAsUser = (channel: string, username: string): string => `Twitch client leave channel ${channel} as user ${username}`

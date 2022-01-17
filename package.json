@@ -30,7 +30,8 @@
   "homepage": "https://github.com/bbohec/the-cleavage-game#readme",
   "dependencies": {
     "sirv-cli": "^2.0.0",
-    "tmi.js": "^1.8.5"
+    "tmi.js": "^1.8.5",
+    "tone": "^14.7.77"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
