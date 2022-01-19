@@ -2,7 +2,7 @@ import { UseCase } from './UseCase'
 import type { ApplicationEvent } from '../events/GameEvent'
 import type { InterfaceApplicationService } from '../applicationServices/InterfaceApplicationService'
 import { Sound } from '../entities/sound'
-import { SoundType } from '../ports/SoundType'
+import { SupportedSound } from '../ports/SoundType'
 
 export class PlayerHyperLikeUseCase extends UseCase {
     constructor (
@@ -10,6 +10,6 @@ export class PlayerHyperLikeUseCase extends UseCase {
     ) { super() }
 
     execute (event: ApplicationEvent): Promise<void> {
-        return this.interfaceApplicationService.playSound(new Sound(SoundType.HYPERLIKE))
+        return this.interfaceApplicationService.playSound(new Sound(SupportedSound.HYPERLIKE))
     }
 }

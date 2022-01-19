@@ -4,7 +4,7 @@ import type { InterfaceApplicationService } from '../applicationServices/Interfa
 import type { ApplicationEvent } from '../events/GameEvent'
 import type { Cleavage } from '../entities/Cleavage'
 import { Sound } from '../entities/sound'
-import { SoundType } from '../ports/SoundType'
+import { SupportedSound } from '../ports/SoundType'
 
 export class PublicCleavageUseCase extends UseCase {
     constructor (
@@ -23,7 +23,7 @@ export class PublicCleavageUseCase extends UseCase {
     private onPublicCleavage (cleavage: Cleavage): void | PromiseLike<void> {
         return Promise.all([
             this.interfaceApplicationService.updateCleavage(cleavage),
-            this.interfaceApplicationService.playSound(new Sound(SoundType.DICE_ROLL))
+            this.interfaceApplicationService.playSound(new Sound(SupportedSound.DICE_ROLL))
         ])
             .then(results => Promise.resolve())
             .catch(error => Promise.reject(error))
@@ -32,7 +32,7 @@ export class PublicCleavageUseCase extends UseCase {
     private onNoPublicCleavage (): Promise<void> {
         return Promise.all([
             this.interfaceApplicationService.onNoPublicCleavage(),
-            this.interfaceApplicationService.playSound(new Sound(SoundType.ERROR))
+            this.interfaceApplicationService.playSound(new Sound(SupportedSound.ERROR))
         ])
             .then(results => Promise.resolve())
             .catch(error => Promise.reject(error))

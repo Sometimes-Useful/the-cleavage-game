@@ -1,5 +1,5 @@
-import type { SoundType } from '../ports/SoundType'
+import type { SupportedSound } from '../ports/SoundType'
 
 export class Sound {
-    constructor (public type: SoundType) { }
+    constructor (public type: SupportedSound) { }
 }

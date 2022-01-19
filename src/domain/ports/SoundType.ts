@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-export enum SoundType {
+export enum SupportedSound {
     QUACK = 'QUACK',
     DICE_ROLL = 'DICE_ROLL',
     ERROR = 'ERROR',

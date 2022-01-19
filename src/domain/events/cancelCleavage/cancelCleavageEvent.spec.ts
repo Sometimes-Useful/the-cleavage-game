@@ -1,6 +1,6 @@
 import { Cleavage } from '../../entities/Cleavage'
 import { Sound } from '../../entities/sound'
-import { SoundType } from '../../ports/SoundType'
+import { SupportedSound } from '../../ports/SoundType'
 import { Gherkin } from '../../tests/Gherkin'
 import { cleavageTitle1 } from '../../tests/testContexts'
 import { feature, scenario } from '../../tests/testSuites'
@@ -13,6 +13,6 @@ feature(EventType.CANCEL_CLEAVAGE, [
         application => theInterfaceGatewayHasCurrentCleavage(Gherkin.GIVEN, application.gateways.interface, new Cleavage(cleavageTitle1)),
         application => whenEventOccurs(application.gateways.event, new CancelCleavageEvent()),
         application => theInterfaceGatewayDontHaveCleavage(Gherkin.THEN, application.gateways.interface),
-        application => theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, application.gateways.interface, new Sound(SoundType.QUACK))
+        application => theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, application.gateways.interface, new Sound(SupportedSound.QUACK))
     ])
 ])
