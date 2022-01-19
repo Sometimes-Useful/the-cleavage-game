@@ -8,6 +8,7 @@
     import { DisconnectChatEvent } from "../domain/events/disconnectChat.spec.ts/DisconnectChatEvent";
     import MainMenu from "./views/MainMenu.svelte";
     import Studio from "./views/Studio.svelte";
+    import Settings from "./views/Settings.svelte";
     let forceView:InterfaceView|undefined = undefined
     interfaceViewStore.set(InterfaceView.STUDIO)
     onDestroy(()=>$applicationEventStore = new DisconnectChatEvent())
@@ -33,6 +34,8 @@
             <MainMenu/>
         {:else if  $interfaceViewStore === InterfaceView.STUDIO}
             <Studio/>
+        {:else if  $interfaceViewStore === InterfaceView.SETTINGS}
+            <Settings/>
         {/if}
     {/if}
     
