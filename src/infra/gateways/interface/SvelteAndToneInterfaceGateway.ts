@@ -12,31 +12,9 @@ import { SupportedMusic } from '../../../domain/entities/music/SupportedMusic'
 export class SvelteAndToneInterfaceGateway implements InterfaceGateway {
     public load ():Promise<void> {
         console.log('Tone loading...')
-        /*
-        return Promise.all([
-            new Tone.Player().load('/sounds/quack.mp3'),
-            new Tone.Player().load('/sounds/dice_roll.mp3'),
-            new Tone.Player().load('/sounds/error.mp3'),
-            new Tone.Player().load('/sounds/hyperlike.mp3'),
-            new Tone.Player().load('/sounds/shoot.mp3'),
-            new Tone.Player().load('/sounds/whistle.mp3'),
-            new Tone.Player().load('/sounds/poufff.mp3'),
-            new Tone.Player().load('/sounds/applause.mp3')
-        ])
-            .then(tones => {
-                this.sounds.set(SoundType.QUACK, tones[0])
-                this.sounds.set(SoundType.DICE_ROLL, tones[1])
-                this.sounds.set(SoundType.ERROR, tones[2])
-                this.sounds.set(SoundType.HYPERLIKE, tones[3])
-                this.sounds.set(SoundType.SHOOT, tones[4])
-                this.sounds.set(SoundType.WHISTLE, tones[5])
-                this.sounds.set(SoundType.POUFFF, tones[6])
-                this.sounds.set(SoundType.APPLAUSE, tones[7])
-                */
         return Tone.loaded()
-            // })
             .then(() => {
-                console.log('Tone ready.')
+                console.log('Tone loaded.')
                 this.toneReady = true
                 console.log('Tone starting...')
                 return Tone.start()
@@ -53,9 +31,10 @@ export class SvelteAndToneInterfaceGateway implements InterfaceGateway {
         if (this.toneReady) {
             const musicToPlay = this.supportedMusics.get(music.supportedMusic)
             if (musicToPlay && musicToPlay.loaded) {
-                musicToPlay.loop = true
-                musicToPlay.volume.value = music.volume
-                musicToPlay.start(0)
+                const player = new Tone.Player(musicToPlay).toDestination()
+                player.loop = true
+                player.volume.value = music.volume
+                player.start(0)
             }
             console.log(`Missing sound ${music.supportedMusic} on music assets.`)
         } else {
@@ -77,9 +56,10 @@ export class SvelteAndToneInterfaceGateway implements InterfaceGateway {
         return Promise.reject(new Error('Tone not ready'))
     }
 
-    private onSound (soundType:SoundType, soundToPlay: Tone.Player): Promise<void> {
+    private onSound (soundType:SoundType, soundToPlay: Tone.ToneAudioBuffer): Promise<void> {
         console.log('PLAYING_SOUND', soundType)
-        soundToPlay.start()
+        const player = new Tone.Player(soundToPlay).toDestination()
+        player.start()
         return Promise.resolve()
     }
 
@@ -106,19 +86,19 @@ export class SvelteAndToneInterfaceGateway implements InterfaceGateway {
     }
 
     private currentView: InterfaceView = InterfaceView.NONE
-    private sounds :Map<SoundType, Tone.Player> = new Map([
-        [SoundType.QUACK, new Tone.Player('/sounds/quack.mp3').toDestination()],
-        [SoundType.DICE_ROLL, new Tone.Player('/sounds/dice_roll.mp3').toDestination()],
-        [SoundType.ERROR, new Tone.Player('/sounds/error.mp3').toDestination()],
-        [SoundType.HYPERLIKE, new Tone.Player('/sounds/hyperlike.mp3').toDestination()],
-        [SoundType.SHOOT, new Tone.Player('/sounds/shoot.mp3').toDestination()],
-        [SoundType.WHISTLE, new Tone.Player('/sounds/whistle.mp3').toDestination()],
-        [SoundType.POUFFF, new Tone.Player('/sounds/poufff.mp3').toDestination()],
-        [SoundType.APPLAUSE, new Tone.Player('/sounds/applause.mp3').toDestination()]
+    private sounds :Map<SoundType, Tone.ToneAudioBuffer> = new Map([
+        [SoundType.QUACK, new Tone.ToneAudioBuffer('/sounds/quack.mp3')],
+        [SoundType.DICE_ROLL, new Tone.ToneAudioBuffer('/sounds/dice_roll.mp3')],
+        [SoundType.ERROR, new Tone.ToneAudioBuffer('/sounds/error.mp3')],
+        [SoundType.HYPERLIKE, new Tone.ToneAudioBuffer('/sounds/hyperlike.mp3')],
+        [SoundType.SHOOT, new Tone.ToneAudioBuffer('/sounds/shoot.mp3')],
+        [SoundType.WHISTLE, new Tone.ToneAudioBuffer('/sounds/whistle.mp3')],
+        [SoundType.POUFFF, new Tone.ToneAudioBuffer('/sounds/poufff.mp3')],
+        [SoundType.APPLAUSE, new Tone.ToneAudioBuffer('/sounds/applause.mp3')]
     ])
 
-    private supportedMusics: Map<SupportedMusic, Tone.Player> = new Map([
-        [SupportedMusic.MAIN, new Tone.Player('/music/Ken Hamm - Buckbreak.mp3').toDestination()]
+    private supportedMusics: Map<SupportedMusic, Tone.ToneAudioBuffer> = new Map([
+        [SupportedMusic.MAIN, new Tone.ToneAudioBuffer('/music/Ken Hamm - Buckbreak.mp3')]
     ])
 
     private toneReady: boolean = false
