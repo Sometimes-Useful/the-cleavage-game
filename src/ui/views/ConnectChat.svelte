@@ -7,12 +7,10 @@
     import Link from "../components/link/Link.svelte";
     import Subtitle from "../components/text/subtitle.svelte";
     import Title from "../components/text/title.svelte"
-    import { applicationEventStore, interfaceViewStore } from "../stores/stores";
+    import { applicationEventStore } from "../stores/stores";
     let username:string
     let token:string
     let channel:string
-    const onClickTwitchConnectButton = () => applicationEventStore.set(new ConnectChatEvent(username, token, channel))
-    const onClickMainMenuButton = () => applicationEventStore.set(new NavigateEvent(InterfaceView.MAIN_MENU)) 
 </script>
 <div class="flex flex-col w-full items-center">
     <Title/>
@@ -24,9 +22,9 @@
         <TextBox id="password" name="password" bind:inputValue={token} placeholder="Token Twitch" type="password"/>
         <TextBox id="channel" name="channel" bind:inputValue={channel} placeholder="Chaine Twitch"/>
         {#if username && token && channel}
-            <Button text="Connexion Twitch !" onClick={onClickTwitchConnectButton}/>
+            <Button text="Connexion Twitch !" onClick={() => applicationEventStore.set(new ConnectChatEvent(username, token, channel))}/>
         {/if}
-        <Button text="Menu principal" onClick={onClickMainMenuButton}/>
+        <Button text="Menu principal" onClick={() => applicationEventStore.set(new NavigateEvent(InterfaceView.MAIN_MENU)) }/>
     </div>
     <Link text="Twitch Token Generator" href="https://twitchapps.com/tmi/" newTab={true}/>
 </div>

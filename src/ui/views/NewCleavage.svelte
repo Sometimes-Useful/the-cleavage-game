@@ -1,24 +1,25 @@
 <script lang="ts">
-import { InterfaceView } from "../../domain/entities/InterfaceView";
-
+    import { InterfaceView } from "../../domain/entities/InterfaceView";
     import { CancelCleavageEvent } from "../../domain/events/cancelCleavage/CancelCleavageEvent";
+import type { ApplicationEvent } from "../../domain/events/GameEvent";
     import { LaunchCleavageEvent } from "../../domain/events/launchCleavage/LaunchCleavageEvent";
-import { NavigateEvent } from "../../domain/events/navigateEvent/NavigateEvent";
+    import { NavigateEvent } from "../../domain/events/navigateEvent/NavigateEvent";
     import { PublicCleavageEvent } from "../../domain/events/publicCleavage/PublicCleavageEvent";
     import Button from "../components/button/button.svelte";
     import CleavageModule from "../components/cleavage/cleavageModule.svelte";
     import TextBox from "../components/inputs/textBox.svelte";
     import Title from "../components/text/title.svelte"
     import { applicationEventStore, cleavageStore } from "../stores/stores";
-    const onClickNewClivageButton = () => applicationEventStore.set(new LaunchCleavageEvent(newCleavageTitle))
-    const onClickCancelButton = () => applicationEventStore.set(new CancelCleavageEvent())
-    const onClickRandomCleavageButton = () => applicationEventStore.set(new PublicCleavageEvent())
-    const onClickMainMenu = () => applicationEventStore.set(new NavigateEvent(InterfaceView.MAIN_MENU))
     let newCleavageTitle:string
-    cleavageStore.subscribe(cleavage => {
-        if(cleavage) newCleavageTitle = cleavage.title
-        else newCleavageTitle = ""
-    })
+    const resetCleavageTitleAndSendEvent = (event:ApplicationEvent) =>{
+        newCleavageTitle = ""
+        applicationEventStore.set(event)
+    }
+    const onClickNewClivageButton = () => resetCleavageTitleAndSendEvent(new LaunchCleavageEvent(newCleavageTitle))
+    const onClickCancelButton = () => resetCleavageTitleAndSendEvent(new CancelCleavageEvent())
+    const onClickRandomCleavageButton = () => resetCleavageTitleAndSendEvent(new PublicCleavageEvent())
+    const onClickMainMenu = () => resetCleavageTitleAndSendEvent(new NavigateEvent(InterfaceView.MAIN_MENU))
+    cleavageStore.subscribe(cleavage =>  cleavage ? newCleavageTitle = cleavage.title : newCleavageTitle = "" )
 
 </script>
 
@@ -29,8 +30,11 @@ import { NavigateEvent } from "../../domain/events/navigateEvent/NavigateEvent";
         <Button onClick={onClickRandomCleavageButton} size="large" text="🎲"/>
     </div>
 </div>
-<div class="flex flex-col w-full  items-center">
+<div class="flex flex-col w-full items-center">
     <CleavageModule leftPercentage={0} rightPercentage={0}/>
+</div>
+<div class="flex flex-col w-full  items-center">
+    
     {#if newCleavageTitle}
         <Button onClick={onClickNewClivageButton} text="C'est parti pour les embrouilles!"/>
         <Button onClick={onClickCancelButton} text="Oh Non! Surtout pas!"/>
