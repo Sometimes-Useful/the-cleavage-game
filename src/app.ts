@@ -12,25 +12,19 @@ import { SvelteAndToneInterfaceGateway } from './infra/gateways/interface/Svelte
 import { InMemoryCleavageRepository } from './infra/repositories/cleavage/InMemoryCleavageRepository'
 import { applicationEventStore } from './ui/stores/stores'
 
-const eventGateway = new InMemoryProductionEventGateway()
-const interfaceGateway = new SvelteAndToneInterfaceGateway()
-const applicationGateways:ProductionApplicationGateways = {
-    chat: new TwitchChatGateway(eventGateway),
-    event: eventGateway,
-    interface: interfaceGateway
-}
-const cleavageRepository = new InMemoryCleavageRepository()
-
-const applicationRepositories:ProductionApplicationRepositories = {
-    cleavage: cleavageRepository
-}
-
-const application = new ProductionApplication(
-    applicationGateways,
-    applicationRepositories
-)
-
 export const applicationStart = ():Promise<void> => {
+    const eventGateway = new InMemoryProductionEventGateway()
+    const interfaceGateway = new SvelteAndToneInterfaceGateway()
+    const applicationGateways:ProductionApplicationGateways = {
+        chat: new TwitchChatGateway(eventGateway),
+        event: eventGateway,
+        interface: interfaceGateway
+    }
+
+    const applicationRepositories:ProductionApplicationRepositories = {
+        cleavage: new InMemoryCleavageRepository()
+    }
+    const application = new ProductionApplication(applicationGateways, applicationRepositories)
     console.log('application started')
     return interfaceGateway.load()
         .then(() => {
@@ -40,9 +34,7 @@ export const applicationStart = ():Promise<void> => {
                 cleavage: new CleavageApplicationService(applicationRepositories.cleavage, applicationGateways.chat),
                 interface: new InterfaceApplicationService(applicationGateways.interface)
             })
-            applicationEventStore.subscribe(event => {
-                if (event) application.gateways.event.sendEvent(event)
-            })
+            applicationEventStore.subscribe(event => { if (event) application.gateways.event.sendEvent(event) })
             applicationEventStore.set(new ApplicationStartEvent())
             return Promise.resolve()
         })
