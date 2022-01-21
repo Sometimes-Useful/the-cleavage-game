@@ -20,4 +20,5 @@
 <div class="flex flex-col items-center">
     <Button text="Jouer !" size="large" onClick={()=>applicationEventStore.set(new NewCleavageEvent())}/>
     <Button text="Options !" size="large" onClick={()=>applicationEventStore.set(new NavigateEvent(InterfaceView.SETTINGS))}/>
+    <Button text="A propos !" size="large" onClick={()=>applicationEventStore.set(new NavigateEvent(InterfaceView.ABOUT))}/>
 </div>

@@ -2,6 +2,7 @@
     import NewCleavage from "./views/NewCleavage.svelte"
     import ConnectChat from "./views/ConnectChat.svelte"
     import CurrentCleavage from "./views/CurrentCleavage.svelte"
+    import About from "./views/About.svelte"
     import { InterfaceView } from "../domain/entities/InterfaceView";
     import { onDestroy } from 'svelte';
     import { applicationEventStore, interfaceViewStore } from "./stores/stores";
@@ -22,6 +23,10 @@
             <CurrentCleavage/>
         {:else if forceView === InterfaceView.NEW_CLEAVAGE }
             <NewCleavage/>
+        {:else if forceView === InterfaceView.SETTINGS }
+            <Settings/>
+        {:else if forceView === InterfaceView.ABOUT }
+            <About/>
         {/if}
     {:else}
         {#if $interfaceViewStore === InterfaceView.CONNECT_CHAT} 
@@ -36,6 +41,8 @@
             <Studio/>
         {:else if  $interfaceViewStore === InterfaceView.SETTINGS}
             <Settings/>
+        {:else if  $interfaceViewStore === InterfaceView.ABOUT}
+            <About/>
         {/if}
     {/if}
     

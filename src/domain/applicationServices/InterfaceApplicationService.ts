@@ -7,6 +7,14 @@ import type { Sound } from '../entities/sound'
 import type { InterfaceGateway } from '../ports/InterfaceGateway'
 
 export class InterfaceApplicationService {
+    changeMusicVolumeLevel (volume: number) {
+        return this.interfaceGateway.changeMusicVolumeLevel(volume)
+    }
+
+    changeSoundVolumeLevel (volume: number): Promise<void> {
+        return this.interfaceGateway.changeSoundVolumeLevel(volume)
+    }
+
     playMusic (music: Music): Promise<void> {
         return this.interfaceGateway.playMusic(music)
     }

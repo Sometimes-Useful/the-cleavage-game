@@ -18,6 +18,8 @@ import { PlayerWhistleUseCase } from './PlayerWhistleUseCase'
 import { PlayerHyperLikeUseCase } from './PlayerHyperLikeUseCase'
 import { ApplicationStartUseCase } from './ApplicationStartUseCase'
 import { NavigateUseCase } from './NavigateUseCase'
+import { ChangeMusicVolumeUseCase } from './ChangeMusicVolumeUseCase'
+import { ChangeSoundVolumeUseCase } from './ChangeSoundVolumeUseCase'
 
 export class PrimaryController {
     constructor (private applicationServices:ApplicationServices) {
@@ -37,6 +39,8 @@ export class PrimaryController {
         this.useCases.set(EventType.PLAYER_SHOOT, new PlayerShootUseCase(this.applicationServices.interface))
         this.useCases.set(EventType.APPLICATION_START, new ApplicationStartUseCase(this.applicationServices.event))
         this.useCases.set(EventType.NAVIGATE, new NavigateUseCase(this.applicationServices.interface))
+        this.useCases.set(EventType.CHANGE_MUSIC_VOLUME, new ChangeMusicVolumeUseCase(this.applicationServices.interface))
+        this.useCases.set(EventType.CHANGE_SOUND_VOLUME, new ChangeSoundVolumeUseCase(this.applicationServices.interface))
     }
 
     executeEvent (event: ApplicationEvent): Promise<void> {

@@ -7,5 +7,6 @@ export enum SupportedSound {
     WHISTLE = 'WHISTLE',
     SHOOT = 'SHOOT',
     HYPERLIKE = 'HYPERLIKE',
-    POUFFF = 'POUFFF'
+    POUFFF = 'POUFFF',
+    TICK = 'TICK'
 }

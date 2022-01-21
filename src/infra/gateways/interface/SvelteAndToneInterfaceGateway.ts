@@ -6,10 +6,24 @@ import type { ApplicationNotification } from '../../../domain/entities/notificat
 import type { Sound } from '../../../domain/entities/sound'
 import { SupportedMusic } from '../../../domain/entities/music/SupportedMusic'
 import type { Music } from '../../../domain/entities/music/Music'
-import { cleavageStore, interfaceViewStore } from '../../../ui/stores/stores'
+import { cleavageStore, interfaceViewStore, musicVolumeStore, soundVolumeStore } from '../../../ui/stores/stores'
 import * as Tone from 'tone'
 
+export const defaultMusicVolumeLevel = 100
+export const defaultSoundVolumeLevel = 100
 export class SvelteAndToneInterfaceGateway implements InterfaceGateway {
+    changeMusicVolumeLevel (volume: number): Promise<void> {
+        this.musicVolumeFader.volume.value = Tone.gainToDb(volume / 100)
+        musicVolumeStore.set(volume)
+        return Promise.resolve()
+    }
+
+    changeSoundVolumeLevel (volume: number): Promise<void> {
+        this.soundVolumeFader.volume.value = Tone.gainToDb(volume / 100)
+        soundVolumeStore.set(volume)
+        return Promise.resolve()
+    }
+
     public load ():Promise<void> {
         console.log('Tone loading...')
         return Tone.loaded()
@@ -74,20 +88,21 @@ export class SvelteAndToneInterfaceGateway implements InterfaceGateway {
 
     private onMusicReadyToPlay (music: Music, musicToPlay: Tone.ToneAudioBuffer):Promise<void> {
         console.log('PLAYING_MUSIC', music.supportedMusic)
-        const player = new Tone.Player(musicToPlay).toDestination()
+        const player = new Tone.Player(musicToPlay).connect(this.musicVolumeFader)
         player.loop = true
-        player.volume.value = music.volume
-        player.start(0)
+        player.start()
         return Promise.resolve()
     }
 
     private onSoundReadyToPlay (supportedSound:SupportedSound, soundToPlay: Tone.ToneAudioBuffer): Promise<void> {
         console.log('PLAYING_SOUND', supportedSound)
-        const player = new Tone.Player(soundToPlay).toDestination()
+        const player = new Tone.Player(soundToPlay).connect(this.soundVolumeFader)
         player.start()
         return Promise.resolve()
     }
 
+    private musicVolumeFader: Tone.Volume = new Tone.Volume(Tone.gainToDb(defaultMusicVolumeLevel / 100)).toDestination()
+    private soundVolumeFader: Tone.Volume = new Tone.Volume(Tone.gainToDb(defaultSoundVolumeLevel / 100)).toDestination()
     private currentView: InterfaceView = InterfaceView.NONE
     private toneReady: boolean = false
 
@@ -99,7 +114,8 @@ export class SvelteAndToneInterfaceGateway implements InterfaceGateway {
         [SupportedSound.SHOOT, new Tone.ToneAudioBuffer('/sounds/shoot.mp3')],
         [SupportedSound.WHISTLE, new Tone.ToneAudioBuffer('/sounds/whistle.mp3')],
         [SupportedSound.POUFFF, new Tone.ToneAudioBuffer('/sounds/poufff.mp3')],
-        [SupportedSound.APPLAUSE, new Tone.ToneAudioBuffer('/sounds/applause.mp3')]
+        [SupportedSound.APPLAUSE, new Tone.ToneAudioBuffer('/sounds/applause.mp3')],
+        [SupportedSound.TICK, new Tone.ToneAudioBuffer('/sounds/tick.mp3')]
     ])
 
     private supportedMusics: Map<SupportedMusic, Tone.ToneAudioBuffer> = new Map([

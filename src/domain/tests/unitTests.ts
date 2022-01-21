@@ -60,6 +60,20 @@ export const theInterfaceGatewayHasPlayingSounds = (gherkinPrefix:Gherkin, inter
     })
 }
 
+export const theInterfaceGatewayHasCurrentSoundVolume = (gherkinPrefix:Gherkin, interfaceGateway: FakeInterfaceGateway, expectedSoundVolume: number):Test => {
+    return it(`${gherkinPrefix} the interface gateway has current music volume set to '${expectedSoundVolume}'.`, () => {
+        if (gherkinPrefix === Gherkin.GIVEN || gherkinPrefix === Gherkin.AND_GIVEN) interfaceGateway.soundVolume = expectedSoundVolume
+        expect(interfaceGateway.soundVolume).deep.equal(expectedSoundVolume)
+    })
+}
+
+export const theInterfaceGatewayHasCurrentMusicVolume = (gherkinPrefix:Gherkin, interfaceGateway: FakeInterfaceGateway, expectedMusicVolume: number):Test => {
+    return it(`${gherkinPrefix} the interface gateway has current music volume set to '${expectedMusicVolume}'.`, () => {
+        if (gherkinPrefix === Gherkin.GIVEN || gherkinPrefix === Gherkin.AND_GIVEN) interfaceGateway.musicVolume = expectedMusicVolume
+        expect(interfaceGateway.musicVolume).deep.equal(expectedMusicVolume)
+    })
+}
+
 export const theInterfaceGatewayHasPlayingMusic = (gherkinPrefix:Gherkin, interfaceGateway: FakeInterfaceGateway, expectedPlayingMusic: Music):Test => {
     return it(`${gherkinPrefix} the interface gateway is playing music : '${expectedPlayingMusic}'.`, () => {
         if (gherkinPrefix === Gherkin.GIVEN || gherkinPrefix === Gherkin.AND_GIVEN) interfaceGateway.playingMusic = expectedPlayingMusic

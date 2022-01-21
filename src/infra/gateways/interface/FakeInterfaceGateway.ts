@@ -6,6 +6,16 @@ import type { InterfaceGateway } from '../../../domain/ports/InterfaceGateway'
 import type { Music } from '../../../domain/entities/music/Music'
 
 export class FakeInterfaceGateway implements InterfaceGateway {
+    changeMusicVolumeLevel (volume: number): Promise<void> {
+        this.musicVolume = volume
+        return Promise.resolve()
+    }
+
+    changeSoundVolumeLevel (volume: number): Promise<void> {
+        this.soundVolume = volume
+        return Promise.resolve()
+    }
+
     playMusic (music: Music): Promise<void> {
         this.playingMusic = music
         return Promise.resolve()
@@ -38,6 +48,8 @@ export class FakeInterfaceGateway implements InterfaceGateway {
     currentCleavage: Cleavage|undefined
     notifications: ApplicationNotification[] = [];
     playingSounds: Sound[] = []
+    musicVolume: number = 0
+    soundVolume: number = 0
     playingMusic: Music | undefined = undefined
     currentView: InterfaceView = InterfaceView.NONE;
 }

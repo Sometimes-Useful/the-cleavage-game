@@ -5,6 +5,8 @@ import type { ApplicationNotification } from '../entities/notification/Notificat
 import type { Sound } from '../entities/sound'
 
 export interface InterfaceGateway {
+    changeMusicVolumeLevel(volume: number):Promise<void>
+    changeSoundVolumeLevel(volume: number): Promise<void>
     playMusic(music: Music): Promise<void>
     playSound(sound: Sound): Promise<void>
     retrieveCurrentView(): Promise<InterfaceView>
