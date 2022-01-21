@@ -8,9 +8,8 @@ import { SupportedMusic } from '../../../domain/entities/music/SupportedMusic'
 import type { Music } from '../../../domain/entities/music/Music'
 import { cleavageStore, interfaceViewStore, musicVolumeStore, soundVolumeStore } from '../../../ui/stores/stores'
 import * as Tone from 'tone'
+import { defaultMusicVolumeLevel, defaultSoundVolumeLevel } from './defaultVolumeLevels'
 
-export const defaultMusicVolumeLevel = 100
-export const defaultSoundVolumeLevel = 100
 export class SvelteAndToneInterfaceGateway implements InterfaceGateway {
     changeMusicVolumeLevel (volume: number): Promise<void> {
         this.musicVolumeFader.volume.value = Tone.gainToDb(volume / 100)
