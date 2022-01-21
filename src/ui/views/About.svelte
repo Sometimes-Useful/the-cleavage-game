@@ -2,8 +2,8 @@
     import { InterfaceView } from "../../domain/entities/InterfaceView";
     import { NavigateEvent } from "../../domain/events/navigateEvent/NavigateEvent";
     import Button from "../components/button/button.svelte";
-import Link from "../components/link/Link.svelte";
-import Paragraph from "../components/text/paragraph.svelte";
+    import Link from "../components/link/Link.svelte";
+    import Paragraph from "../components/text/paragraph.svelte";
     import Subtitle from "../components/text/subtitle.svelte";
     import Title from "../components/text/title.svelte"
     import { applicationEventStore } from "../stores/stores";
