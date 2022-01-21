@@ -4,11 +4,12 @@
     export let min:number = 0
     export let max:number = 100
     export let step:number = 1
-    export let onChange:svelte.JSX.FormEventHandler<HTMLInputElement>
+    export let onInput:svelte.JSX.FormEventHandler<HTMLInputElement>
     export let value:number
+    const rotatizer = Math.random() * 100
 </script>
 <div class="flex flex-col w-full items-center p-3">
-  <label for={id} class="form-label text-[#fbff00] font-sans mb-2">{text} - {value}%</label>
+  <label for={id} class="form-label text-[#fbff00] font-sans mb-2">{text} - {value}</label>
   <input
     type="range" 
     class="
@@ -16,8 +17,9 @@
         border-2 rounded-md 
         w-full md:w-1/2 xl:w-1/3 h-1 
         border-[#fbff00]  accent-[#FF2FCB]
+        {rotatizer < 33 ? "" : rotatizer < 66 ? "rotate-1" : "-rotate-1" }
     "
-    on:change={onChange}
+    on:input={onInput}
     {value}
     {min}
     {max}

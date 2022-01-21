@@ -10,12 +10,12 @@
 <div class="flex flex-col items-center">
     <Title/>
     <Subtitle subtitle="El famoso!
-    Le jeu du clivage où on décide enfin si quelque chose est de gauche ou de droite.
-    Un super jeu politique pour fight entre amis ou en famille.
+    Le jeu du clivage où on décide ENFIN si quelque chose est finalement de gauche ou de droite.
+    Un super jeu politique pour fight entre amis ou en famille. Attention, mamie c'est le boss final...
     Version streamer!
-    Tellement digital, tellement handspinner. Le plaisir.
-    Parfait pour préparer l'élection présidentielle de 2022!
-    4€99 seulement! Wouah!"/>
+    Tellement digital! Tellement handspinner! Le plaisir.
+    Parfait pour préparer l'élection présidentielle de 2022 ou quand on s'emmerde...
+    94.99$ seulement! Wouah!"/>
 </div>
 <div class="flex flex-col items-center">
     <Button text="Jouer !" size="large" onClick={()=>applicationEventStore.set(new NewCleavageEvent())}/>

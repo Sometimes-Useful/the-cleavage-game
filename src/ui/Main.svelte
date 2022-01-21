@@ -8,10 +8,10 @@
     import { applicationEventStore, interfaceViewStore } from "./stores/stores";
     import { DisconnectChatEvent } from "../domain/events/disconnectChat.spec.ts/DisconnectChatEvent";
     import MainMenu from "./views/MainMenu.svelte";
-    import Studio from "./views/Studio.svelte";
     import Settings from "./views/Settings.svelte";
+    import Intro from "./views/Intro.svelte";
     let forceView:InterfaceView|undefined = undefined
-    interfaceViewStore.set(InterfaceView.STUDIO)
+    interfaceViewStore.set(InterfaceView.INTRO)
     onDestroy(()=>$applicationEventStore = new DisconnectChatEvent())
 </script>
 
@@ -37,8 +37,8 @@
             <NewCleavage/>
         {:else if  $interfaceViewStore === InterfaceView.MAIN_MENU}
             <MainMenu/>
-        {:else if  $interfaceViewStore === InterfaceView.STUDIO}
-            <Studio/>
+        {:else if  $interfaceViewStore === InterfaceView.INTRO}
+            <Intro/>
         {:else if  $interfaceViewStore === InterfaceView.SETTINGS}
             <Settings/>
         {:else if  $interfaceViewStore === InterfaceView.ABOUT}

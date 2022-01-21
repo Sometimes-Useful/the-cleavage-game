@@ -1,16 +1,21 @@
 import type { InterfaceGateway } from '../../../domain/ports/InterfaceGateway'
-import { SupportedSound } from '../../../domain/ports/SoundType'
+import type { SupportedSound } from '../../../domain/ports/SoundType'
 import type { Cleavage } from '../../../domain/entities/Cleavage'
-import { InterfaceView } from '../../../domain/entities/InterfaceView'
 import type { ApplicationNotification } from '../../../domain/entities/notification/Notification'
 import type { Sound } from '../../../domain/entities/sound'
-import { SupportedMusic } from '../../../domain/entities/music/SupportedMusic'
 import type { Music } from '../../../domain/entities/music/Music'
+import type { SupportedMusic } from '../../../domain/entities/music/SupportedMusic'
+import { InterfaceView } from '../../../domain/entities/InterfaceView'
+import { defaultMusicVolumeLevel, defaultSoundVolumeLevel } from './defaultVolumeLevels'
 import { cleavageStore, interfaceViewStore, musicVolumeStore, soundVolumeStore } from '../../../ui/stores/stores'
 import * as Tone from 'tone'
-import { defaultMusicVolumeLevel, defaultSoundVolumeLevel } from './defaultVolumeLevels'
 
 export class SvelteAndToneInterfaceGateway implements InterfaceGateway {
+    constructor (
+        private supportedSounds :Map<SupportedSound, Tone.ToneAudioBuffer>,
+        private supportedMusics: Map<SupportedMusic, Tone.ToneAudioBuffer>
+    ) {}
+
     changeMusicVolumeLevel (volume: number): Promise<void> {
         this.musicVolumeFader.volume.value = Tone.gainToDb(volume / 100)
         musicVolumeStore.set(volume)
@@ -104,22 +109,6 @@ export class SvelteAndToneInterfaceGateway implements InterfaceGateway {
     private soundVolumeFader: Tone.Volume = new Tone.Volume(Tone.gainToDb(defaultSoundVolumeLevel / 100)).toDestination()
     private currentView: InterfaceView = InterfaceView.NONE
     private toneReady: boolean = false
-
-    private supportedSounds :Map<SupportedSound, Tone.ToneAudioBuffer> = new Map([
-        [SupportedSound.QUACK, new Tone.ToneAudioBuffer('/sounds/quack.mp3')],
-        [SupportedSound.DICE_ROLL, new Tone.ToneAudioBuffer('/sounds/dice_roll.mp3')],
-        [SupportedSound.ERROR, new Tone.ToneAudioBuffer('/sounds/error.mp3')],
-        [SupportedSound.HYPERLIKE, new Tone.ToneAudioBuffer('/sounds/hyperlike.mp3')],
-        [SupportedSound.SHOOT, new Tone.ToneAudioBuffer('/sounds/shoot.mp3')],
-        [SupportedSound.WHISTLE, new Tone.ToneAudioBuffer('/sounds/whistle.mp3')],
-        [SupportedSound.POUFFF, new Tone.ToneAudioBuffer('/sounds/poufff.mp3')],
-        [SupportedSound.APPLAUSE, new Tone.ToneAudioBuffer('/sounds/applause.mp3')],
-        [SupportedSound.TICK, new Tone.ToneAudioBuffer('/sounds/tick.mp3')]
-    ])
-
-    private supportedMusics: Map<SupportedMusic, Tone.ToneAudioBuffer> = new Map([
-        [SupportedMusic.MAIN, new Tone.ToneAudioBuffer('/music/Ken Hamm - Buckbreak.mp3')]
-    ])
 }
 
 const toneIsNotReady = 'Tone is not ready'

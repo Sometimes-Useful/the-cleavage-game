@@ -21,8 +21,8 @@
     <Subtitle subtitle="Options"/>
 </div>
 <div class="flex flex-col w-full items-center">
-    <Slider id="musicVolume" text="Music Volume" onChange={onMusicVolumeChange} value={musicVolume}/>
-    <Slider id="soundVolume" text="Sound Volume" onChange={onSoundVolumeChange} value={soundVolume}/>
+    <Slider id="musicVolume" text="Volume - Musique" onInput={onMusicVolumeChange} value={musicVolume}/>
+    <Slider id="soundVolume" text="Volume - Sons" onInput={onSoundVolumeChange} value={soundVolume}/>
 </div>
 <div class="flex flex-col w-full  items-center">
     <Button onClick={()=>applicationEventStore.set(new NavigateEvent(InterfaceView.MAIN_MENU))} text="Menu Principal!"/>

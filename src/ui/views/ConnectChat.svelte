@@ -8,9 +8,9 @@
     import Subtitle from "../components/text/subtitle.svelte";
     import Title from "../components/text/title.svelte";
     import { applicationEventStore } from "../stores/stores";
-    let username:string
-    let token:string
-    let channel:string
+    let username:string = ""
+    let token:string = ""
+    let channel:string = ""
 </script>
 <div class="flex flex-col w-full items-center">
     <Title/>

@@ -9,7 +9,7 @@
     import { applicationEventStore } from "../stores/stores";
     const gameDescription = `Le jeu du clivage est un jeu qui permet aux joueurs de cliver sur un sujet choisi par le maitre du jeu.
     Le joueur doit choisir si le sujet est de gauche ou de droite.
-    Le joueur peut aussi proposer au maitre du jeu de nouveaux clivages.`
+    Le joueur peut aussi proposer au maitre du jeu de nouveaux clivages et participer dans le débat (applaudir, huer,...)`
     const projectDescription =`Le jeu du clivage est un projet open source et gratuit.`
     const donationDescription = `Nous avons besoin de votre soutient pour pouvoir passer plus de temps au développement du jeu. Hésitez pas à nous contacter à l'addresse bbohec.pro[AT]gmail.com si vous souhaitez nous aider.`
 </script>
