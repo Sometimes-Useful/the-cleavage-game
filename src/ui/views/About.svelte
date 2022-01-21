@@ -2,7 +2,7 @@
     import { InterfaceView } from "../../domain/entities/InterfaceView";
     import { NavigateEvent } from "../../domain/events/navigateEvent/NavigateEvent";
     import Button from "../components/button/button.svelte";
-    import Link from "../components/link/Link.svelte";
+    import LinkComponent from "../components/link/linkComponent.svelte";
     import Paragraph from "../components/text/paragraph.svelte";
     import Subtitle from "../components/text/subtitle.svelte";
     import Title from "../components/text/title.svelte"
@@ -13,7 +13,6 @@
     const projectDescription =`Le jeu du clivage est un projet open source et gratuit.`
     const donationDescription = `Nous avons besoin de votre soutient pour pouvoir passer plus de temps au développement du jeu. Hésitez pas à nous contacter à l'addresse bbohec.pro[AT]gmail.com si vous souhaitez nous aider.`
 </script>
-
 <div class="flex flex-col w-full items-center">
     <Title/>
     <Subtitle subtitle="A propos"/>
@@ -21,7 +20,7 @@
 <div class="flex flex-col w-full  items-center">
     <Paragraph text={gameDescription}/>
     <Paragraph text={projectDescription} center={true}/>
-    <Link text="GitHub" href="https://github.com/Sometimes-Useful/the-cleavage-game" newTab={true}/>
+    <LinkComponent text="GitHub" href="https://github.com/Sometimes-Useful/the-cleavage-game" newTab={true}/>
     <Paragraph text={donationDescription} center={true}/>
 </div>
 <div class="flex flex-col w-full  items-center">

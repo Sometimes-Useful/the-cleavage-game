@@ -4,9 +4,9 @@
     import { NavigateEvent } from "../../domain/events/navigateEvent/NavigateEvent";
     import Button from "../components/button/button.svelte";
     import TextBox from "../components/inputs/textBox.svelte";
-    import Link from "../components/link/Link.svelte";
+    import LinkComponent from "../components/link/linkComponent.svelte";
     import Subtitle from "../components/text/subtitle.svelte";
-    import Title from "../components/text/title.svelte"
+    import Title from "../components/text/title.svelte";
     import { applicationEventStore } from "../stores/stores";
     let username:string
     let token:string
@@ -26,5 +26,5 @@
         {/if}
         <Button text="Menu principal" onClick={() => applicationEventStore.set(new NavigateEvent(InterfaceView.MAIN_MENU)) }/>
     </div>
-    <Link text="Twitch Token Generator" href="https://twitchapps.com/tmi/" newTab={true}/>
+    <LinkComponent text="Twitch Token Generator" href="https://twitchapps.com/tmi/" newTab={true}/>
 </div>
