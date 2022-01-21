@@ -27,7 +27,7 @@
 <div class="flex flex-col w-full items-center">
     <Title/>
     <Subtitle subtitle={title}/>
-    <Paragraph text={viewersCleaveText}/>
+    <Paragraph text={viewersCleaveText} center={true}/>
 </div>
 <div class="flex flex-col w-full items-center">
     <CleavageModule {leftPercentage} {rightPercentage}/>
