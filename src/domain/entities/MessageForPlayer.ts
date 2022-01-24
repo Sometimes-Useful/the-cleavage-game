@@ -16,5 +16,4 @@ export const welcomePlayerMessage = (player:Player):MessageForPlayer => ({
     player,
     message: welcomeMessage(player)
 })
-const welcomeMessage = (player: Player): string => `Bienvenue ${player.username} au jeu du clivage!
-Si tu as besoin d'aide, tu peux tapper '!h'.`
+const welcomeMessage = (player: Player): string => `Bienvenue ${player.username} au jeu du clivage! Tu peux tapper '!h' pour l'aide.`

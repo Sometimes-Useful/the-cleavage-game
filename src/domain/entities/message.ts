@@ -4,6 +4,8 @@ export class Message {
 
 export class WelcomeMessage extends Message {
     constructor () {
-        super("Le jeu du clivage a démarré. Pour obtenir de l'aide, lancer la commande '!h'")
+        super(welcomeMessage)
     }
 }
+const welcomeMessage = `La régie du jeu du clivage est chaud patate!
+Pour obtenir de l'aide, lancer la commande '!h'`
