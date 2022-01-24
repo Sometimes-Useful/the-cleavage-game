@@ -11,6 +11,6 @@
         })
     </script>
     <div class="flex flex-col">
-        <p class= "p-2 font-sans font-bold">{smilleys}</p>
+        <p class= "p-2 font-sans font-bold text-center">{smilleys}</p>
     </div>
  
