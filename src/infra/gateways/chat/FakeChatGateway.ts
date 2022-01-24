@@ -1,8 +1,14 @@
 import type { MessageForPlayer } from '../../../domain/entities/MessageForPlayer'
 import type { ChatGateway } from '../../../domain/ports/ChatGateway'
 import { ChatStatus } from '../../../domain/entities/ChatStatus'
+import type { Message } from '../../../domain/entities/message'
 
 export class FakeChatGateway implements ChatGateway {
+    sendMessage (message: Message): Promise<void> {
+        this.messages.push(message)
+        return Promise.resolve()
+    }
+
     isConnected (): Promise<boolean> {
         return Promise.resolve(this.status === ChatStatus.CONNECTED)
     }
@@ -23,5 +29,6 @@ export class FakeChatGateway implements ChatGateway {
     }
 
     public messagesForPlayer: MessageForPlayer[]=[]
+    public messages: Message[] = []
     public status: ChatStatus = ChatStatus.DISCONNECTED
 }

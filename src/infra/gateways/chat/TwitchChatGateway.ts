@@ -3,6 +3,10 @@ import { PlayerMessageEvent } from '../../../domain/events/playerMessage/PlayerM
 import { MessageForPlayer } from '../../../domain/entities/MessageForPlayer'
 import type { ChatGateway } from '../../../domain/ports/ChatGateway'
 import type { InMemoryProductionEventGateway } from '../event/InMemoryProductionEventGateway'
+import type { Message } from '../../../domain/entities/message'
+import { PlayerJoinEvent } from '../../../domain/events/playerJoin/PlayerJoinEvent'
+import { PlayerQuitEvent } from '../../../domain/events/playerQuit/PlayerQuitEvent'
+import { Player } from '../../../domain/entities/Player'
 
 const noTwitchClientSet = 'No Twitch Client Set'
 export class TwitchChatGateway implements ChatGateway {
@@ -10,6 +14,15 @@ export class TwitchChatGateway implements ChatGateway {
         private eventBus:InMemoryProductionEventGateway,
         private twitchClientDebug:boolean = false
     ) {}
+
+    sendMessage (message: Message): Promise<void> {
+        if (this.tmiClient === null) return Promise.reject(new Error(noTwitchClientSet))
+        return !this.channel
+            ? Promise.reject(new Error(channelUndefinedErrorMessage(message.message)))
+            : !this.isClientConnected
+                ? Promise.reject(new Error(twitchClientNotConnectedErrorMessage))
+                : this.sendTmiMessage(this.tmiClient, this.channel, message)
+    }
 
     connect (username: string, password: string, channel: string): Promise<void> {
         const options:Options = {
@@ -28,6 +41,7 @@ export class TwitchChatGateway implements ChatGateway {
                 return tmiClient.join(channel)
             })
             .then(result => {
+                console.log('channel join - promise resolved')
                 this.channel = channel
             })
             .catch(error => Promise.reject(error))
@@ -36,16 +50,16 @@ export class TwitchChatGateway implements ChatGateway {
     sendMessageToPlayer (messageForPlayer: MessageForPlayer): Promise<void> {
         if (this.tmiClient === null) return Promise.reject(new Error(noTwitchClientSet))
         return !this.channel
-            ? Promise.reject(new Error(channelUndefinedErrorMessage))
+            ? Promise.reject(new Error(channelUndefinedErrorMessage(messageForPlayer.message)))
             : !this.isClientConnected
                 ? Promise.reject(new Error(twitchClientNotConnectedErrorMessage))
-                : this.sendMessage(this.tmiClient, this.channel, messageForPlayer)
+                : this.sendTmiMessage(this.tmiClient, this.channel, messageForPlayer)
     }
 
-    private sendMessage (tmiClient:Client, channel:string, messageForPlayer: MessageForPlayer): Promise<void> {
-        const messages = messageForPlayer.message.split('\n')
-        messages[0] = formatTwitchUserMessage(new MessageForPlayer(messageForPlayer.player, messages[0]))
-
+    private sendTmiMessage (tmiClient:Client, channel:string, message: MessageForPlayer|Message): Promise<void> {
+        const messages = message.message.split('\n')
+        if (message instanceof MessageForPlayer)
+            messages[0] = formatTwitchUserMessage(new MessageForPlayer(message.player, messages[0]))
         return Promise.all(messages.map(message => tmiClient.say(channel, message)))
             .then(results => Promise.resolve())
             .catch(error => Promise.reject(error))
@@ -54,7 +68,7 @@ export class TwitchChatGateway implements ChatGateway {
     disconnect (): Promise<void> {
         if (this.tmiClient === null) return Promise.reject(new Error(noTwitchClientSet))
         return !this.channel
-            ? Promise.reject(new Error(channelUndefinedErrorMessage))
+            ? Promise.reject(new Error(channelUndefinedErrorMessage('')))
             : !this.isClientConnected
                 ? Promise.reject(new Error(twitchClientNotConnectedErrorMessage))
                 : this.tmiClient.part(this.channel)
@@ -82,9 +96,11 @@ export class TwitchChatGateway implements ChatGateway {
         if (this.tmiClient === null) throw new Error(noTwitchClientSet)
         this.tmiClient.on('join', (channel: string, username: string, self: boolean) => {
             console.log(twitchClientJoinChannelAsUser(channel, username))
+            this.eventBus.sendEvent(new PlayerJoinEvent(new Player(username)))
         })
         this.tmiClient.on('part', (channel: string, username: string, self: boolean) => {
             console.log(twitchClientLeaveChannelAsUser(channel, username))
+            this.eventBus.sendEvent(new PlayerQuitEvent(new Player(username)))
         })
         this.tmiClient.on('connected', (host: string, port: number) => {
             console.log(twitchClientConnected(host, port))
@@ -97,7 +113,7 @@ export class TwitchChatGateway implements ChatGateway {
         })
         this.tmiClient.on('message', (channel: string, userstate: ChatUserstate, message: string, self: boolean) => {
             console.log(twitchClientMessage, { channel, userstate, message })
-            if (userstate.username) this.sendPlayerMessageEventOnEventBus(new PlayerMessageEvent(userstate.username, message))
+            if (userstate.username) this.sendPlayerMessageEventOnEventBus(new PlayerMessageEvent(new Player(userstate.username), message))
         })
     }
 
@@ -110,13 +126,13 @@ export class TwitchChatGateway implements ChatGateway {
     private channel:string|null = null
 }
 
-const channelUndefinedErrorMessage = 'Channel is undefined.'
+const channelUndefinedErrorMessage = (message:string) => `Channel is undefined. Can't send player message: ${message}`
 const twitchClientConnecting = (host:string, port:number) => `Twitch client connecting on ${host}:${port} ...`
 const twitchClientNotConnectedErrorMessage = 'Client not connected.'
 const twitchClientConnected = (host:string, port:number) => `Twitch client connected on ${host}:${port}.`
 const twitchClientMessage = 'Twitch client message'
 const twitchClientDisconnecting = 'Twitch client disconnecting ...'
 const twitchClientDisconnect = 'Twitch client disconnected.'
-export const formatTwitchUserMessage = (messageForPlayer: MessageForPlayer): string => `@${messageForPlayer.player} >>> ${messageForPlayer.message}`
-const twitchClientJoinChannelAsUser = (channel: string, username: string): string => `Twitch client joint channel ${channel} as user ${username}`
-const twitchClientLeaveChannelAsUser = (channel: string, username: string): string => `Twitch client leave channel ${channel} as user ${username}`
+export const formatTwitchUserMessage = (messageForPlayer: MessageForPlayer): string => `@${messageForPlayer.player.username} >>> ${messageForPlayer.message}`
+const twitchClientJoinChannelAsUser = (channel: string, username: string): string => `${username} joint channel '${channel}'.`
+const twitchClientLeaveChannelAsUser = (channel: string, username: string): string => `${username} leave channel '${channel}'.`

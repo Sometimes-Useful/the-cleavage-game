@@ -16,6 +16,7 @@ import { PlayerHyperLikeEvent } from '../events/playerHyperLike/PlayerHyperLikeE
 import { PlayerWhistleEvent } from '../events/playerWhistle/PlayerWhistleEvent'
 import type { ApplicationEvent } from '../events/GameEvent'
 import { PlayerAskForHelpEvent } from '../events/playerAskForHelp/PlayerAskForHelpEvent'
+import type { Player } from '../entities/Player'
 
 export class PlayerMessage extends UseCase {
     constructor (private eventApplicationService:EventApplicationService, private chatApplicationService:ChatApplicationService) { super() }
@@ -25,14 +26,14 @@ export class PlayerMessage extends UseCase {
             : Promise.resolve()
     }
 
-    private onApplicationEvent (player:string, message:string):Promise<void> {
+    private onApplicationEvent (player:Player, message:string):Promise<void> {
         const applicationEvent = this.applicationEventStrategies(message, player).get(true)
         return applicationEvent
             ? this.eventApplicationService.sentEvent(applicationEvent)
             : this.chatApplicationService.sendMessageToPlayer(new MessageForPlayer(player, dontKnowWhatToDoWithThatMessage(player)))
     }
 
-    private applicationEventStrategies (message: string, player: string): Map<boolean, ApplicationEvent> {
+    private applicationEventStrategies (message: string, player: Player): Map<boolean, ApplicationEvent> {
         return new Map([
             [message === applicationMessagePrefix + AuthorizedMessage.SHORT_APPLAUSE, new PlayerApplauseEvent()],
             [message === applicationMessagePrefix + AuthorizedMessage.SHORT_WHISTLE, new PlayerWhistleEvent()],

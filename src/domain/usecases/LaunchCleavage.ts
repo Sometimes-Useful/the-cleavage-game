@@ -7,13 +7,16 @@ import type { CleavageApplicationService } from '../applicationServices/Cleavage
 import { Cleavage } from '../entities/Cleavage'
 import type { EventApplicationService } from '../applicationServices/EventApplicationService'
 import { NavigateEvent } from '../events/navigateEvent/NavigateEvent'
+import type { PlayerApplicationService } from '../applicationServices/PlayerApplicationService'
+import { PlayerCleave } from '../entities/PlayerCleave'
 
 export class LaunchCleavage extends UseCase {
     constructor (
         private interfaceApplicationService: InterfaceApplicationService,
         private chatApplicationService:ChatApplicationService,
         private cleavageApplicationService:CleavageApplicationService,
-        private eventApplicationService:EventApplicationService
+        private eventApplicationService:EventApplicationService,
+        private playerApplicationService:PlayerApplicationService
     ) {
         super()
     }
@@ -28,9 +31,14 @@ export class LaunchCleavage extends UseCase {
     }
 
     private onConnected (event:LaunchCleavageEvent): Promise<void> {
-        const cleavage = new Cleavage(event.cleavageTitle)
-        return this.cleavageApplicationService.saveCleavage(cleavage)
-            .then(() => this.interfaceApplicationService.updateCleavage(cleavage))
+        return this.playerApplicationService.players()
+            .then(players => {
+                const cleaves:Map<string, PlayerCleave> = new Map()
+                players.forEach(player => cleaves.set(player.username, PlayerCleave.NOTHING))
+                return this.cleavageApplicationService.saveCleavage(new Cleavage(event.cleavageTitle, cleaves))
+            })
+            .then(() => this.cleavageApplicationService.loadCleavage())
+            .then(cleavage => this.interfaceApplicationService.updateCleavage(cleavage))
             .then(() => this.eventApplicationService.sentEvent(new NavigateEvent(InterfaceView.CURRENT_CLEAVAGE)))
             .catch(error => Promise.reject(error))
     }

@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 export enum PlayerCleave {
     LEFT = 'LEFT',
-    RIGHT = 'RIGHT'
+    RIGHT = 'RIGHT',
+    NOTHING = 'NOTHING'
 }

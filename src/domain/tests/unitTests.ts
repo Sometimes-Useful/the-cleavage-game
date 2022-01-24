@@ -13,6 +13,9 @@ import type { InMemoryCleavageRepository } from '../../infra/repositories/cleava
 import type { Cleavage } from '../entities/Cleavage'
 import type { Sound } from '../entities/sound'
 import type { Music } from '../entities/music/Music'
+import type { Message } from '../entities/message'
+import type { InMemoryPlayerRepository } from '../../infra/repositories/player/InMemoryPlayerRepository'
+import type { Player } from '../entities/Player'
 
 export const theChatGatewayHasExpectedStatus = (gherkinPrefix: Gherkin, chatGateway: FakeChatGateway, chatStatus: ChatStatus):Test =>
     it(`${gherkinPrefix} the chat is '${chatStatus}'.`, () => {
@@ -46,7 +49,7 @@ export const theEventIsSent = (gherkinPrefix:Gherkin, eventGateway:FakeEventGate
 export const theInterfaceGatewayHasCurrentCleavage = (gherkinPrefix:Gherkin, interfaceGateway: FakeInterfaceGateway, expectedCleavage: Cleavage):Test =>
     it(`${gherkinPrefix} the interface gateway has the current cleavage : '${expectedCleavage}'.`, () => {
         if (gherkinPrefix === Gherkin.GIVEN || gherkinPrefix === Gherkin.AND_GIVEN) interfaceGateway.currentCleavage = expectedCleavage
-        expect(interfaceGateway.currentCleavage).deep.equal(expectedCleavage)
+        expect(interfaceGateway.currentCleavage).deep.equal(expectedCleavage, detailedComparisonMessage(interfaceGateway.currentCleavage, expectedCleavage))
     })
 
 export const theInterfaceGatewayDontHaveCleavage = (gherkinPrefix:Gherkin, interfaceGateway: FakeInterfaceGateway):Test =>
@@ -93,10 +96,28 @@ export const theChatGatewaySendMessageToPlayer = (gherkinPrefix:Gherkin, chatGat
     return it(`${gherkinPrefix} the chat gateway has messages for player: ${messagesForPlayer}`, () => expect(chatGateway.messagesForPlayer).deep.equal(messagesForPlayer))
 }
 
+export const theChatGatewaySendMessage = (gherkinPrefix:Gherkin, chatGateway:FakeChatGateway, expectedMessages:Message|Message[]):Test => {
+    const messages = Array.isArray(expectedMessages) ? expectedMessages : [expectedMessages]
+    return it(`${gherkinPrefix} the chat gateway has messages : ${messages}`, () => expect(chatGateway.messages).deep.equal(messages))
+}
+
+export const thePlayerRepositoryHasPlayers = (gherkinPrefix: Gherkin, playerRepository: InMemoryPlayerRepository, expectedPlayers: Player|Player[]):Test => {
+    const players : Player[] = Array.isArray(expectedPlayers) ? expectedPlayers : [expectedPlayers]
+    return it(`${gherkinPrefix} the player repository has the following players: ${players}`, () => {
+        if (gherkinPrefix === Gherkin.GIVEN || gherkinPrefix === Gherkin.AND_GIVEN) playerRepository.currentPlayers = players
+        expect(playerRepository.currentPlayers).deep.equal(players)
+    })
+}
+export const thePlayerRepositoryDontHavePlayers = (gherkinPrefix: Gherkin, playerRepository: InMemoryPlayerRepository): Test =>
+    it(`${gherkinPrefix} the player repository don't have players.`, () => {
+        if (gherkinPrefix === Gherkin.GIVEN || gherkinPrefix === Gherkin.AND_GIVEN) playerRepository.currentPlayers = []
+        expect(playerRepository.currentPlayers).deep.equal([])
+    })
+
 export const theCleavageRepositoryHasCurrentCleavage = (gherkinPrefix: Gherkin, cleavageRepository: InMemoryCleavageRepository, expectedCleavage: Cleavage): Test =>
     it(`${gherkinPrefix} the cleavage repository has the following cleavage: ${expectedCleavage}`, () => {
         if (gherkinPrefix === Gherkin.GIVEN || gherkinPrefix === Gherkin.AND_GIVEN) cleavageRepository.cleavage = expectedCleavage
-        expect(cleavageRepository.cleavage).deep.equal(expectedCleavage, cleavageDetailedComparisonMessage(cleavageRepository.cleavage, expectedCleavage))
+        expect(cleavageRepository.cleavage).deep.equal(expectedCleavage, detailedComparisonMessage(cleavageRepository.cleavage, expectedCleavage))
     })
 
 export const theCleavageRepositoryHasPublicCleavages = (gherkinPrefix: Gherkin, cleavageRepository: InMemoryCleavageRepository, expectedPublicCleavages: Cleavage|Cleavage[]):Test =>
@@ -112,7 +133,7 @@ export const theCleavageRepositoryDontHaveCurrentCleavage = (gherkinPrefix: Gher
         expect(cleavageRepository.cleavage).equal(undefined)
     })
 
-const cleavageDetailedComparisonMessage = (cleavage: Cleavage|undefined, expectedCleavage: Cleavage): string => `DETAILS\nexpected >>>>>>>> ${stringifyWithDetailledSetAndMap(cleavage)} \nto deeply equal > ${stringifyWithDetailledSetAndMap(expectedCleavage)} \n`
+const detailedComparisonMessage = (currentValue: any, expectedValue: any): string => `DETAILS\nexpected >>>>>>>> ${stringifyWithDetailledSetAndMap(currentValue)} \nto deeply equal > ${stringifyWithDetailledSetAndMap(expectedValue)} \n`
 const stringifyWithDetailledSetAndMap = (value: any) => JSON.stringify(value, detailledStringifyForSetAndMap)
 const mapToObjectLiteral = (value: Map<any, any>): any => Array.from(value).reduce((obj: any, [key, value]) => {
     obj[key] = value

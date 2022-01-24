@@ -8,6 +8,7 @@ import { TwitchChatGateway } from './infra/gateways/chat/TwitchChatGateway'
 import { InMemoryProductionEventGateway } from './infra/gateways/event/InMemoryProductionEventGateway'
 import { SvelteAndToneInterfaceGateway } from './infra/gateways/interface/SvelteAndToneInterfaceGateway'
 import { InMemoryCleavageRepository } from './infra/repositories/cleavage/InMemoryCleavageRepository'
+import { InMemoryPlayerRepository } from './infra/repositories/player/InMemoryPlayerRepository'
 
 const supportedSounds = new Map([
     [SupportedSound.QUACK, new Tone.ToneAudioBuffer('/sounds/quack.mp3')],
@@ -27,6 +28,7 @@ const interfaceGateway = new SvelteAndToneInterfaceGateway(supportedSounds, supp
 const eventGateway = new InMemoryProductionEventGateway()
 const chatGateway = new TwitchChatGateway(eventGateway)
 const cleavageRepository = new InMemoryCleavageRepository()
+const playerRepository = new InMemoryPlayerRepository()
 const applicationGateways:ProductionApplicationGateways = { chat: chatGateway, event: eventGateway, interface: interfaceGateway }
-const applicationRepositories:ProductionApplicationRepositories = { cleavage: cleavageRepository }
+const applicationRepositories:ProductionApplicationRepositories = { cleavage: cleavageRepository, player: playerRepository }
 export const application = new ProductionApplication(applicationGateways, applicationRepositories)

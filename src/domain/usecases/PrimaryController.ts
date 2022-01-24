@@ -20,13 +20,15 @@ import { ApplicationStartUseCase } from './ApplicationStartUseCase'
 import { NavigateUseCase } from './NavigateUseCase'
 import { ChangeMusicVolumeUseCase } from './ChangeMusicVolumeUseCase'
 import { ChangeSoundVolumeUseCase } from './ChangeSoundVolumeUseCase'
+import { PlayerJoinUseCase } from './PlayerJoinUseCase'
+import { PlayerQuitUseCase } from './PlayerQuitUseCase'
 
 export class PrimaryController {
     constructor (private applicationServices:ApplicationServices) {
         this.useCases.set(EventType.DISCONNECT_CHAT, new DisconnectChat(this.applicationServices.chat))
         this.useCases.set(EventType.CONNECT_CHAT, new ConnectChat(this.applicationServices.chat, this.applicationServices.interface, this.applicationServices.event))
         this.useCases.set(EventType.NEW_CLEAVAGE, new NewCleavage(this.applicationServices.interface, this.applicationServices.chat, this.applicationServices.event))
-        this.useCases.set(EventType.LAUNCH_CLEAVAGE, new LaunchCleavage(this.applicationServices.interface, this.applicationServices.chat, this.applicationServices.cleavage, this.applicationServices.event))
+        this.useCases.set(EventType.LAUNCH_CLEAVAGE, new LaunchCleavage(this.applicationServices.interface, this.applicationServices.chat, this.applicationServices.cleavage, this.applicationServices.event, this.applicationServices.player))
         this.useCases.set(EventType.PLAYER_MESSAGE, new PlayerMessage(this.applicationServices.event, this.applicationServices.chat))
         this.useCases.set(EventType.PLAYER_CLEAVE, new PlayerCleaveUseCase(this.applicationServices.cleavage, this.applicationServices.chat, this.applicationServices.interface))
         this.useCases.set(EventType.PUBLIC_CLEAVAGE, new PublicCleavageUseCase(this.applicationServices.cleavage, this.applicationServices.interface))
@@ -41,6 +43,8 @@ export class PrimaryController {
         this.useCases.set(EventType.NAVIGATE, new NavigateUseCase(this.applicationServices.interface))
         this.useCases.set(EventType.CHANGE_MUSIC_VOLUME, new ChangeMusicVolumeUseCase(this.applicationServices.interface))
         this.useCases.set(EventType.CHANGE_SOUND_VOLUME, new ChangeSoundVolumeUseCase(this.applicationServices.interface))
+        this.useCases.set(EventType.PLAYER_JOIN, new PlayerJoinUseCase(this.applicationServices.player, this.applicationServices.chat, this.applicationServices.cleavage, this.applicationServices.interface))
+        this.useCases.set(EventType.PLAYER_QUIT, new PlayerQuitUseCase(this.applicationServices.player, this.applicationServices.cleavage, this.applicationServices.interface))
     }
 
     executeEvent (event: ApplicationEvent): Promise<void> {
