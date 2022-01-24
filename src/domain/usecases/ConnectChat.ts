@@ -7,6 +7,7 @@ import { InterfaceView } from '../entities/InterfaceView'
 import { mainMusic } from '../entities/music/mainMusic'
 import type { EventApplicationService } from '../applicationServices/EventApplicationService'
 import { NavigateEvent } from '../events/navigateEvent/NavigateEvent'
+import { WelcomeMessage } from '../entities/message'
 
 export class ConnectChat extends UseCase {
     constructor (
@@ -34,6 +35,7 @@ export class ConnectChat extends UseCase {
     private onConnected (): void | PromiseLike<void> {
         return Promise.all([
             this.eventApplicationService.sentEvent(new NavigateEvent(InterfaceView.NEW_CLEAVAGE)),
+            this.chatApplicationService.sendMessage(new WelcomeMessage()),
             this.interfaceApplicationService.playMusic(mainMusic)
         ])
             .then(results => Promise.resolve())

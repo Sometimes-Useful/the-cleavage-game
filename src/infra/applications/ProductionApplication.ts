@@ -3,6 +3,7 @@ import { ChatApplicationService } from '../../domain/applicationServices/ChatApp
 import { CleavageApplicationService } from '../../domain/applicationServices/CleavageService'
 import { EventApplicationService } from '../../domain/applicationServices/EventApplicationService'
 import { InterfaceApplicationService } from '../../domain/applicationServices/InterfaceApplicationService'
+import { PlayerApplicationService } from '../../domain/applicationServices/PlayerApplicationService'
 import { ApplicationStartEvent } from '../../domain/events/applicationStart/ApplicationStartEvent'
 import type { ProductionApplicationGateways } from '../../domain/ports/ApplicationGateways'
 import type { ProductionApplicationRepositories } from '../../domain/ports/ApplicationRepositories'
@@ -22,7 +23,8 @@ export class ProductionApplication {
                     chat: new ChatApplicationService(this.gateways.chat, this.gateways.interface),
                     event: new EventApplicationService(this.gateways.event),
                     cleavage: new CleavageApplicationService(this.repositories.cleavage, this.gateways.chat),
-                    interface: new InterfaceApplicationService(this.gateways.interface)
+                    interface: new InterfaceApplicationService(this.gateways.interface),
+                    player: new PlayerApplicationService(this.repositories.player)
                 })
                 applicationEventStore.subscribe(event => { if (event) application.gateways.event.sendEvent(event) })
                 applicationEventStore.set(new ApplicationStartEvent())

@@ -2,6 +2,7 @@ import { alreadyDisconnectedToChatNotification } from '../entities/notification/
 import type { ChatGateway } from '../ports/ChatGateway'
 import type { MessageForPlayer } from '../entities/MessageForPlayer'
 import type { InterfaceGateway } from '../ports/InterfaceGateway'
+import type { Message } from '../entities/message'
 
 export class ChatApplicationService {
     constructor (
@@ -11,6 +12,10 @@ export class ChatApplicationService {
 
     sendMessageToPlayer (messageForPlayer: MessageForPlayer): Promise<void> {
         return this.chatGateway.sendMessageToPlayer(messageForPlayer)
+    }
+
+    sendMessage (message: Message): Promise<void> {
+        return this.chatGateway.sendMessage(message)
     }
 
     isConnected () {

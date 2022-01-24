@@ -1,5 +1,7 @@
-export const player1 = 'Billy'
-export const player2 = 'Bob'
+import { Player } from '../entities/Player'
+
+export const player1 = new Player('Billy')
+export const player2 = new Player('Bob')
 export const cleavageTitle1 = 'Les mouchoirs en tissu'
 export const cleavageTitle2 = 'Les glaciers de l\'Ile d\'Oléron'
 export const integrationTestMessage = 'Integration Test Message'

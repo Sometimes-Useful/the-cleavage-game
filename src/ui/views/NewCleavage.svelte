@@ -31,7 +31,7 @@ import type { ApplicationEvent } from "../../domain/events/GameEvent";
     </div>
 </div>
 <div class="flex flex-col w-full items-center">
-    <CleavageModule leftPercentage={0} rightPercentage={0}/>
+    <CleavageModule cleaveLeft={0} cleaveRight={0} notCleave={0} totalCleave={0}/>
 </div>
 <div class="flex flex-col w-full  items-center">
     

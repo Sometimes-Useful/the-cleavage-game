@@ -12,6 +12,8 @@ import type { ApplicationServices } from '../ports/ApplicationServices'
 import type { FakeApplicationGateways } from '../ports/ApplicationGateways'
 import type { FakeApplicationRepositories } from '../ports/ApplicationRepositories'
 import type { EventType } from '../events/EventType'
+import { InMemoryPlayerRepository } from '../../infra/repositories/player/InMemoryPlayerRepository'
+import { PlayerApplicationService } from '../applicationServices/PlayerApplicationService'
 
 type UnitTest = (application: FakeApplication) => Test;
 
@@ -25,13 +27,15 @@ export function scenario (scenarioTitle: string, tests: ((application: FakeAppli
         interface: new FakeInterfaceGateway()
     }
     const applicationRepositories:FakeApplicationRepositories = {
-        cleavage: new InMemoryCleavageRepository()
+        cleavage: new InMemoryCleavageRepository(),
+        player: new InMemoryPlayerRepository()
     }
     const applicationServices:ApplicationServices = {
         chat: new ChatApplicationService(applicationGateways.chat, applicationGateways.interface),
         event: new EventApplicationService(applicationGateways.event),
         cleavage: new CleavageApplicationService(applicationRepositories.cleavage, applicationGateways.chat),
-        interface: new InterfaceApplicationService(applicationGateways.interface)
+        interface: new InterfaceApplicationService(applicationGateways.interface),
+        player: new PlayerApplicationService(applicationRepositories.player)
     }
     eventGateway.configureController(applicationServices)
     const application = new FakeApplication(

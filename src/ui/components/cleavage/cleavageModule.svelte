@@ -1,10 +1,15 @@
 <script lang="ts">
+    import { beforeUpdate } from "svelte";
     import Cleave from "../text/cleave.svelte";
-    export let leftPercentage:number
-    export let rightPercentage:number
+    import NotCleave from "../text/notCleave.svelte";
+    export let cleaveLeft:number
+    export let cleaveRight:number
+    export let notCleave:number
+    export let totalCleave:number
 </script>
 <div class="flex w-full flex-row justify-evenly">
-    <Cleave rotate="+" text="GÔCHE" color="Red" percentage={leftPercentage}/>
-    <Cleave rotate="-" text="DROUATE" color="Blue" percentage={rightPercentage}/>
+    <Cleave rotate="+" text="GÔCHE" color="Red" cleave = {cleaveLeft} {totalCleave}  />
+    <NotCleave {notCleave}/>
+    <Cleave rotate="-" text="DROUATE" color="Blue" cleave = {cleaveRight} {totalCleave}/>
 </div>
 

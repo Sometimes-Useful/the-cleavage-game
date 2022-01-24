@@ -9,6 +9,7 @@ import { FakeEventGateway } from '../event/FakeEventGateway'
 import { channel, integrationTestMessage, player1, token, username } from '../../../domain/tests/testContexts'
 import { PlayerMessageEvent } from '../../../domain/events/playerMessage/PlayerMessageEvent'
 import { EnvironmentVariable } from './EnvironmentVariable'
+import { Player } from '../../../domain/entities/Player'
 function retrieveEnvVariable (envVariableName:EnvironmentVariable) {
     const envVariableValue: string | undefined = process.env[envVariableName]
     if (envVariableValue) return envVariableValue
@@ -56,7 +57,7 @@ envs.forEach(environnement => {
                 }
                 if (environnement.adapter instanceof TwitchChatGateway)
                     setTimeout(() => {
-                        expect(inMemoryEventBus.events).deep.equal([new PlayerMessageEvent(environnement.username, formatTwitchUserMessage(messageForPlayer))])
+                        expect(inMemoryEventBus.events).deep.equal([new PlayerMessageEvent(new Player(environnement.username), formatTwitchUserMessage(messageForPlayer))])
                         done()
                     }, 20)
             })
