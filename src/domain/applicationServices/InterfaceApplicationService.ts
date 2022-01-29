@@ -4,9 +4,10 @@ import type { Music } from '../entities/music/Music'
 import type { ApplicationNotification } from '../entities/notification/Notification'
 import { noPublicCleavageNotification } from '../entities/notification/notifications'
 import type { Sound } from '../entities/sound'
-import type { InterfaceGateway } from '../ports/InterfaceGateway'
+import type { InterfaceGateway } from '../ports/secondary/gateways/InterfaceGateway'
 
 export class InterfaceApplicationService {
+    constructor (private interfaceGateway:InterfaceGateway) {}
     changeMusicVolumeLevel (volume: number) {
         return this.interfaceGateway.changeMusicVolumeLevel(volume)
     }
@@ -19,7 +20,6 @@ export class InterfaceApplicationService {
         return this.interfaceGateway.playMusic(music)
     }
 
-    constructor (private interfaceGateway:InterfaceGateway) {}
     onNoPublicCleavage (): Promise<void> {
         return Promise.all([
             this.clearCleavage(),

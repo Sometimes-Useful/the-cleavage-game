@@ -2,7 +2,7 @@ import type { ChatApplicationService } from '../applicationServices/ChatApplicat
 import type { ApplicationEvent } from '../events/GameEvent'
 import { UseCase } from './UseCase'
 
-export class DisconnectChat extends UseCase {
+export class DisconnectChatUseCase extends UseCase {
     constructor (private chatApplicationService: ChatApplicationService) {
         super()
     }

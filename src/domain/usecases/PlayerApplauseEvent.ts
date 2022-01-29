@@ -2,7 +2,7 @@ import { UseCase } from './UseCase'
 import type { ApplicationEvent } from '../events/GameEvent'
 import type { InterfaceApplicationService } from '../applicationServices/InterfaceApplicationService'
 import { Sound } from '../entities/sound'
-import { SupportedSound } from '../ports/SoundType'
+import { SupportedSound } from '../entities/SoundType'
 
 export class PlayerApplauseUseCase extends UseCase {
     constructor (

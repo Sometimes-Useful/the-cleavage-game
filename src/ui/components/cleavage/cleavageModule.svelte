@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { beforeUpdate } from "svelte";
     import Cleave from "../text/cleave.svelte";
     import NotCleave from "../text/notCleave.svelte";
     export let cleaveLeft:number

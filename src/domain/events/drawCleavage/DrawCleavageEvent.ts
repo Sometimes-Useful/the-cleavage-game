@@ -1,8 +1,8 @@
 import { EventType } from '../EventType'
 import { ApplicationEvent } from '../GameEvent'
 
-export class PublicCleavageEvent extends ApplicationEvent {
+export class DrawCleavageEvent extends ApplicationEvent {
     constructor () { super() }
 
-    eventType: EventType = EventType.PUBLIC_CLEAVAGE;
+    eventType: EventType = EventType.DRAW_CLEAVAGE;
 }

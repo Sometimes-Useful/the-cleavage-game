@@ -1,7 +1,7 @@
-import type { MessageForPlayer } from '../../../domain/entities/MessageForPlayer'
-import type { ChatGateway } from '../../../domain/ports/ChatGateway'
 import { ChatStatus } from '../../../domain/entities/ChatStatus'
 import type { Message } from '../../../domain/entities/message'
+import type { MessageForPlayer } from '../../../domain/entities/MessageForPlayer'
+import type { ChatGateway } from '../../../domain/ports/secondary/gateways/ChatGateway'
 
 export class FakeChatGateway implements ChatGateway {
     sendMessage (message: Message): Promise<void> {

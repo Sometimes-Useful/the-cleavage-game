@@ -1,12 +1,11 @@
 import { ChatUserstate, Client, Options } from 'tmi.js'
 import { PlayerMessageEvent } from '../../../domain/events/playerMessage/PlayerMessageEvent'
 import { MessageForPlayer } from '../../../domain/entities/MessageForPlayer'
-import type { ChatGateway } from '../../../domain/ports/ChatGateway'
 import type { InMemoryProductionEventGateway } from '../event/InMemoryProductionEventGateway'
 import type { Message } from '../../../domain/entities/message'
-import { PlayerJoinEvent } from '../../../domain/events/playerJoin/PlayerJoinEvent'
 import { PlayerQuitEvent } from '../../../domain/events/playerQuit/PlayerQuitEvent'
 import { Player } from '../../../domain/entities/Player'
+import type { ChatGateway } from '../../../domain/ports/secondary/gateways/ChatGateway'
 
 const noTwitchClientSet = 'No Twitch Client Set'
 export class TwitchChatGateway implements ChatGateway {
@@ -96,7 +95,6 @@ export class TwitchChatGateway implements ChatGateway {
         if (this.tmiClient === null) throw new Error(noTwitchClientSet)
         this.tmiClient.on('join', (channel: string, username: string, self: boolean) => {
             console.log(twitchClientJoinChannelAsUser(channel, username))
-            this.eventBus.sendEvent(new PlayerJoinEvent(new Player(username)))
         })
         this.tmiClient.on('part', (channel: string, username: string, self: boolean) => {
             console.log(twitchClientLeaveChannelAsUser(channel, username))

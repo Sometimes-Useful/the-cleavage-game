@@ -1,7 +1,7 @@
 import type { InterfaceApplicationService } from '../applicationServices/InterfaceApplicationService'
 import { Sound } from '../entities/sound'
+import { SupportedSound } from '../entities/SoundType'
 import type { CancelCleavageEvent } from '../events/cancelCleavage/CancelCleavageEvent'
-import { SupportedSound } from '../ports/SoundType'
 import { UseCase } from './UseCase'
 
 export class CancelCleavageUseCase extends UseCase {

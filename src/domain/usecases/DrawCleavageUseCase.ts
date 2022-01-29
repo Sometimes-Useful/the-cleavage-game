@@ -4,9 +4,9 @@ import type { InterfaceApplicationService } from '../applicationServices/Interfa
 import type { ApplicationEvent } from '../events/GameEvent'
 import type { Cleavage } from '../entities/Cleavage'
 import { Sound } from '../entities/sound'
-import { SupportedSound } from '../ports/SoundType'
+import { SupportedSound } from '../entities/SoundType'
 
-export class PublicCleavageUseCase extends UseCase {
+export class DrawCleavageUseCase extends UseCase {
     constructor (
         private cleavageApplicationService: CleavageApplicationService,
         private interfaceApplicationService: InterfaceApplicationService
@@ -15,12 +15,12 @@ export class PublicCleavageUseCase extends UseCase {
     execute (event: ApplicationEvent): Promise<void> {
         return this.cleavageApplicationService.nextPublicCleavage()
             .then(cleavage => cleavage
-                ? this.onPublicCleavage(cleavage)
+                ? this.onCleavage(cleavage)
                 : this.onNoPublicCleavage())
             .catch(error => Promise.reject(error))
     }
 
-    private onPublicCleavage (cleavage: Cleavage): void | PromiseLike<void> {
+    private onCleavage (cleavage: Cleavage): void | PromiseLike<void> {
         return Promise.all([
             this.interfaceApplicationService.updateCleavage(cleavage),
             this.interfaceApplicationService.playSound(new Sound(SupportedSound.DICE_ROLL))
@@ -30,6 +30,14 @@ export class PublicCleavageUseCase extends UseCase {
     }
 
     private onNoPublicCleavage (): Promise<void> {
+        return this.cleavageApplicationService.randomGlobalCleavage()
+            .then(cleavage => cleavage
+                ? this.onCleavage(cleavage)
+                : this.onNoGlobalCleavage())
+            .catch(error => Promise.reject(error))
+    }
+
+    private onNoGlobalCleavage (): Promise<void> {
         return Promise.all([
             this.interfaceApplicationService.onNoPublicCleavage(),
             this.interfaceApplicationService.playSound(new Sound(SupportedSound.ERROR))

@@ -7,13 +7,16 @@ import { FakeInterfaceGateway } from '../../infra/gateways/interface/FakeInterfa
 import { InterfaceApplicationService } from '../applicationServices/InterfaceApplicationService'
 import { EventApplicationService } from '../applicationServices/EventApplicationService'
 import { CleavageApplicationService } from '../applicationServices/CleavageService'
-import { InMemoryCleavageRepository } from '../../infra/repositories/cleavage/InMemoryCleavageRepository'
 import type { ApplicationServices } from '../ports/ApplicationServices'
-import type { FakeApplicationGateways } from '../ports/ApplicationGateways'
-import type { FakeApplicationRepositories } from '../ports/ApplicationRepositories'
 import type { EventType } from '../events/EventType'
 import { InMemoryPlayerRepository } from '../../infra/repositories/player/InMemoryPlayerRepository'
 import { PlayerApplicationService } from '../applicationServices/PlayerApplicationService'
+import { InMemoryCurrentCleavageRepository } from '../../infra/repositories/currentCleavage/InMemoryCurrentCleavageRepository'
+import type { FakeApplicationGateways } from '../ports/secondary/gateways/ApplicationGateways'
+import type { FakeApplicationRepositories } from '../ports/secondary/repositories/ApplicationRepositories'
+import { InMemoryGlobalCleavageDrawPileRepository } from '../../infra/repositories/globalCleavageDrawPile/InMemoryGlobalCleavageRepository'
+import { InMemoryPublicCleavageDrawPileRepository } from '../../infra/repositories/publicCleavageDrawPile/InMemoryPublicCleavageDrawPileRepository'
+import { FakeRandomGateway } from '../../infra/gateways/random/FakeRandomGateway'
 
 type UnitTest = (application: FakeApplication) => Test;
 
@@ -24,16 +27,19 @@ export function scenario (scenarioTitle: string, tests: ((application: FakeAppli
     const applicationGateways:FakeApplicationGateways = {
         chat: new FakeChatGateway(),
         event: eventGateway,
-        interface: new FakeInterfaceGateway()
+        interface: new FakeInterfaceGateway(),
+        random: new FakeRandomGateway()
     }
     const applicationRepositories:FakeApplicationRepositories = {
-        cleavage: new InMemoryCleavageRepository(),
-        player: new InMemoryPlayerRepository()
+        publicCleavageDrawPile: new InMemoryPublicCleavageDrawPileRepository(),
+        player: new InMemoryPlayerRepository(),
+        globalCleavageDrawPile: new InMemoryGlobalCleavageDrawPileRepository(),
+        currentCleavage: new InMemoryCurrentCleavageRepository()
     }
     const applicationServices:ApplicationServices = {
         chat: new ChatApplicationService(applicationGateways.chat, applicationGateways.interface),
         event: new EventApplicationService(applicationGateways.event),
-        cleavage: new CleavageApplicationService(applicationRepositories.cleavage, applicationGateways.chat),
+        cleavage: new CleavageApplicationService(applicationRepositories.publicCleavageDrawPile, applicationRepositories.globalCleavageDrawPile, applicationRepositories.currentCleavage, applicationGateways.chat, applicationGateways.random),
         interface: new InterfaceApplicationService(applicationGateways.interface),
         player: new PlayerApplicationService(applicationRepositories.player)
     }
