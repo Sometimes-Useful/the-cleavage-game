@@ -1,7 +1,6 @@
 import { describe, it } from 'mocha'
 import { expect } from 'chai'
 import { config } from 'dotenv'
-import type { ChatGateway } from '../../../domain/ports/ChatGateway'
 import type { MessageForPlayer } from '../../../domain/entities/MessageForPlayer'
 import { FakeChatGateway } from './FakeChatGateway'
 import { formatTwitchUserMessage, TwitchChatGateway } from './TwitchChatGateway'
@@ -10,6 +9,7 @@ import { channel, integrationTestMessage, player1, token, username } from '../..
 import { PlayerMessageEvent } from '../../../domain/events/playerMessage/PlayerMessageEvent'
 import { EnvironmentVariable } from './EnvironmentVariable'
 import { Player } from '../../../domain/entities/Player'
+import type { ChatGateway } from '../../../domain/ports/secondary/gateways/ChatGateway'
 function retrieveEnvVariable (envVariableName:EnvironmentVariable) {
     const envVariableValue: string | undefined = process.env[envVariableName]
     if (envVariableValue) return envVariableValue

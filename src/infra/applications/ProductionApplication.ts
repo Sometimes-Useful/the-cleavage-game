@@ -5,8 +5,8 @@ import { EventApplicationService } from '../../domain/applicationServices/EventA
 import { InterfaceApplicationService } from '../../domain/applicationServices/InterfaceApplicationService'
 import { PlayerApplicationService } from '../../domain/applicationServices/PlayerApplicationService'
 import { ApplicationStartEvent } from '../../domain/events/applicationStart/ApplicationStartEvent'
-import type { ProductionApplicationGateways } from '../../domain/ports/ApplicationGateways'
-import type { ProductionApplicationRepositories } from '../../domain/ports/ApplicationRepositories'
+import type { ProductionApplicationGateways } from '../../domain/ports/secondary/gateways/ApplicationGateways'
+import type { ProductionApplicationRepositories } from '../../domain/ports/secondary/repositories/ApplicationRepositories'
 import { applicationEventStore } from '../../ui/stores/stores'
 
 export class ProductionApplication {
@@ -22,7 +22,7 @@ export class ProductionApplication {
                 this.gateways.event.configureController({
                     chat: new ChatApplicationService(this.gateways.chat, this.gateways.interface),
                     event: new EventApplicationService(this.gateways.event),
-                    cleavage: new CleavageApplicationService(this.repositories.cleavage, this.gateways.chat),
+                    cleavage: new CleavageApplicationService(this.repositories.publicCleavageDrawPile, this.repositories.globalCleavageDrawPile, this.repositories.currentCleavage, this.gateways.chat, this.gateways.random),
                     interface: new InterfaceApplicationService(this.gateways.interface),
                     player: new PlayerApplicationService(this.repositories.player)
                 })

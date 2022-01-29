@@ -2,8 +2,8 @@ import type { Cleavage } from '../../../domain/entities/Cleavage'
 import { InterfaceView } from '../../../domain/entities/InterfaceView'
 import type { ApplicationNotification } from '../../../domain/entities/notification/Notification'
 import type { Sound } from '../../../domain/entities/sound'
-import type { InterfaceGateway } from '../../../domain/ports/InterfaceGateway'
 import type { Music } from '../../../domain/entities/music/Music'
+import type { InterfaceGateway } from '../../../domain/ports/secondary/gateways/InterfaceGateway'
 
 export class FakeInterfaceGateway implements InterfaceGateway {
     changeMusicVolumeLevel (volume: number): Promise<void> {

@@ -1,17 +1,18 @@
-import { InterfaceView } from '../../entities/InterfaceView'
-import { Sound } from '../../entities/sound'
-import { SupportedSound } from '../../ports/SoundType'
-import { Gherkin } from '../../tests/Gherkin'
 import { feature, scenario } from '../../tests/testSuites'
-import { theInterfaceGatewayHasCurrentView, theInterfaceGatewayHasPlayingSounds, whenEventOccurs } from '../../tests/unitTests'
 import { EventType } from '../EventType'
 import { NavigateEvent } from './NavigateEvent'
+import { theInterfaceGatewayHasCurrentView, theInterfaceGatewayHasPlayingSounds } from '../../tests/unitTests/interfaceGateway'
+import { whenEventOccurs } from '../../tests/unitTests/eventGateway'
+import { InterfaceView } from '../../entities/InterfaceView'
+import { Sound } from '../../entities/sound'
+import { SupportedSound } from '../../entities/SoundType'
+import { Gherkin } from '../../tests/Gherkin'
 
 feature(EventType.NAVIGATE, [
-    scenario(`Scenario 1 : ${new NavigateEvent(InterfaceView.MAIN_MENU)}`, [
-        application => theInterfaceGatewayHasCurrentView(Gherkin.GIVEN, application.gateways.interface, InterfaceView.NEW_CLEAVAGE),
-        application => whenEventOccurs(application.gateways.event, new NavigateEvent(InterfaceView.MAIN_MENU)),
-        application => theInterfaceGatewayHasCurrentView(Gherkin.THEN, application.gateways.interface, InterfaceView.MAIN_MENU),
-        application => theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, application.gateways.interface, new Sound(SupportedSound.POUFFF))
+    scenario(`Scenario 1 : ${JSON.stringify(new NavigateEvent(InterfaceView.MAIN_MENU))}`, [
+        application => theInterfaceGatewayHasCurrentView(Gherkin.GIVEN, application, InterfaceView.NEW_CLEAVAGE),
+        application => whenEventOccurs(application, new NavigateEvent(InterfaceView.MAIN_MENU)),
+        application => theInterfaceGatewayHasCurrentView(Gherkin.THEN, application, InterfaceView.MAIN_MENU),
+        application => theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, application, new Sound(SupportedSound.POUFFF))
     ])
 ])

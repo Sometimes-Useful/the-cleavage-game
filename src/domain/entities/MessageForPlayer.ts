@@ -9,7 +9,7 @@ export class MessageForPlayer {
 
 export const noCleavagePleaseWait = (player:Player):MessageForPlayer => ({
     player: player,
-    message: `Il n'y a pas de clivage en cours ${player}. Attends un peu.`
+    message: `Il n'y a pas de clivage en cours ${player.username}. Attends un peu.`
 })
 
 export const welcomePlayerMessage = (player:Player):MessageForPlayer => ({

@@ -2,7 +2,7 @@ import { UseCase } from './UseCase'
 import type { InterfaceApplicationService } from '../applicationServices/InterfaceApplicationService'
 import type { ChangeMusicVolumeEvent } from '../events/changeMusicVolume/ChangeMusicVolumeEvent'
 import { Sound } from '../entities/sound'
-import { SupportedSound } from '../ports/SoundType'
+import { SupportedSound } from '../entities/SoundType'
 
 export class ChangeSoundVolumeUseCase extends UseCase {
     constructor (

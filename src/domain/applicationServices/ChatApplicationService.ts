@@ -1,8 +1,8 @@
-import { alreadyDisconnectedToChatNotification } from '../entities/notification/notifications'
-import type { ChatGateway } from '../ports/ChatGateway'
-import type { MessageForPlayer } from '../entities/MessageForPlayer'
-import type { InterfaceGateway } from '../ports/InterfaceGateway'
 import type { Message } from '../entities/message'
+import type { MessageForPlayer } from '../entities/MessageForPlayer'
+import { alreadyDisconnectedToChatNotification } from '../entities/notification/notifications'
+import type { ChatGateway } from '../ports/secondary/gateways/ChatGateway'
+import type { InterfaceGateway } from '../ports/secondary/gateways/InterfaceGateway'
 
 export class ChatApplicationService {
     constructor (

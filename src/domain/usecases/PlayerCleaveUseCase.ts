@@ -6,16 +6,19 @@ import { MessageForPlayer, noCleavagePleaseWait } from '../entities/MessageForPl
 import type { InterfaceApplicationService } from '../applicationServices/InterfaceApplicationService'
 import { InterfaceView } from '../entities/InterfaceView'
 import { waitForCleavageLaunchMessage } from '../entities/playerMessages'
+import type { PlayerApplicationService } from '../applicationServices/PlayerApplicationService'
 
 export class PlayerCleaveUseCase extends UseCase {
     constructor (
         private cleavageApplicationService: CleavageApplicationService,
         private chatApplicationService: ChatApplicationService,
-        private interfaceApplicationService:InterfaceApplicationService
+        private interfaceApplicationService:InterfaceApplicationService,
+        private playerApplicationService:PlayerApplicationService
     ) { super() }
 
     execute (event: PlayerCleaveEvent): Promise<void> {
-        return this.interfaceApplicationService.retrieveCurrentView()
+        return this.playerApplicationService.addPlayer(event.player)
+            .then(() => this.interfaceApplicationService.retrieveCurrentView())
             .then(currentView => currentView !== InterfaceView.CURRENT_CLEAVAGE
                 ? this.chatApplicationService.sendMessageToPlayer(new MessageForPlayer(event.player, waitForCleavageLaunchMessage))
                 : this.onCurrentCleavage(event)

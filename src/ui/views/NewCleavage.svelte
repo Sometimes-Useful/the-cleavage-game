@@ -1,10 +1,10 @@
 <script lang="ts">
     import { InterfaceView } from "../../domain/entities/InterfaceView";
     import { CancelCleavageEvent } from "../../domain/events/cancelCleavage/CancelCleavageEvent";
-import type { ApplicationEvent } from "../../domain/events/GameEvent";
+    import { DrawCleavageEvent } from "../../domain/events/drawCleavage/DrawCleavageEvent";
+    import type { ApplicationEvent } from "../../domain/events/GameEvent";
     import { LaunchCleavageEvent } from "../../domain/events/launchCleavage/LaunchCleavageEvent";
     import { NavigateEvent } from "../../domain/events/navigateEvent/NavigateEvent";
-    import { PublicCleavageEvent } from "../../domain/events/publicCleavage/PublicCleavageEvent";
     import Button from "../components/button/button.svelte";
     import CleavageModule from "../components/cleavage/cleavageModule.svelte";
     import TextBox from "../components/inputs/textBox.svelte";
@@ -17,7 +17,7 @@ import type { ApplicationEvent } from "../../domain/events/GameEvent";
     }
     const onClickNewClivageButton = () => resetCleavageTitleAndSendEvent(new LaunchCleavageEvent(newCleavageTitle))
     const onClickCancelButton = () => resetCleavageTitleAndSendEvent(new CancelCleavageEvent())
-    const onClickRandomCleavageButton = () => resetCleavageTitleAndSendEvent(new PublicCleavageEvent())
+    const onClickRandomCleavageButton = () => resetCleavageTitleAndSendEvent(new DrawCleavageEvent())
     const onClickMainMenu = () => resetCleavageTitleAndSendEvent(new NavigateEvent(InterfaceView.MAIN_MENU))
     cleavageStore.subscribe(cleavage =>  cleavage ? newCleavageTitle = cleavage.title : newCleavageTitle = "" )
 
@@ -25,8 +25,8 @@ import type { ApplicationEvent } from "../../domain/events/GameEvent";
 
 <div class="flex flex-col w-full items-center">
     <Title/>
-    <div class="flex flex-row">
-        <TextBox id="title" name="title" mainInput={true} bind:inputValue={newCleavageTitle} placeholder="On clive sur quoi?"/>
+    <div class="flex flex-col items-center">
+        <TextBox id="title" name="title" type={`${newCleavageTitle.length > 20 ? "textarea" : "text"}`} mainInput={true} bind:inputValue={newCleavageTitle} placeholder="On clive sur quoi?"/>
         <Button onClick={onClickRandomCleavageButton} size="large" text="🎲"/>
     </div>
 </div>

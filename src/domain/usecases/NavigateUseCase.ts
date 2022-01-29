@@ -2,7 +2,7 @@ import { UseCase } from './UseCase'
 import type { InterfaceApplicationService } from '../applicationServices/InterfaceApplicationService'
 import type { NavigateEvent } from '../events/navigateEvent/NavigateEvent'
 import { Sound } from '../entities/sound'
-import { SupportedSound } from '../ports/SoundType'
+import { SupportedSound } from '../entities/SoundType'
 
 export class NavigateUseCase extends UseCase {
     constructor (

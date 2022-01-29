@@ -1,5 +1,3 @@
-import type { InterfaceGateway } from '../../../domain/ports/InterfaceGateway'
-import type { SupportedSound } from '../../../domain/ports/SoundType'
 import type { Cleavage } from '../../../domain/entities/Cleavage'
 import type { ApplicationNotification } from '../../../domain/entities/notification/Notification'
 import type { Sound } from '../../../domain/entities/sound'
@@ -9,6 +7,8 @@ import { InterfaceView } from '../../../domain/entities/InterfaceView'
 import { defaultMusicVolumeLevel, defaultSoundVolumeLevel } from './defaultVolumeLevels'
 import { cleavageStore, interfaceViewStore, musicVolumeStore, soundVolumeStore } from '../../../ui/stores/stores'
 import * as Tone from 'tone'
+import type { SupportedSound } from '../../../domain/entities/SoundType'
+import type { InterfaceGateway } from '../../../domain/ports/secondary/gateways/InterfaceGateway'
 
 export class SvelteAndToneInterfaceGateway implements InterfaceGateway {
     constructor (

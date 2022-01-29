@@ -6,7 +6,7 @@ import { UseCase } from './UseCase'
 import type { EventApplicationService } from '../applicationServices/EventApplicationService'
 import { NavigateEvent } from '../events/navigateEvent/NavigateEvent'
 
-export class NewCleavage extends UseCase {
+export class NewCleavageUseCase extends UseCase {
     constructor (
         private interfaceApplicationService: InterfaceApplicationService,
         private chatApplicationService:ChatApplicationService,

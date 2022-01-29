@@ -6,11 +6,7 @@
     import Subtitle from "../components/text/subtitle.svelte";
     import Title from "../components/text/title.svelte"
     import { applicationEventStore, cleavageStore } from "../stores/stores";
-import { PlayerCleave } from "../../domain/entities/PlayerCleave";
-    let leftPercentage:number
-    let leftPercentageString:string
-    let rightPercentage:number
-    let rightPercentageString:string
+    import { PlayerCleave } from "../../domain/entities/PlayerCleave";
     let title:string
     let totalPlayers:number
     let cleaveLeft:number

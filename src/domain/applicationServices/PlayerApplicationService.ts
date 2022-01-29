@@ -1,6 +1,6 @@
 
 import type { Player } from '../entities/Player'
-import type { PlayerRepository } from '../ports/PlayerRepository'
+import type { PlayerRepository } from '../ports/secondary/repositories/PlayerRepository'
 
 export class PlayerApplicationService {
     constructor (
@@ -16,6 +16,7 @@ export class PlayerApplicationService {
     }
 
     addPlayer (player: Player): Promise<void> {
-        return this.playerRepository.add(player)
+        return this.playerRepository.hasPlayer(player)
+            .then(hasPlayer => hasPlayer ? Promise.resolve() : this.playerRepository.add(player))
     }
 }
