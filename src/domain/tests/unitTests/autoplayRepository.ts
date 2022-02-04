@@ -1,0 +1,23 @@
+import { expect } from 'chai'
+import { Test, it } from 'mocha'
+import type { FakeApplication } from '../../../infra/applications/FakeApplication'
+import type { Gherkin } from '../Gherkin'
+import { isGiven } from './unitTests'
+
+export const theAutoPlayRepositoryHasNextCleavageDate = (gherkinPrefix:Gherkin, application:FakeApplication, expectedNextCleavageDate:Date):Test =>
+    it(`${gherkinPrefix} the autoplay repository has the following next cleavage date : ${expectedNextCleavageDate.toISOString()}`, () => {
+        if (isGiven(gherkinPrefix)) application.repositories.autoplay.nextCleavageDate = expectedNextCleavageDate
+        expect(application.repositories.autoplay.nextCleavageDate).deep.equal(expectedNextCleavageDate)
+    })
+
+export const theAutoPlayRepositoryDontHaveNextCleavageDate = (gherkinPrefix:Gherkin, application:FakeApplication):Test =>
+    it(`${gherkinPrefix} the autoplay repository don't have next cleavage date.`, () => {
+        if (isGiven(gherkinPrefix)) application.repositories.autoplay.nextCleavageDate = undefined
+        expect(application.repositories.autoplay.nextCleavageDate).equal(undefined)
+    })
+
+export const theAutoPlayRepositoryHasAutoPlayInterval = (gherkinPrefix:Gherkin, application:FakeApplication, expectedAutoplayInterval:number):Test =>
+    it(`${gherkinPrefix} the autoplay repository  has the following autoplay interval : ${expectedAutoplayInterval}`, () => {
+        if (isGiven(gherkinPrefix)) application.repositories.autoplay.autoplayInterval = expectedAutoplayInterval
+        expect(application.repositories.autoplay.autoplayInterval).equal(expectedAutoplayInterval)
+    })

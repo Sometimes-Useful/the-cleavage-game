@@ -43,7 +43,7 @@ feature(EventType.PLAYER_MESSAGE, [
     ]),
     scenario(`Scenario 6 : ${`${applicationMessagePrefix}${AuthorizedMessage.SUGGEST_CLEAVAGE} ${cleavageTitle1}`}`, [
         application => whenEventOccurs(application, new PlayerMessageEvent(player1, `${applicationMessagePrefix}${AuthorizedMessage.SUGGEST_CLEAVAGE} ${cleavageTitle1}`)),
-        application => theEventIsSent(Gherkin.THEN, application, new PlayerSuggestCleavageEvent(player1, new Cleavage(cleavageTitle1)))
+        application => theEventIsSent(Gherkin.THEN, application, new PlayerSuggestCleavageEvent(player1, new Cleavage(cleavageTitle1, { name: 'Gôche', players: [] }, { name: 'Drouate', players: [] })))
     ]),
     scenario(`Scenario 7 : ${`${applicationMessagePrefix}${AuthorizedMessage.HELP}`}`, [
         application => whenEventOccurs(application, new PlayerMessageEvent(player1, `${applicationMessagePrefix}${AuthorizedMessage.HELP}`)),

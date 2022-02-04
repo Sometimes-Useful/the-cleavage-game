@@ -13,6 +13,9 @@ import { InMemoryGlobalCleavageDrawPileRepository } from './infra/repositories/g
 import { InMemoryPublicCleavageDrawPileRepository } from './infra/repositories/publicCleavageDrawPile/InMemoryPublicCleavageDrawPileRepository'
 import { ProductionRandomGateway } from './infra/gateways/random/ProductionRandomGateway'
 import { Cleavage } from './domain/entities/Cleavage'
+import type { Choice } from './domain/entities/Choice'
+import { InMemoryAutoplayRepository } from './infra/repositories/autoplay/InMemoryAutoplayRepository'
+import { ProductionDateGateway } from './infra/gateways/date/ProductionDateGateway'
 
 const supportedSounds = new Map([
     [SupportedSound.QUACK, new Tone.ToneAudioBuffer('/sounds/quack.mp3')],
@@ -29,6 +32,8 @@ const supportedMusics = new Map([
     [SupportedMusic.MAIN, new Tone.ToneAudioBuffer('/music/Ken_Hamm-Buckbreak.mp3')]
 ])
 
+const defaultLeftChoice:Choice = { name: 'Gôche', players: [] }
+const defaultRightChoice:Choice = { name: 'Drouate', players: [] }
 const globalCleavages:Cleavage[] = [
     "Emmanuel Macron au PMU avec un p'tit blanc",
     'Un infirmier après son augmentation annuelle',
@@ -63,22 +68,32 @@ const globalCleavages:Cleavage[] = [
     'Le cousin chiant',
     'Le tonton chiant',
     'La Gameboy'
-].map(title => new Cleavage(title))
+].map(title => new Cleavage(title, defaultLeftChoice, defaultRightChoice))
 
 const interfaceGateway = new SvelteAndToneInterfaceGateway(supportedSounds, supportedMusics)
 const eventGateway = new InMemoryProductionEventGateway()
 const chatGateway = new TwitchChatGateway(eventGateway)
 const randomGateway = new ProductionRandomGateway()
-const applicationGateways:ProductionApplicationGateways = { chat: chatGateway, event: eventGateway, interface: interfaceGateway, random: randomGateway }
+const dateGateway = new ProductionDateGateway()
+const applicationGateways:ProductionApplicationGateways = {
+    chat: chatGateway,
+    event: eventGateway,
+    interface: interfaceGateway,
+    random: randomGateway,
+    date: dateGateway
+}
 
 const publicCleavageDrawPileRepository = new InMemoryPublicCleavageDrawPileRepository()
 const playerRepository = new InMemoryPlayerRepository()
 const globalCleavageDrawPileRepository = new InMemoryGlobalCleavageDrawPileRepository(globalCleavages)
 const currentCleavageRepository = new InMemoryCurrentCleavageRepository()
+const autoplayRepository = new InMemoryAutoplayRepository()
 const applicationRepositories:ProductionApplicationRepositories = {
     publicCleavageDrawPile: publicCleavageDrawPileRepository,
     globalCleavageDrawPile: globalCleavageDrawPileRepository,
     currentCleavage: currentCleavageRepository,
-    player: playerRepository
+    player: playerRepository,
+    autoplay: autoplayRepository
 }
+
 export const application = new ProductionApplication(applicationGateways, applicationRepositories)

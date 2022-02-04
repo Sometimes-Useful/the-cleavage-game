@@ -8,3 +8,5 @@ export const integrationTestMessage = 'Integration Test Message'
 export const username = 'Ben'
 export const token = 'f6s53d4gsd3f4sddfd'
 export const channel = 'BenChannel'
+export const gocheChoice = (players:Player[] = []) => ({ name: 'Gôche', players })
+export const drouateChoice = (players:Player[] = []) => ({ name: 'Drouate', players })

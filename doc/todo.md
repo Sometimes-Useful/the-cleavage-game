@@ -1,9 +1,9 @@
+- Test integration Twitch
 - Draw cleave on global draw pile
     - DB > Google Datastore
-- Cleave with custom left/right props
-- Clivage temps limite
-- Mode Auto
-
+- Controles launch cleavage > Input non vides
 - Rework UI > Bar
 - Sons persos
 - clivages Choix multiples
+- Options
+    - Mapping commandes chat twitch

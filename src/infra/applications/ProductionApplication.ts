@@ -1,10 +1,12 @@
 import { application } from '../../app'
+import { AutoplayApplicationService } from '../../domain/applicationServices/AutoplayApplicationService'
 import { ChatApplicationService } from '../../domain/applicationServices/ChatApplicationService'
 import { CleavageApplicationService } from '../../domain/applicationServices/CleavageService'
 import { EventApplicationService } from '../../domain/applicationServices/EventApplicationService'
 import { InterfaceApplicationService } from '../../domain/applicationServices/InterfaceApplicationService'
 import { PlayerApplicationService } from '../../domain/applicationServices/PlayerApplicationService'
 import { ApplicationStartEvent } from '../../domain/events/applicationStart/ApplicationStartEvent'
+import { CheckAutoplayEvent } from '../../domain/events/checkAutoplay/CheckAutoplayEvent'
 import type { ProductionApplicationGateways } from '../../domain/ports/secondary/gateways/ApplicationGateways'
 import type { ProductionApplicationRepositories } from '../../domain/ports/secondary/repositories/ApplicationRepositories'
 import { applicationEventStore } from '../../ui/stores/stores'
@@ -24,11 +26,14 @@ export class ProductionApplication {
                     event: new EventApplicationService(this.gateways.event),
                     cleavage: new CleavageApplicationService(this.repositories.publicCleavageDrawPile, this.repositories.globalCleavageDrawPile, this.repositories.currentCleavage, this.gateways.chat, this.gateways.random),
                     interface: new InterfaceApplicationService(this.gateways.interface),
-                    player: new PlayerApplicationService(this.repositories.player)
+                    player: new PlayerApplicationService(this.repositories.player),
+                    autoplay: new AutoplayApplicationService(this.repositories.autoplay, this.gateways.date)
                 })
                 applicationEventStore.subscribe(event => { if (event) application.gateways.event.sendEvent(event) })
                 applicationEventStore.set(new ApplicationStartEvent())
                 console.log('Application started.')
+                const checkAutoPlayIntervalSeconds = (seconds:number) => seconds * 1000
+                setInterval(() => this.gateways.event.sendEvent(new CheckAutoplayEvent()), checkAutoPlayIntervalSeconds(1))
                 return Promise.resolve()
             })
             .catch(error => console.error(error))

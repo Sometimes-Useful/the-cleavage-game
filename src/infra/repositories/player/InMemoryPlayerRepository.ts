@@ -8,7 +8,7 @@ export class InMemoryPlayerRepository implements PlayerRepository {
         return Promise.resolve(includePlayer)
     }
 
-    players (): Promise<Player[]> {
+    loadAllPlayers (): Promise<Player[]> {
         return Promise.resolve(this.currentPlayers)
     }
 

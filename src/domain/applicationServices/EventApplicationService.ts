@@ -6,4 +6,10 @@ export class EventApplicationService {
     sentEvent (event:ApplicationEvent): Promise<void> {
         return this.eventGateway.sendEvent(event)
     }
+
+    sentEvents (events: ApplicationEvent[]): Promise<void> {
+        return Promise.all(events.map(event => this.sentEvent(event)))
+            .then(results => Promise.resolve())
+            .catch(error => Promise.reject(error))
+    }
 }

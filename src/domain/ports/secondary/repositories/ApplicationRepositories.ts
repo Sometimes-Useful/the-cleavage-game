@@ -1,4 +1,5 @@
 
+import type { InMemoryAutoplayRepository } from '../../../../infra/repositories/autoplay/InMemoryAutoplayRepository'
 import type { InMemoryCurrentCleavageRepository } from '../../../../infra/repositories/currentCleavage/InMemoryCurrentCleavageRepository'
 import type { InMemoryGlobalCleavageDrawPileRepository } from '../../../../infra/repositories/globalCleavageDrawPile/InMemoryGlobalCleavageRepository'
 import type { InMemoryPlayerRepository } from '../../../../infra/repositories/player/InMemoryPlayerRepository'
@@ -15,6 +16,7 @@ export interface ApplicationRepositories {
     player:PlayerRepository
 }
 export interface FakeApplicationRepositories extends ApplicationRepositories {
+    autoplay: InMemoryAutoplayRepository
     globalCleavageDrawPile: InMemoryGlobalCleavageDrawPileRepository
     publicCleavageDrawPile: InMemoryPublicCleavageDrawPileRepository;
     currentCleavage:InMemoryCurrentCleavageRepository;
@@ -22,6 +24,7 @@ export interface FakeApplicationRepositories extends ApplicationRepositories {
 
 }
 export interface ProductionApplicationRepositories extends ApplicationRepositories {
+    autoplay: InMemoryAutoplayRepository
     globalCleavageDrawPile: InMemoryGlobalCleavageDrawPileRepository
     publicCleavageDrawPile: InMemoryPublicCleavageDrawPileRepository;
     currentCleavage:InMemoryCurrentCleavageRepository;

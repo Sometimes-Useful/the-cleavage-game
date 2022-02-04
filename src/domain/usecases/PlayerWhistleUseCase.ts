@@ -4,12 +4,16 @@ import type { InterfaceApplicationService } from '../applicationServices/Interfa
 import { Sound } from '../entities/sound'
 import { SupportedSound } from '../entities/SoundType'
 
+interface PlayerWhistleUseCaseApplicationServices {
+    interface:InterfaceApplicationService
+}
+
 export class PlayerWhistleUseCase extends UseCase {
     constructor (
-        private interfaceApplicationService: InterfaceApplicationService
+        private applicationServices: PlayerWhistleUseCaseApplicationServices
     ) { super() }
 
     execute (event: ApplicationEvent): Promise<void> {
-        return this.interfaceApplicationService.playSound(new Sound(SupportedSound.WHISTLE))
+        return this.applicationServices.interface.playSound(new Sound(SupportedSound.WHISTLE))
     }
 }

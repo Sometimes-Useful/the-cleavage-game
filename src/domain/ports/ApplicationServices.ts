@@ -3,6 +3,7 @@ import type { InterfaceApplicationService } from '../applicationServices/Interfa
 import type { EventApplicationService } from '../applicationServices/EventApplicationService'
 import type { CleavageApplicationService } from '../applicationServices/CleavageService'
 import type { PlayerApplicationService } from '../applicationServices/PlayerApplicationService'
+import type { AutoplayApplicationService } from '../applicationServices/AutoplayApplicationService'
 
 export interface ApplicationServices {
     player: PlayerApplicationService
@@ -10,4 +11,5 @@ export interface ApplicationServices {
     interface: InterfaceApplicationService;
     event: EventApplicationService;
     cleavage: CleavageApplicationService;
+    autoplay: AutoplayApplicationService
 }

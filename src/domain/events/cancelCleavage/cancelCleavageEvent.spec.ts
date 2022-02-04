@@ -11,7 +11,7 @@ import { CancelCleavageEvent } from './CancelCleavageEvent'
 
 feature(EventType.CANCEL_CLEAVAGE, [
     scenario('Scenario 1 : Cancel Cleavage', [
-        application => theInterfaceGatewayHasCurrentCleavage(Gherkin.GIVEN, application, new Cleavage(cleavageTitle1)),
+        application => theInterfaceGatewayHasCurrentCleavage(Gherkin.GIVEN, application, new Cleavage(cleavageTitle1, { name: 'Gôche', players: [] }, { name: 'Drouate', players: [] })),
         application => whenEventOccurs(application, new CancelCleavageEvent()),
         application => theInterfaceGatewayDontHaveCleavage(Gherkin.THEN, application),
         application => theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, application, new Sound(SupportedSound.QUACK))

@@ -1,11 +1,8 @@
 import { UseCase } from './UseCase'
-import type { PlayerMessageEvent } from '../events/playerMessage/PlayerMessageEvent'
-import type { EventApplicationService } from '../applicationServices/EventApplicationService'
 import { applicationMessagePrefix } from '../entities/applicationMessagePrefix'
 import { AuthorizedMessage } from '../entities/AuthorizedMessage'
 import { PlayerCleave } from '../entities/PlayerCleave'
 import { PlayerCleaveEvent } from '../events/playerCleave/PlayerCleaveEvent'
-import type { ChatApplicationService } from '../applicationServices/ChatApplicationService'
 import { MessageForPlayer } from '../entities/MessageForPlayer'
 import { PlayerSuggestCleavageEvent } from '../events/suggestCleavage/PlayerSuggestCleavageEvent'
 import { Cleavage } from '../entities/Cleavage'
@@ -14,23 +11,34 @@ import { PlayerApplauseEvent } from '../events/playerApplause/PlayerApplauseEven
 import { PlayerShootEvent } from '../events/playerShoot/PlayerShootEvent'
 import { PlayerHyperLikeEvent } from '../events/playerHyperLike/PlayerHyperLikeEvent'
 import { PlayerWhistleEvent } from '../events/playerWhistle/PlayerWhistleEvent'
-import type { ApplicationEvent } from '../events/GameEvent'
 import { PlayerAskForHelpEvent } from '../events/playerAskForHelp/PlayerAskForHelpEvent'
+import type { ChatApplicationService } from '../applicationServices/ChatApplicationService'
+import type { EventApplicationService } from '../applicationServices/EventApplicationService'
+import type { ApplicationEvent } from '../events/GameEvent'
+import type { PlayerMessageEvent } from '../events/playerMessage/PlayerMessageEvent'
 import type { Player } from '../entities/Player'
 
-export class PlayerMessage extends UseCase {
-    constructor (private eventApplicationService:EventApplicationService, private chatApplicationService:ChatApplicationService) { super() }
+interface PlayerMessageUseCaseApplicationServices {
+    event:EventApplicationService
+    chat:ChatApplicationService
+}
+
+export class PlayerMessageUseCase extends UseCase {
+    constructor (
+        private applicationServices:PlayerMessageUseCaseApplicationServices
+    ) { super() }
+
     execute (event: PlayerMessageEvent): Promise<void> {
         return event.message.startsWith(applicationMessagePrefix)
             ? this.onApplicationEvent(event.player, event.message)
             : Promise.resolve()
     }
 
-    private onApplicationEvent (player:Player, message:string):Promise<void> {
+    private onApplicationEvent (player: Player, message: string): Promise<void> {
         const applicationEvent = this.applicationEventStrategies(message, player).get(true)
         return applicationEvent
-            ? this.eventApplicationService.sentEvent(applicationEvent)
-            : this.chatApplicationService.sendMessageToPlayer(new MessageForPlayer(player, dontKnowWhatToDoWithThatMessage(player)))
+            ? this.applicationServices.event.sentEvent(applicationEvent)
+            : this.applicationServices.chat.sendMessageToPlayer(new MessageForPlayer(player, dontKnowWhatToDoWithThatMessage(player)))
     }
 
     private applicationEventStrategies (message: string, player: Player): Map<boolean, ApplicationEvent> {
@@ -43,7 +51,7 @@ export class PlayerMessage extends UseCase {
             [message === applicationMessagePrefix + AuthorizedMessage.LEFT, new PlayerCleaveEvent(player, PlayerCleave.LEFT)],
             [message === applicationMessagePrefix + AuthorizedMessage.HELP, new PlayerAskForHelpEvent(player)],
             [message === applicationMessagePrefix + AuthorizedMessage.SHORT_HELP, new PlayerAskForHelpEvent(player)],
-            [message.startsWith(applicationMessagePrefix + AuthorizedMessage.SUGGEST_CLEAVAGE), new PlayerSuggestCleavageEvent(player, new Cleavage(message.replace(applicationMessagePrefix + AuthorizedMessage.SUGGEST_CLEAVAGE, '').trimStart()))]
+            [message.startsWith(applicationMessagePrefix + AuthorizedMessage.SUGGEST_CLEAVAGE), new PlayerSuggestCleavageEvent(player, new Cleavage(message.replace(applicationMessagePrefix + AuthorizedMessage.SUGGEST_CLEAVAGE, '').trimStart(), { name: 'Gôche', players: [] }, { name: 'Drouate', players: [] }))]
         ])
     }
 }

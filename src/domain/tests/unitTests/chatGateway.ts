@@ -1,15 +1,15 @@
 import { expect } from 'chai'
 import { Test, it } from 'mocha'
-import { Gherkin } from '../Gherkin'
 import type { ChatStatus } from '../../entities/ChatStatus'
 import type { FakeApplication } from '../../../infra/applications/FakeApplication'
 import type { Message } from '../../entities/message'
 import type { MessageForPlayer } from '../../entities/MessageForPlayer'
+import { isGiven } from './unitTests'
+import type { Gherkin } from '../Gherkin'
 
 export const theChatGatewayHasExpectedStatus = (gherkinPrefix: Gherkin, application: FakeApplication, chatStatus: ChatStatus): Test =>
     it(`${gherkinPrefix} the chat is '${chatStatus}'.`, () => {
-        if (gherkinPrefix === Gherkin.GIVEN || gherkinPrefix === Gherkin.AND_GIVEN)
-            application.gateways.chat.status = chatStatus
+        if (isGiven(gherkinPrefix)) application.gateways.chat.status = chatStatus
         expect(application.gateways.chat.status).equal(chatStatus)
     })
 
@@ -22,5 +22,7 @@ export const theChatGatewaySendMessageToPlayer = (gherkinPrefix:Gherkin, applica
 
 export const theChatGatewaySendMessage = (gherkinPrefix:Gherkin, application:FakeApplication, expectedMessages:Message|Message[]):Test => {
     const messages = Array.isArray(expectedMessages) ? expectedMessages : [expectedMessages]
-    return it(`${gherkinPrefix} the chat gateway has messages : ${JSON.stringify(messages)}`, () => expect(application.gateways.chat.messages).deep.equal(messages))
+    return it(`${gherkinPrefix} the chat gateway has messages : ${JSON.stringify(messages)}`, () =>
+        expect(application.gateways.chat.messages).deep.equal(messages)
+    )
 }

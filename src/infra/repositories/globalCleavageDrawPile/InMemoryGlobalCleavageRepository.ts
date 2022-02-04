@@ -17,7 +17,6 @@ export class InMemoryGlobalCleavageDrawPileRepository implements GlobalCleavageD
 
     save (cleavage: Cleavage): Promise<void> {
         this.globalCleavages.push(cleavage)
-        console.log(this.globalCleavages)
         return Promise.resolve()
     }
 
