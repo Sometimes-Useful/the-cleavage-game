@@ -3,11 +3,11 @@ import { InterfaceView } from '../entities/InterfaceView'
 import type { LaunchCleavageEvent } from '../events/launchCleavage/LaunchCleavageEvent'
 import { Cleavage } from '../entities/Cleavage'
 import { NavigateEvent } from '../events/navigateEvent/NavigateEvent'
-import type { ApplicationServices } from '../ports/ApplicationServices'
+import type { ClientApplicationServices } from '../ports/ApplicationServices'
 
 export class LaunchCleavageUseCase extends UseCase {
     constructor (
-        private applicationServices:ApplicationServices
+        private applicationServices:ClientApplicationServices
     ) { super() }
 
     execute (event: LaunchCleavageEvent): Promise<void> {

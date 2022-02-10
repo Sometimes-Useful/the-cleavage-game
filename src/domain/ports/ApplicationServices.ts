@@ -4,12 +4,17 @@ import type { EventApplicationService } from '../applicationServices/EventApplic
 import type { CleavageApplicationService } from '../applicationServices/CleavageService'
 import type { PlayerApplicationService } from '../applicationServices/PlayerApplicationService'
 import type { AutoplayApplicationService } from '../applicationServices/AutoplayApplicationService'
+import type { GlobalCleavageDrawPileApplicationService } from '../applicationServices/GlobalCleavageDrawPileApplicationService'
 
-export interface ApplicationServices {
+export interface ClientApplicationServices {
     player: PlayerApplicationService
     chat: ChatApplicationService;
     interface: InterfaceApplicationService;
     event: EventApplicationService;
     cleavage: CleavageApplicationService;
     autoplay: AutoplayApplicationService
+}
+
+export interface ServerApplicationServices {
+    globalCleavageDrawPile:GlobalCleavageDrawPileApplicationService
 }

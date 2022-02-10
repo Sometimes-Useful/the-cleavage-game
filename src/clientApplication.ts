@@ -1,21 +1,20 @@
 import * as Tone from 'tone'
 import { SupportedMusic } from './domain/entities/music/SupportedMusic'
-import { ProductionApplication } from './infra/applications/ProductionApplication'
+import { ProductionClientApplication } from './infra/applications/client/ProductionApplication'
 import { TwitchChatGateway } from './infra/gateways/chat/TwitchChatGateway'
-import { InMemoryProductionEventGateway } from './infra/gateways/event/InMemoryProductionEventGateway'
 import { SvelteAndToneInterfaceGateway } from './infra/gateways/interface/SvelteAndToneInterfaceGateway'
 import { InMemoryPlayerRepository } from './infra/repositories/player/InMemoryPlayerRepository'
 import { InMemoryCurrentCleavageRepository } from './infra/repositories/currentCleavage/InMemoryCurrentCleavageRepository'
 import { SupportedSound } from './domain/entities/SoundType'
-import type { ProductionApplicationGateways } from './domain/ports/secondary/gateways/ApplicationGateways'
-import type { ProductionApplicationRepositories } from './domain/ports/secondary/repositories/ApplicationRepositories'
-import { InMemoryGlobalCleavageDrawPileRepository } from './infra/repositories/globalCleavageDrawPile/InMemoryGlobalCleavageRepository'
+import type { ProductionClientApplicationGateways } from './domain/ports/secondary/gateways/ApplicationGateways'
+import type { ProductionClientApplicationRepositories } from './domain/ports/secondary/repositories/ApplicationRepositories'
 import { InMemoryPublicCleavageDrawPileRepository } from './infra/repositories/publicCleavageDrawPile/InMemoryPublicCleavageDrawPileRepository'
 import { ProductionRandomGateway } from './infra/gateways/random/ProductionRandomGateway'
-import { Cleavage } from './domain/entities/Cleavage'
-import type { Choice } from './domain/entities/Choice'
 import { InMemoryAutoplayRepository } from './infra/repositories/autoplay/InMemoryAutoplayRepository'
 import { ProductionDateGateway } from './infra/gateways/date/ProductionDateGateway'
+import { InMemoryProductionClientEventGateway } from './infra/gateways/event/InMemoryProductionClientEventGateway'
+import { AxiosGlobalCleavageDrawPileGateway } from './infra/gateways/globalCleavageDrawPile/AxiosGlobalCleavageDrawPileGateway'
+import { backendPort } from './webServer/main'
 
 const supportedSounds = new Map([
     [SupportedSound.QUACK, new Tone.ToneAudioBuffer('/sounds/quack.mp3')],
@@ -32,68 +31,30 @@ const supportedMusics = new Map([
     [SupportedMusic.MAIN, new Tone.ToneAudioBuffer('/music/Ken_Hamm-Buckbreak.mp3')]
 ])
 
-const defaultLeftChoice:Choice = { name: 'Gôche', players: [] }
-const defaultRightChoice:Choice = { name: 'Drouate', players: [] }
-const globalCleavages:Cleavage[] = [
-    "Emmanuel Macron au PMU avec un p'tit blanc",
-    'Un infirmier après son augmentation annuelle',
-    "Le manager de l'équipe après s'être fait allumé par le CODIR",
-    'Le vieux monsieur après 4 runs foirées sur Isaac',
-    'Le prof de français en 5ème',
-    'Pépé', 'Papy',
-    'Mémé', 'Mamie',
-    'Papa', 'Maman',
-    "Ton mec une fois que tu l'as bien gonflé",
-    "Ta meuf une fois que tu l'as énervé",
-    "Toi quand ta meuf t'a énervé",
-    'Ton enfant qui commande son plat au resto',
-    'Gainsbourg',
-    'Coluche',
-    'Les concombres à la crème',
-    'La raclette entre potes à la montagne en février',
-    'Le maitre nageur à la piscine',
-    'Le DRH',
-    'Le stagiaire',
-    "Robert Hue devant son relevé d'impots",
-    'Les blues brothers (dans le premier film)',
-    'Les fourmis',
-    'Une mercedes',
-    'Une renault',
-    'Bernard Arnaud qui donne 10 balles à un SDF',
-    'Le chat',
-    'La choucroute',
-    'La Suisse',
-    'La Belgique',
-    'Le service en porcelaine de belle maman',
-    'Le cousin chiant',
-    'Le tonton chiant',
-    'La Gameboy'
-].map(title => new Cleavage(title, defaultLeftChoice, defaultRightChoice))
-
 const interfaceGateway = new SvelteAndToneInterfaceGateway(supportedSounds, supportedMusics)
-const eventGateway = new InMemoryProductionEventGateway()
+const eventGateway = new InMemoryProductionClientEventGateway()
 const chatGateway = new TwitchChatGateway(eventGateway)
 const randomGateway = new ProductionRandomGateway()
 const dateGateway = new ProductionDateGateway()
-const applicationGateways:ProductionApplicationGateways = {
+const globalCleavageDrawPileGateway = new AxiosGlobalCleavageDrawPileGateway('localhost', backendPort)
+const applicationGateways:ProductionClientApplicationGateways = {
     chat: chatGateway,
     event: eventGateway,
     interface: interfaceGateway,
     random: randomGateway,
-    date: dateGateway
+    date: dateGateway,
+    globalCleavageDrawPile: globalCleavageDrawPileGateway
 }
 
 const publicCleavageDrawPileRepository = new InMemoryPublicCleavageDrawPileRepository()
 const playerRepository = new InMemoryPlayerRepository()
-const globalCleavageDrawPileRepository = new InMemoryGlobalCleavageDrawPileRepository(globalCleavages)
 const currentCleavageRepository = new InMemoryCurrentCleavageRepository()
 const autoplayRepository = new InMemoryAutoplayRepository()
-const applicationRepositories:ProductionApplicationRepositories = {
+const applicationRepositories:ProductionClientApplicationRepositories = {
     publicCleavageDrawPile: publicCleavageDrawPileRepository,
-    globalCleavageDrawPile: globalCleavageDrawPileRepository,
     currentCleavage: currentCleavageRepository,
     player: playerRepository,
     autoplay: autoplayRepository
 }
 
-export const application = new ProductionApplication(applicationGateways, applicationRepositories)
+export const clientApplication = new ProductionClientApplication(applicationGateways, applicationRepositories)

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { application } from "../../app";
+    import { clientApplication } from "../../clientApplication";
     let applicationStarted:boolean = false
     const start = (): Promise<void> => {
         return applicationStarted
@@ -8,7 +8,7 @@
     }
     const onStart = (): Promise<void>  => {
         applicationStarted = true
-        return application.start()
+        return clientApplication.start()
             .then(() => Promise.resolve())
             .catch(error => {
                 applicationStarted=false;

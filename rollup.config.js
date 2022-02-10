@@ -1,11 +1,13 @@
 import svelte from 'rollup-plugin-svelte'
 import commonjs from '@rollup/plugin-commonjs'
+import json from '@rollup/plugin-json'
 import resolve from '@rollup/plugin-node-resolve'
 import livereload from 'rollup-plugin-livereload'
 import { terser } from 'rollup-plugin-terser'
 import sveltePreprocess from 'svelte-preprocess'
 import typescript from '@rollup/plugin-typescript'
 import css from 'rollup-plugin-css-only'
+import nodePolyfills from 'rollup-plugin-polyfill-node'
 
 const production = !process.env.ROLLUP_WATCH
 
@@ -39,6 +41,7 @@ export default {
         file: 'public/build/bundle.js'
     },
     plugins: [
+        nodePolyfills(),
         svelte({
             preprocess: sveltePreprocess({
                 sourceMap: !production,
@@ -64,7 +67,9 @@ export default {
             browser: true,
             dedupe: ['svelte']
         }),
+
         commonjs(),
+        json(),
         typescript({
             sourceMap: !production,
             inlineSources: !production

@@ -1,5 +1,6 @@
 import { Gherkin } from '../../tests/Gherkin'
-import { feature, scenario } from '../../tests/testSuites'
+import { clientScenario } from '../../tests/clientScenario'
+import { feature } from '../../tests/feature'
 import { theAutoPlayRepositoryDontHaveNextCleavageDate, theAutoPlayRepositoryHasAutoPlayInterval, theAutoPlayRepositoryHasNextCleavageDate } from '../../tests/unitTests/autoplayRepository'
 import { whenEventOccurs } from '../../tests/unitTests/eventGateway'
 import { theInterfaceGatewayHasAutoplayOptionDisabled, theInterfaceGatewayHasAutoplayOptionEnabled } from '../../tests/unitTests/interfaceGateway'
@@ -7,7 +8,7 @@ import { EventType } from '../EventType'
 import { StopAutoplayEvent } from './StopAutoplayEvent'
 
 feature(EventType.STOP_AUTOPLAY, [
-    scenario('Scenario 1 : Stop autoplay', [
+    clientScenario('Scenario 1 : Stop autoplay', [
         application => theAutoPlayRepositoryHasAutoPlayInterval(Gherkin.GIVEN, application, 5),
         application => theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_GIVEN, application, new Date()),
         application => theInterfaceGatewayHasAutoplayOptionEnabled(Gherkin.AND_GIVEN, application),

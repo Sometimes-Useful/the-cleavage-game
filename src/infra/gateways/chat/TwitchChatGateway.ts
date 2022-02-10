@@ -1,16 +1,16 @@
 import { ChatUserstate, Client, Options } from 'tmi.js'
 import { PlayerMessageEvent } from '../../../domain/events/playerMessage/PlayerMessageEvent'
 import { MessageForPlayer } from '../../../domain/entities/MessageForPlayer'
-import type { InMemoryProductionEventGateway } from '../event/InMemoryProductionEventGateway'
 import type { Message } from '../../../domain/entities/message'
 import { PlayerQuitEvent } from '../../../domain/events/playerQuit/PlayerQuitEvent'
 import { Player } from '../../../domain/entities/Player'
 import type { ChatGateway } from '../../../domain/ports/secondary/gateways/ChatGateway'
+import type { InMemoryProductionClientEventGateway } from '../event/InMemoryProductionClientEventGateway'
 
 const noTwitchClientSet = 'No Twitch Client Set'
 export class TwitchChatGateway implements ChatGateway {
     constructor (
-        private eventBus:InMemoryProductionEventGateway,
+        private eventBus:InMemoryProductionClientEventGateway,
         private twitchClientDebug:boolean = false
     ) {}
 

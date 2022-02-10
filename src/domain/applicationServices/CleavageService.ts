@@ -4,24 +4,20 @@ import type { Player } from '../entities/Player'
 import { PlayerCleave } from '../entities/PlayerCleave'
 import type{ PlayerCleaveEvent } from '../events/playerCleave/PlayerCleaveEvent'
 import type { PublicCleavageDrawPileRepository } from '../ports/secondary/repositories/PublicCleavageDrawPileRepository'
-import type { GlobalCleavageDrawPileRepository } from '../ports/secondary/repositories/GlobalCleavageDrawPileRepository'
 import type { CurrentCleavageRepository } from '../ports/secondary/repositories/CurrentCleavageRepository'
 import type { ChatGateway } from '../ports/secondary/gateways/ChatGateway'
-import type { RandomGateway } from '../ports/secondary/gateways/RandomGateway'
+import type { GlobalCleavageDrawPileGateway } from '../ports/secondary/gateways/GlobalCleavageDrawPileGateway'
 
 export class CleavageApplicationService {
     constructor (
         private publicCleavageDrawPileRepository: PublicCleavageDrawPileRepository,
-        private globalCleavageDrawPileRepository:GlobalCleavageDrawPileRepository,
+        private globalCleavageDrawPileGateway:GlobalCleavageDrawPileGateway,
         private currentCleavageRepository:CurrentCleavageRepository,
-        private chatGateway:ChatGateway,
-        private randomGateway: RandomGateway
+        private chatGateway:ChatGateway
     ) { }
 
     saveGlobalCleavage (cleavage: Cleavage): Promise<void> {
-        return this.globalCleavageDrawPileRepository.hasCleavage(cleavage)
-            .then(hasCleavage => hasCleavage ? Promise.resolve() : this.globalCleavageDrawPileRepository.save(cleavage))
-            .catch(error => Promise.reject(error))
+        return this.globalCleavageDrawPileGateway.save(cleavage)
     }
 
     removePlayerOnCleavage (player:Player):Promise<void> {
@@ -111,14 +107,6 @@ export class CleavageApplicationService {
     }
 
     randomGlobalCleavage ():Promise<Cleavage|undefined> {
-        return this.globalCleavageDrawPileRepository.globalCleavageQuantity()
-            .then(globalCleavageQuantity => globalCleavageQuantity === 0 ? Promise.resolve(undefined) : this.onGlobalCleavage(globalCleavageQuantity))
-            .catch(error => Promise.reject(error))
-    }
-
-    onGlobalCleavage (globalCleavageQuantity:number): Promise<Cleavage> {
-        return this.randomGateway.randomIntergerOnRange(1, globalCleavageQuantity)
-            .then(randomGlobalCleavageNumber => this.globalCleavageDrawPileRepository.retrieveGlobalCleavageByIndex(randomGlobalCleavageNumber - 1))
-            .catch(error => Promise.reject(error))
+        return this.globalCleavageDrawPileGateway.drawGlobalCleavage()
     }
 }

@@ -1,7 +1,8 @@
 import { Cleavage } from '../../entities/Cleavage'
 import { Gherkin } from '../../tests/Gherkin'
 import { cleavageTitle1, cleavageTitle2, drouateChoice, gocheChoice } from '../../tests/testContexts'
-import { feature, scenario } from '../../tests/testSuites'
+import { clientScenario } from '../../tests/clientScenario'
+import { feature } from '../../tests/feature'
 import { theAutoPlayRepositoryHasAutoPlayInterval, theAutoPlayRepositoryHasNextCleavageDate } from '../../tests/unitTests/autoplayRepository'
 import { theCurrentCleavageRepositoryHasCleavage } from '../../tests/unitTests/cleavageRepository'
 import { theDateGatewayHasCurrentDate } from '../../tests/unitTests/dateGateway'
@@ -14,7 +15,7 @@ import { StartAutoPlayEvent } from './StartAutoPlayEvent'
 const currentDate1 = new Date(Date.UTC(2022, 2, 4, 10, 0, 0))
 const currentDate2 = new Date(Date.UTC(2022, 2, 4, 11, 0, 0))
 feature(EventType.START_AUTOPLAY, [
-    scenario(`Scenario 1 : Start autoplay with 1 minute autoplay with current date at ${currentDate1.toISOString()}`, [
+    clientScenario(`Scenario 1 : Start autoplay with 1 minute autoplay with current date at ${currentDate1.toISOString()}`, [
         application => theDateGatewayHasCurrentDate(Gherkin.GIVEN, application, currentDate1),
         application => theInterfaceGatewayHasAutoplayOptionDisabled(Gherkin.AND_THEN, application),
         application => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, application, new Cleavage(cleavageTitle1, gocheChoice(), drouateChoice())),
@@ -24,7 +25,7 @@ feature(EventType.START_AUTOPLAY, [
         application => theAutoPlayRepositoryHasAutoPlayInterval(Gherkin.AND_THEN, application, 1),
         application => theInterfaceGatewayHasAutoplayOptionEnabled(Gherkin.AND_THEN, application)
     ]),
-    scenario(`Scenario 2 : Start autoplay with 5 minute autoplay ${currentDate1.toISOString()}`, [
+    clientScenario(`Scenario 2 : Start autoplay with 5 minute autoplay ${currentDate1.toISOString()}`, [
         application => theDateGatewayHasCurrentDate(Gherkin.GIVEN, application, currentDate1),
         application => theInterfaceGatewayHasAutoplayOptionDisabled(Gherkin.AND_THEN, application),
         application => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, application, new Cleavage(cleavageTitle1, gocheChoice(), drouateChoice())),
@@ -34,7 +35,7 @@ feature(EventType.START_AUTOPLAY, [
         application => theAutoPlayRepositoryHasAutoPlayInterval(Gherkin.AND_THEN, application, 5),
         application => theInterfaceGatewayHasAutoplayOptionEnabled(Gherkin.AND_THEN, application)
     ]),
-    scenario(`Scenario 3 : Start autoplay with 5 minute autoplay ${currentDate2.toISOString()}`, [
+    clientScenario(`Scenario 3 : Start autoplay with 5 minute autoplay ${currentDate2.toISOString()}`, [
         application => theDateGatewayHasCurrentDate(Gherkin.GIVEN, application, currentDate2),
         application => theInterfaceGatewayHasAutoplayOptionDisabled(Gherkin.AND_THEN, application),
         application => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, application, new Cleavage(cleavageTitle2, gocheChoice(), drouateChoice())),

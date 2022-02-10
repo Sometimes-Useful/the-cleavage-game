@@ -1,6 +1,6 @@
 import type { ApplicationEvent } from '../../events/GameEvent'
 import type { UseCase } from '../../usecases/UseCase'
-import type { ApplicationServices } from '../ApplicationServices'
+import type { ClientApplicationServices } from '../ApplicationServices'
 import { EventType } from '../../events/EventType'
 import { ApplicationStartUseCase } from '../../usecases/ApplicationStartUseCase'
 import { AskForHelpUseCase } from '../../usecases/AskForHelpUseCase'
@@ -26,8 +26,8 @@ import { CheckAutoplayUseCase } from '../../usecases/CheckAutoplayUseCase'
 import { StartAutoplayUseCase } from '../../usecases/StartAutoplayUseCase'
 import { StopAutoplayUseCase } from '../../usecases/StopAutoplayUseCase'
 
-export class PrimaryController {
-    constructor (private applicationServices:ApplicationServices) {
+export class PrimaryClientController {
+    constructor (private applicationServices: ClientApplicationServices) {
         this.useCases.set(EventType.DISCONNECT_CHAT, new DisconnectChatUseCase(this.applicationServices))
         this.useCases.set(EventType.CONNECT_CHAT, new ConnectChatUseCase(this.applicationServices))
         this.useCases.set(EventType.NEW_CLEAVAGE, new NewCleavageUseCase(this.applicationServices))
@@ -56,8 +56,8 @@ export class PrimaryController {
         const usecase = this.useCases.get(event.eventType)
         return usecase
             ? usecase.execute(event)
-            : Promise.reject(new Error(eventNotSupported(event)))
+            : Promise.reject(new Error(eventNotSupported(event, this)))
     }
 
-    private useCases: Map<EventType, UseCase> = new Map([])
+    private useCases: Map<EventType, UseCase> = new Map([]);
 }
