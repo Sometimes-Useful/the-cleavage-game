@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.EnvironmentVariable = void 0;
+exports.onMissingEnvVariable = exports.EnvironmentVariable = void 0;
 /* eslint-disable no-unused-vars */
 var EnvironmentVariable;
 (function (EnvironmentVariable) {
@@ -14,3 +14,5 @@ var EnvironmentVariable;
     EnvironmentVariable["BACKEND_FQDN"] = "BACKEND_FQDN";
     EnvironmentVariable["BACKEND_SHEME"] = "BACKEND_SHEME";
 })(EnvironmentVariable = exports.EnvironmentVariable || (exports.EnvironmentVariable = {}));
+var onMissingEnvVariable = function (envVar) { throw new Error("Missing env variable ".concat(envVar)); };
+exports.onMissingEnvVariable = onMissingEnvVariable;

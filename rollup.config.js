@@ -48,7 +48,7 @@ export default {
     plugins: [
         replace({
             preventAssignment: true,
-            'process.env.PORT': JSON.stringify(retrieveEnvVariable('PORT')),
+            'process.env.PORT': process.env.PORT ? JSON.stringify(process.env.PORT) : undefined,
             'process.env.BACKEND_FQDN': JSON.stringify(retrieveEnvVariable('BACKEND_FQDN')),
             'process.env.BACKEND_SHEME': JSON.stringify(retrieveEnvVariable('BACKEND_SHEME'))
         }),

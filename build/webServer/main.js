@@ -5,8 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 var dotenv_1 = require("dotenv");
 var express_1 = __importDefault(require("express"));
-var backendEnv_1 = require("../api/backendEnv");
-var EnvironmentVariable_1 = require("../infra/EnvironmentVariable");
+var serverEnvironnementVariables_1 = require("../env/serverEnvironnementVariables");
 var serverApplication_1 = require("../serverApplication");
 var expressCommandApi_1 = require("./express/expressCommandApi");
 var expressListen_1 = require("./express/expressListen");
@@ -17,4 +16,4 @@ var expressApplication = (0, express_1["default"])();
 (0, expressCommandApi_1.expressCommandApi)(expressApplication, serverApplication_1.serverApplication);
 (0, expressQueryApi_1.expressQueryApi)(expressApplication, serverApplication_1.serverApplication);
 (0, expressStaticFrontEnd_1.expressStaticFrontEnd)(expressApplication);
-(0, expressListen_1.expressListen)(expressApplication, (0, backendEnv_1.backendSheme)(process.env.BACKEND_SHEME, EnvironmentVariable_1.EnvironmentVariable.BACKEND_SHEME), (0, backendEnv_1.backendFqdn)(process.env.BACKEND_FQDN, EnvironmentVariable_1.EnvironmentVariable.BACKEND_FQDN), (0, backendEnv_1.backendPort)(process.env.PORT, EnvironmentVariable_1.EnvironmentVariable.BACKEND_PORT));
+(0, expressListen_1.expressListen)(expressApplication, serverEnvironnementVariables_1.backendSheme, serverEnvironnementVariables_1.backendFqdn, serverEnvironnementVariables_1.backendPort);
