@@ -4,12 +4,16 @@ import type { InterfaceApplicationService } from '../applicationServices/Interfa
 import { Sound } from '../entities/sound'
 import { SupportedSound } from '../entities/SoundType'
 
+interface PlayerHyperLikeUseCaseApplicationServices {
+    interface:InterfaceApplicationService
+}
+
 export class PlayerHyperLikeUseCase extends UseCase {
     constructor (
-        private interfaceApplicationService: InterfaceApplicationService
+        private applicationServices: PlayerHyperLikeUseCaseApplicationServices
     ) { super() }
 
     execute (event: ApplicationEvent): Promise<void> {
-        return this.interfaceApplicationService.playSound(new Sound(SupportedSound.HYPERLIKE))
+        return this.applicationServices.interface.playSound(new Sound(SupportedSound.HYPERLIKE))
     }
 }

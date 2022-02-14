@@ -8,7 +8,7 @@ export class PlayerApplicationService {
     ) {}
 
     players ():Promise<Player[]> {
-        return this.playerRepository.players()
+        return this.playerRepository.loadAllPlayers()
     }
 
     removePlayer (player: Player): Promise<void> {

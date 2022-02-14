@@ -4,12 +4,16 @@ import { MessageForPlayer } from '../entities/MessageForPlayer'
 import { helpMessage } from '../entities/playerMessages'
 import type { PlayerAskForHelpEvent } from '../events/playerAskForHelp/PlayerAskForHelpEvent'
 
+interface AskForHelpUseCaseApplicationServices {
+    chat:ChatApplicationService
+}
+
 export class AskForHelpUseCase extends UseCase {
     constructor (
-        private chatApplicationService: ChatApplicationService
+        private applicationServices: AskForHelpUseCaseApplicationServices
     ) { super() }
 
     execute (event: PlayerAskForHelpEvent): Promise<void> {
-        return this.chatApplicationService.sendMessageToPlayer(new MessageForPlayer(event.player, helpMessage))
+        return this.applicationServices.chat.sendMessageToPlayer(new MessageForPlayer(event.player, helpMessage))
     }
 }

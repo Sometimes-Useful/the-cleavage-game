@@ -1,30 +1,41 @@
-
+import type { InMemoryAutoplayRepository } from '../../../../infra/repositories/autoplay/InMemoryAutoplayRepository'
 import type { InMemoryCurrentCleavageRepository } from '../../../../infra/repositories/currentCleavage/InMemoryCurrentCleavageRepository'
 import type { InMemoryGlobalCleavageDrawPileRepository } from '../../../../infra/repositories/globalCleavageDrawPile/InMemoryGlobalCleavageRepository'
 import type { InMemoryPlayerRepository } from '../../../../infra/repositories/player/InMemoryPlayerRepository'
 import type { InMemoryPublicCleavageDrawPileRepository } from '../../../../infra/repositories/publicCleavageDrawPile/InMemoryPublicCleavageDrawPileRepository'
+import type { AutoplayRepository } from './AutoplayRepository'
 import type { CurrentCleavageRepository } from './CurrentCleavageRepository'
 import type { GlobalCleavageDrawPileRepository } from './GlobalCleavageDrawPileRepository'
 import type { PlayerRepository } from './PlayerRepository'
 import type { PublicCleavageDrawPileRepository } from './PublicCleavageDrawPileRepository'
 
-export interface ApplicationRepositories {
-    globalCleavageDrawPile: GlobalCleavageDrawPileRepository
+export interface ClientApplicationRepositories {
+    autoplay:AutoplayRepository
     publicCleavageDrawPile: PublicCleavageDrawPileRepository;
     currentCleavage:CurrentCleavageRepository
     player:PlayerRepository
 }
-export interface FakeApplicationRepositories extends ApplicationRepositories {
-    globalCleavageDrawPile: InMemoryGlobalCleavageDrawPileRepository
+export interface FakeClientApplicationRepositories extends ClientApplicationRepositories {
+    autoplay: InMemoryAutoplayRepository
     publicCleavageDrawPile: InMemoryPublicCleavageDrawPileRepository;
     currentCleavage:InMemoryCurrentCleavageRepository;
     player: InMemoryPlayerRepository;
 
 }
-export interface ProductionApplicationRepositories extends ApplicationRepositories {
-    globalCleavageDrawPile: InMemoryGlobalCleavageDrawPileRepository
+export interface ProductionClientApplicationRepositories extends ClientApplicationRepositories {
+    autoplay: InMemoryAutoplayRepository
     publicCleavageDrawPile: InMemoryPublicCleavageDrawPileRepository;
     currentCleavage:InMemoryCurrentCleavageRepository;
     player: InMemoryPlayerRepository;
+}
 
+export interface ServerApplicationRepositories {
+    globalCleavageDrawPileRepository:GlobalCleavageDrawPileRepository
+}
+export interface FakeServerApplicationRepositories extends ServerApplicationRepositories {
+    globalCleavageDrawPileRepository: InMemoryGlobalCleavageDrawPileRepository
+
+}
+export interface ProductionServerApplicationRepositories extends ServerApplicationRepositories {
+    globalCleavageDrawPileRepository: GlobalCleavageDrawPileRepository
 }

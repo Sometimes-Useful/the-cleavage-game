@@ -5,28 +5,36 @@ import { InterfaceView } from '../entities/InterfaceView'
 import { UseCase } from './UseCase'
 import type { EventApplicationService } from '../applicationServices/EventApplicationService'
 import { NavigateEvent } from '../events/navigateEvent/NavigateEvent'
+import type { AutoplayApplicationService } from '../applicationServices/AutoplayApplicationService'
+import { DrawCleavageEvent } from '../events/drawCleavage/DrawCleavageEvent'
+export interface NewCleavageUseCaseApplicationServices {
+    autoplay: AutoplayApplicationService
+    interface: InterfaceApplicationService,
+    chat:ChatApplicationService,
+    event:EventApplicationService
+}
 
 export class NewCleavageUseCase extends UseCase {
     constructor (
-        private interfaceApplicationService: InterfaceApplicationService,
-        private chatApplicationService:ChatApplicationService,
-        private eventApplicationService:EventApplicationService
-    ) {
-        super()
-    }
+        private applicationServices:NewCleavageUseCaseApplicationServices
+    ) { super() }
 
     execute (event: ApplicationEvent): Promise<void> {
-        return this.chatApplicationService.isConnected()
+        return this.applicationServices.chat.isConnected()
             .then(isConnected => isConnected
                 ? this.onConnected()
-                : this.eventApplicationService.sentEvent(new NavigateEvent(InterfaceView.CONNECT_CHAT))
+                : this.applicationServices.event.sentEvent(new NavigateEvent(InterfaceView.CONNECT_CHAT))
             )
             .catch(error => Promise.reject(error))
     }
 
     private onConnected (): void | PromiseLike<void> {
-        return this.interfaceApplicationService.newCleavage()
-            .then(() => this.eventApplicationService.sentEvent(new NavigateEvent(InterfaceView.NEW_CLEAVAGE)))
+        return this.applicationServices.interface.newCleavage()
+            .then(() => this.applicationServices.autoplay.hasAutoplay())
+            .then(hasAutoplay => this.applicationServices.event.sentEvents([
+                new NavigateEvent(InterfaceView.NEW_CLEAVAGE),
+                ...(hasAutoplay ? [new DrawCleavageEvent()] : [])
+            ]))
             .catch(error => Promise.reject(error))
     }
 }

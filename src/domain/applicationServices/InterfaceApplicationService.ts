@@ -2,11 +2,19 @@ import type { Cleavage } from '../entities/Cleavage'
 import type { InterfaceView } from '../entities/InterfaceView'
 import type { Music } from '../entities/music/Music'
 import type { ApplicationNotification } from '../entities/notification/Notification'
-import { noPublicCleavageNotification } from '../entities/notification/notifications'
+import { noCleavageAvailableNotification } from '../entities/notification/notifications'
 import type { Sound } from '../entities/sound'
 import type { InterfaceGateway } from '../ports/secondary/gateways/InterfaceGateway'
 
 export class InterfaceApplicationService {
+    disableAutoplay (): Promise<void> {
+        return this.interfaceGateway.disableAutoplay()
+    }
+
+    enableAutoplay (): Promise<void> {
+        return this.interfaceGateway.enableAutoplay()
+    }
+
     constructor (private interfaceGateway:InterfaceGateway) {}
     changeMusicVolumeLevel (volume: number) {
         return this.interfaceGateway.changeMusicVolumeLevel(volume)
@@ -20,10 +28,10 @@ export class InterfaceApplicationService {
         return this.interfaceGateway.playMusic(music)
     }
 
-    onNoPublicCleavage (): Promise<void> {
+    onNoCleavageAvailable (): Promise<void> {
         return Promise.all([
             this.clearCleavage(),
-            this.notify(noPublicCleavageNotification)
+            this.notify(noCleavageAvailableNotification)
         ])
             .then(results => Promise.resolve())
             .catch(error => Promise.reject(error))

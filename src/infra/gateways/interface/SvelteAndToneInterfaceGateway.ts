@@ -5,7 +5,7 @@ import type { Music } from '../../../domain/entities/music/Music'
 import type { SupportedMusic } from '../../../domain/entities/music/SupportedMusic'
 import { InterfaceView } from '../../../domain/entities/InterfaceView'
 import { defaultMusicVolumeLevel, defaultSoundVolumeLevel } from './defaultVolumeLevels'
-import { cleavageStore, interfaceViewStore, musicVolumeStore, soundVolumeStore } from '../../../ui/stores/stores'
+import { autoplayStore, currentCleavageStore, interfaceViewStore, musicVolumeStore, soundVolumeStore } from '../../../ui/stores/stores'
 import * as Tone from 'tone'
 import type { SupportedSound } from '../../../domain/entities/SoundType'
 import type { InterfaceGateway } from '../../../domain/ports/secondary/gateways/InterfaceGateway'
@@ -15,6 +15,16 @@ export class SvelteAndToneInterfaceGateway implements InterfaceGateway {
         private supportedSounds :Map<SupportedSound, Tone.ToneAudioBuffer>,
         private supportedMusics: Map<SupportedMusic, Tone.ToneAudioBuffer>
     ) {}
+
+    disableAutoplay (): Promise<void> {
+        autoplayStore.set(false)
+        return Promise.resolve()
+    }
+
+    enableAutoplay (): Promise<void> {
+        autoplayStore.set(true)
+        return Promise.resolve()
+    }
 
     changeMusicVolumeLevel (volume: number): Promise<void> {
         this.musicVolumeFader.volume.value = Tone.gainToDb(volume / 100)
@@ -79,7 +89,7 @@ export class SvelteAndToneInterfaceGateway implements InterfaceGateway {
 
     public updateCleavage (cleavage: Cleavage|undefined): Promise<void> {
         console.log('UPDATE_CLEAVAGE', cleavage)
-        cleavageStore.set(cleavage)
+        currentCleavageStore.set(cleavage)
         return Promise.resolve()
     }
 

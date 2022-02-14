@@ -1,3 +1,3 @@
-import SPA from './Main.svelte'
-const app = new SPA({ target: document.body })
-export default app
+import Main from './Main.svelte'
+const svelteApplication = new Main({ target: document.body })
+export default svelteApplication

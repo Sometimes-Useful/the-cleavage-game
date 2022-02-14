@@ -1,5 +1,6 @@
 import { PlayerCleave } from '../../entities/PlayerCleave'
-import { feature, scenario } from '../../tests/testSuites'
+import { clientScenario } from '../../tests/clientScenario'
+import { feature } from '../../tests/feature'
 
 import { applicationMessagePrefix } from '../../entities/applicationMessagePrefix'
 import { AuthorizedMessage } from '../../entities/AuthorizedMessage'
@@ -21,51 +22,51 @@ import { theChatGatewaySendMessageToPlayer } from '../../tests/unitTests/chatGat
 import { whenEventOccurs, theEventIsSent } from '../../tests/unitTests/eventGateway'
 
 feature(EventType.PLAYER_MESSAGE, [
-    scenario(`Scenario 1 : ${applicationMessagePrefix + AuthorizedMessage.LEFT}`, [
+    clientScenario(`Scenario 1 : ${applicationMessagePrefix + AuthorizedMessage.LEFT}`, [
         application => whenEventOccurs(application, new PlayerMessageEvent(player1, applicationMessagePrefix + AuthorizedMessage.LEFT)),
         application => theEventIsSent(Gherkin.THEN, application, new PlayerCleaveEvent(player1, PlayerCleave.LEFT))
     ]),
-    scenario(`Scenario 2 : ${applicationMessagePrefix + AuthorizedMessage.RIGHT}`, [
+    clientScenario(`Scenario 2 : ${applicationMessagePrefix + AuthorizedMessage.RIGHT}`, [
         application => whenEventOccurs(application, new PlayerMessageEvent(player1, applicationMessagePrefix + AuthorizedMessage.RIGHT)),
         application => theEventIsSent(Gherkin.THEN, application, new PlayerCleaveEvent(player1, PlayerCleave.RIGHT))
     ]),
-    scenario(`Scenario 3 : ${applicationMessagePrefix + AuthorizedMessage.UNSUPPORTED}`, [
+    clientScenario(`Scenario 3 : ${applicationMessagePrefix + AuthorizedMessage.UNSUPPORTED}`, [
         application => whenEventOccurs(application, new PlayerMessageEvent(player1, applicationMessagePrefix + AuthorizedMessage.UNSUPPORTED)),
         application => theChatGatewaySendMessageToPlayer(Gherkin.THEN, application, new MessageForPlayer(player1, dontKnowWhatToDoWithThatMessage(player1)))
     ]),
-    scenario(`Scenario 4 : ${AuthorizedMessage.UNSUPPORTED}`, [
+    clientScenario(`Scenario 4 : ${AuthorizedMessage.UNSUPPORTED}`, [
         application => whenEventOccurs(application, new PlayerMessageEvent(player1, AuthorizedMessage.UNSUPPORTED)),
         application => theChatGatewaySendMessageToPlayer(Gherkin.THEN, application, [])
     ]),
-    scenario(`Scenario 5 : ${applicationMessagePrefix + AuthorizedMessage.RIGHT} with another player ${JSON.stringify(player2)}`, [
+    clientScenario(`Scenario 5 : ${applicationMessagePrefix + AuthorizedMessage.RIGHT} with another player ${JSON.stringify(player2)}`, [
         application => whenEventOccurs(application, new PlayerMessageEvent(player2, applicationMessagePrefix + AuthorizedMessage.RIGHT)),
         application => theEventIsSent(Gherkin.THEN, application, new PlayerCleaveEvent(player2, PlayerCleave.RIGHT))
     ]),
-    scenario(`Scenario 6 : ${`${applicationMessagePrefix}${AuthorizedMessage.SUGGEST_CLEAVAGE} ${cleavageTitle1}`}`, [
+    clientScenario(`Scenario 6 : ${`${applicationMessagePrefix}${AuthorizedMessage.SUGGEST_CLEAVAGE} ${cleavageTitle1}`}`, [
         application => whenEventOccurs(application, new PlayerMessageEvent(player1, `${applicationMessagePrefix}${AuthorizedMessage.SUGGEST_CLEAVAGE} ${cleavageTitle1}`)),
-        application => theEventIsSent(Gherkin.THEN, application, new PlayerSuggestCleavageEvent(player1, new Cleavage(cleavageTitle1)))
+        application => theEventIsSent(Gherkin.THEN, application, new PlayerSuggestCleavageEvent(player1, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [] }, rightChoice: { name: 'Drouate', players: [] }, players: [] })))
     ]),
-    scenario(`Scenario 7 : ${`${applicationMessagePrefix}${AuthorizedMessage.HELP}`}`, [
+    clientScenario(`Scenario 7 : ${`${applicationMessagePrefix}${AuthorizedMessage.HELP}`}`, [
         application => whenEventOccurs(application, new PlayerMessageEvent(player1, `${applicationMessagePrefix}${AuthorizedMessage.HELP}`)),
         application => theEventIsSent(Gherkin.THEN, application, new PlayerAskForHelpEvent(player1))
     ]),
-    scenario(`Scenario 8 : ${`${applicationMessagePrefix}${AuthorizedMessage.SHORT_HELP}`}`, [
+    clientScenario(`Scenario 8 : ${`${applicationMessagePrefix}${AuthorizedMessage.SHORT_HELP}`}`, [
         application => whenEventOccurs(application, new PlayerMessageEvent(player1, `${applicationMessagePrefix}${AuthorizedMessage.SHORT_HELP}`)),
         application => theEventIsSent(Gherkin.THEN, application, new PlayerAskForHelpEvent(player1))
     ]),
-    scenario(`Scenario 9 : ${`${applicationMessagePrefix}${AuthorizedMessage.SHORT_APPLAUSE}`}`, [
+    clientScenario(`Scenario 9 : ${`${applicationMessagePrefix}${AuthorizedMessage.SHORT_APPLAUSE}`}`, [
         application => whenEventOccurs(application, new PlayerMessageEvent(player1, `${applicationMessagePrefix}${AuthorizedMessage.SHORT_APPLAUSE}`)),
         application => theEventIsSent(Gherkin.THEN, application, new PlayerApplauseEvent())
     ]),
-    scenario(`Scenario 10 : ${`${applicationMessagePrefix}${AuthorizedMessage.SHORT_SHOOT}`}`, [
+    clientScenario(`Scenario 10 : ${`${applicationMessagePrefix}${AuthorizedMessage.SHORT_SHOOT}`}`, [
         application => whenEventOccurs(application, new PlayerMessageEvent(player1, `${applicationMessagePrefix}${AuthorizedMessage.SHORT_SHOOT}`)),
         application => theEventIsSent(Gherkin.THEN, application, new PlayerShootEvent())
     ]),
-    scenario(`Scenario 11 : ${`${applicationMessagePrefix}${AuthorizedMessage.SHORT_HYPERLIKE}`}`, [
+    clientScenario(`Scenario 11 : ${`${applicationMessagePrefix}${AuthorizedMessage.SHORT_HYPERLIKE}`}`, [
         application => whenEventOccurs(application, new PlayerMessageEvent(player1, `${applicationMessagePrefix}${AuthorizedMessage.SHORT_HYPERLIKE}`)),
         application => theEventIsSent(Gherkin.THEN, application, new PlayerHyperLikeEvent())
     ]),
-    scenario(`Scenario 12 : ${`${applicationMessagePrefix}${AuthorizedMessage.SHORT_WHISTLE}`}`, [
+    clientScenario(`Scenario 12 : ${`${applicationMessagePrefix}${AuthorizedMessage.SHORT_WHISTLE}`}`, [
         application => whenEventOccurs(application, new PlayerMessageEvent(player1, `${applicationMessagePrefix}${AuthorizedMessage.SHORT_WHISTLE}`)),
         application => theEventIsSent(Gherkin.THEN, application, new PlayerWhistleEvent())
     ])

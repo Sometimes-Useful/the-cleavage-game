@@ -1,16 +1,16 @@
 import { ChatUserstate, Client, Options } from 'tmi.js'
 import { PlayerMessageEvent } from '../../../domain/events/playerMessage/PlayerMessageEvent'
 import { MessageForPlayer } from '../../../domain/entities/MessageForPlayer'
-import type { InMemoryProductionEventGateway } from '../event/InMemoryProductionEventGateway'
 import type { Message } from '../../../domain/entities/message'
 import { PlayerQuitEvent } from '../../../domain/events/playerQuit/PlayerQuitEvent'
 import { Player } from '../../../domain/entities/Player'
 import type { ChatGateway } from '../../../domain/ports/secondary/gateways/ChatGateway'
+import type { InMemoryProductionClientEventGateway } from '../event/InMemoryProductionClientEventGateway'
 
 const noTwitchClientSet = 'No Twitch Client Set'
 export class TwitchChatGateway implements ChatGateway {
     constructor (
-        private eventBus:InMemoryProductionEventGateway,
+        private eventBus:InMemoryProductionClientEventGateway,
         private twitchClientDebug:boolean = false
     ) {}
 
@@ -98,7 +98,7 @@ export class TwitchChatGateway implements ChatGateway {
         })
         this.tmiClient.on('part', (channel: string, username: string, self: boolean) => {
             console.log(twitchClientLeaveChannelAsUser(channel, username))
-            this.eventBus.sendEvent(new PlayerQuitEvent(new Player(username)))
+            this.eventBus.sendEvent(new PlayerQuitEvent(new Player({ username })))
         })
         this.tmiClient.on('connected', (host: string, port: number) => {
             console.log(twitchClientConnected(host, port))
@@ -111,7 +111,7 @@ export class TwitchChatGateway implements ChatGateway {
         })
         this.tmiClient.on('message', (channel: string, userstate: ChatUserstate, message: string, self: boolean) => {
             console.log(twitchClientMessage, { channel, userstate, message })
-            if (userstate.username) this.sendPlayerMessageEventOnEventBus(new PlayerMessageEvent(new Player(userstate.username), message))
+            if (userstate.username) this.sendPlayerMessageEventOnEventBus(new PlayerMessageEvent(new Player({ username: userstate.username }), message))
         })
     }
 

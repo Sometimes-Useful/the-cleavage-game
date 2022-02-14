@@ -10,7 +10,7 @@
     import MainMenu from "./views/MainMenu.svelte";
     import Settings from "./views/Settings.svelte";
     import Intro from "./views/Intro.svelte";
-import Credits from "./views/Credits.svelte";
+    import Credits from "./views/Credits.svelte";
     let forceView:InterfaceView|undefined = undefined
     interfaceViewStore.set(InterfaceView.INTRO)
     onDestroy(()=>$applicationEventStore = new DisconnectChatEvent())

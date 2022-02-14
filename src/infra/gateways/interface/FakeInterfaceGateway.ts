@@ -6,6 +6,16 @@ import type { Music } from '../../../domain/entities/music/Music'
 import type { InterfaceGateway } from '../../../domain/ports/secondary/gateways/InterfaceGateway'
 
 export class FakeInterfaceGateway implements InterfaceGateway {
+    disableAutoplay (): Promise<void> {
+        this.autoplayEnabled = false
+        return Promise.resolve()
+    }
+
+    enableAutoplay (): Promise<void> {
+        this.autoplayEnabled = true
+        return Promise.resolve()
+    }
+
     changeMusicVolumeLevel (volume: number): Promise<void> {
         this.musicVolume = volume
         return Promise.resolve()
@@ -50,6 +60,7 @@ export class FakeInterfaceGateway implements InterfaceGateway {
     playingSounds: Sound[] = []
     musicVolume: number = 0
     soundVolume: number = 0
+    autoplayEnabled: boolean = false
     playingMusic: Music | undefined = undefined
     currentView: InterfaceView = InterfaceView.NONE;
 }

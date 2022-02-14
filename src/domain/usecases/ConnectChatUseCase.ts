@@ -9,34 +9,37 @@ import type { EventApplicationService } from '../applicationServices/EventApplic
 import { NavigateEvent } from '../events/navigateEvent/NavigateEvent'
 import { WelcomeMessage } from '../entities/message'
 
-export class ConnectChat extends UseCase {
+interface ConnectChatUseCaseApplicationServices {
+    chat:ChatApplicationService
+    interface:InterfaceApplicationService
+    event:EventApplicationService
+}
+
+export class ConnectChatUseCase extends UseCase {
     constructor (
-        private chatApplicationService: ChatApplicationService,
-        private interfaceApplicationService: InterfaceApplicationService,
-        private eventApplicationService:EventApplicationService
-    ) {
-        super()
-    }
+        private applicationServices: ConnectChatUseCaseApplicationServices
+    ) { super() }
 
     execute (event: ConnectChatEvent): Promise<void> {
-        return this.chatApplicationService.isConnected()
+        return this.applicationServices.chat.isConnected()
             .then(isConnected => !isConnected
                 ? this.onDisconnected(event)
-                : this.interfaceApplicationService.notify(alreadyConnectedToChatNotification))
+                : this.applicationServices.interface.notify(alreadyConnectedToChatNotification)
+            )
             .catch(error => Promise.reject(error))
     }
 
     private onDisconnected (event: ConnectChatEvent): Promise<void> {
-        return this.chatApplicationService.connectChat(event.username, event.token, event.channel)
+        return this.applicationServices.chat.connectChat(event.username, event.token, event.channel)
             .then(() => this.onConnected())
             .catch(error => Promise.reject(error))
     }
 
-    private onConnected (): void | PromiseLike<void> {
+    private onConnected (): Promise<void> {
         return Promise.all([
-            this.eventApplicationService.sentEvent(new NavigateEvent(InterfaceView.NEW_CLEAVAGE)),
-            this.chatApplicationService.sendMessage(new WelcomeMessage()),
-            this.interfaceApplicationService.playMusic(mainMusic)
+            this.applicationServices.event.sentEvent(new NavigateEvent(InterfaceView.NEW_CLEAVAGE)),
+            this.applicationServices.chat.sendMessage(new WelcomeMessage()),
+            this.applicationServices.interface.playMusic(mainMusic)
         ])
             .then(results => Promise.resolve())
             .catch(error => Promise.reject(error))
