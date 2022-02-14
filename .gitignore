@@ -2,3 +2,4 @@ node_modules
 .DS_Store
 .env
 the-cleavage-game_GCP.json
+cloudbuild.yaml
