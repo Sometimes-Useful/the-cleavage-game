@@ -15,10 +15,10 @@ const gateways: ProductionServerApplicationGateways = {
 }
 const repositories: ProductionServerApplicationRepositories = {
     globalCleavageDrawPileRepository: new GcpGlobalCleavageDrawPileRepository(new GcpDatastore({
-        gcpProjectId: JSON.parse(retrieveEnvVariable(EnvironmentVariable.GCP_PROJECT_ID)).gcpProjectId,
-        gcpClientEmail: JSON.parse(retrieveEnvVariable(EnvironmentVariable.GCP_CLIENT_EMAIL)).gcpClientEmail,
+        gcpProjectId: JSON.parse(retrieveEnvVariable(process.env.GCP_PROJECT_ID, EnvironmentVariable.GCP_PROJECT_ID)).gcpProjectId,
+        gcpClientEmail: JSON.parse(retrieveEnvVariable(process.env.GCP_CLIENT_EMAIL, EnvironmentVariable.GCP_CLIENT_EMAIL)).gcpClientEmail,
         gcpKindPrefix: '',
-        gcpPrivateKey: JSON.parse(retrieveEnvVariable(EnvironmentVariable.GCP_PRIVATE_KEY)).gcpPrivateKey
+        gcpPrivateKey: JSON.parse(retrieveEnvVariable(process.env.GCP_PRIVATE_KEY, EnvironmentVariable.GCP_PRIVATE_KEY)).gcpPrivateKey
     }))
 }
 

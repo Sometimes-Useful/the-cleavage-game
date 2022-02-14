@@ -1,7 +1,6 @@
 import type { EnvironmentVariable } from './EnvironmentVariable'
 
-export function retrieveEnvVariable (envVariableName: EnvironmentVariable, defaultValue?:string) {
-    const envVariableValue: string | undefined = process.env[envVariableName]
+export function retrieveEnvVariable (envVariableValue: string | undefined, envVariableName:EnvironmentVariable, defaultValue?:string) {
     if (envVariableValue)
         return envVariableValue
     if (defaultValue)
