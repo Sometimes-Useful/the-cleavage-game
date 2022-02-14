@@ -17,4 +17,4 @@ var expressApplication = (0, express_1["default"])();
 (0, expressCommandApi_1.expressCommandApi)(expressApplication, serverApplication_1.serverApplication);
 (0, expressQueryApi_1.expressQueryApi)(expressApplication, serverApplication_1.serverApplication);
 (0, expressStaticFrontEnd_1.expressStaticFrontEnd)(expressApplication);
-(0, expressListen_1.expressListen)(expressApplication, (0, backendEnv_1.backendFqdn)(process.env.BACKEND_FQDN, EnvironmentVariable_1.EnvironmentVariable.BACKEND_FQDN), (0, backendEnv_1.backendPort)(process.env.PORT, EnvironmentVariable_1.EnvironmentVariable.BACKEND_PORT));
+(0, expressListen_1.expressListen)(expressApplication, (0, backendEnv_1.backendSheme)(process.env.BACKEND_SHEME, EnvironmentVariable_1.EnvironmentVariable.BACKEND_SHEME), (0, backendEnv_1.backendFqdn)(process.env.BACKEND_FQDN, EnvironmentVariable_1.EnvironmentVariable.BACKEND_FQDN), (0, backendEnv_1.backendPort)(process.env.PORT, EnvironmentVariable_1.EnvironmentVariable.BACKEND_PORT));

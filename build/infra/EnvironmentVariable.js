@@ -12,4 +12,5 @@ var EnvironmentVariable;
     EnvironmentVariable["GCP_PRIVATE_KEY"] = "GCP_PRIVATE_KEY";
     EnvironmentVariable["BACKEND_PORT"] = "PORT";
     EnvironmentVariable["BACKEND_FQDN"] = "BACKEND_FQDN";
+    EnvironmentVariable["BACKEND_SHEME"] = "BACKEND_SHEME";
 })(EnvironmentVariable = exports.EnvironmentVariable || (exports.EnvironmentVariable = {}));
