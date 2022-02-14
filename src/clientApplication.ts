@@ -15,6 +15,7 @@ import { ProductionDateGateway } from './infra/gateways/date/ProductionDateGatew
 import { InMemoryProductionClientEventGateway } from './infra/gateways/event/InMemoryProductionClientEventGateway'
 import { AxiosGlobalCleavageDrawPileGateway } from './infra/gateways/globalCleavageDrawPile/AxiosGlobalCleavageDrawPileGateway'
 import { backendFqdn, backendPort } from './api/backendEnv'
+import { EnvironmentVariable } from './infra/EnvironmentVariable'
 
 const supportedSounds = new Map([
     [SupportedSound.QUACK, new Tone.ToneAudioBuffer('/sounds/quack.mp3')],
@@ -37,7 +38,10 @@ const chatGateway = new TwitchChatGateway(eventGateway)
 const randomGateway = new ProductionRandomGateway()
 const dateGateway = new ProductionDateGateway()
 
-const globalCleavageDrawPileGateway = new AxiosGlobalCleavageDrawPileGateway(backendFqdn, backendPort)
+const globalCleavageDrawPileGateway = new AxiosGlobalCleavageDrawPileGateway(
+    backendFqdn(process.env.BACKEND_FQDN, EnvironmentVariable.BACKEND_FQDN),
+    backendPort(process.env.PORT, EnvironmentVariable.BACKEND_PORT)
+)
 // const globalCleavageDrawPileGateway = new FakeGlobalCleavageDrawPileGateway()
 const applicationGateways:ProductionClientApplicationGateways = {
     chat: chatGateway,
