@@ -1,4 +1,4 @@
-import type { Cleavage } from '../entities/Cleavage'
+import { Cleavage } from '../entities/Cleavage'
 import { MessageForPlayer } from '../entities/MessageForPlayer'
 import type { Player } from '../entities/Player'
 import { PlayerCleave } from '../entities/PlayerCleave'
@@ -17,7 +17,9 @@ export class CleavageApplicationService {
     ) { }
 
     saveGlobalCleavage (cleavage: Cleavage): Promise<void> {
-        return this.globalCleavageDrawPileGateway.save(cleavage)
+        const currentClevageDto = cleavage.toDto()
+        currentClevageDto.players = []
+        return this.globalCleavageDrawPileGateway.save(new Cleavage(currentClevageDto))
     }
 
     removePlayerOnCleavage (player:Player):Promise<void> {

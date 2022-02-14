@@ -1,4 +1,4 @@
-import type { Choice } from '../../../domain/entities/Choice'
+import { Choice } from '../../../domain/entities/Choice'
 import { Cleavage } from '../../../domain/entities/Cleavage'
 import type { GlobalCleavageDrawPileRepository } from '../../../domain/ports/secondary/repositories/GlobalCleavageDrawPileRepository'
 
@@ -26,8 +26,8 @@ export class InMemoryGlobalCleavageDrawPileRepository implements GlobalCleavageD
         return Promise.resolve(hasCleavage)
     }
 }
-const defaultLeftChoice:Choice = { name: 'Gôche', players: [] }
-const defaultRightChoice:Choice = { name: 'Drouate', players: [] }
+const defaultLeftChoice:Choice = new Choice({ name: 'Gôche', players: [] })
+const defaultRightChoice:Choice = new Choice({ name: 'Drouate', players: [] })
 export const globalCleavages:Cleavage[] = [
     "Emmanuel Macron au PMU avec un p'tit blanc",
     'Un infirmier après son augmentation annuelle',
@@ -62,4 +62,4 @@ export const globalCleavages:Cleavage[] = [
     'Le cousin chiant',
     'Le tonton chiant',
     'La Gameboy'
-].map(title => new Cleavage(title, defaultLeftChoice, defaultRightChoice))
+].map(title => new Cleavage({ title, leftChoice: defaultLeftChoice.toDTO(), rightChoice: defaultRightChoice.toDTO(), players: [] }))

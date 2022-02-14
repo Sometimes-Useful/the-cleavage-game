@@ -51,7 +51,16 @@ export class PlayerMessageUseCase extends UseCase {
             [message === applicationMessagePrefix + AuthorizedMessage.LEFT, new PlayerCleaveEvent(player, PlayerCleave.LEFT)],
             [message === applicationMessagePrefix + AuthorizedMessage.HELP, new PlayerAskForHelpEvent(player)],
             [message === applicationMessagePrefix + AuthorizedMessage.SHORT_HELP, new PlayerAskForHelpEvent(player)],
-            [message.startsWith(applicationMessagePrefix + AuthorizedMessage.SUGGEST_CLEAVAGE), new PlayerSuggestCleavageEvent(player, new Cleavage(message.replace(applicationMessagePrefix + AuthorizedMessage.SUGGEST_CLEAVAGE, '').trimStart(), { name: 'Gôche', players: [] }, { name: 'Drouate', players: [] }))]
+            [message.startsWith(applicationMessagePrefix + AuthorizedMessage.SUGGEST_CLEAVAGE), new PlayerSuggestCleavageEvent(player, this.newCleavageFromMessage(message))]
         ])
+    }
+
+    private newCleavageFromMessage (message: string): Cleavage {
+        return new Cleavage({
+            title: message.replace(applicationMessagePrefix + AuthorizedMessage.SUGGEST_CLEAVAGE, '').trimStart(),
+            leftChoice: { name: 'Gôche', players: [] },
+            rightChoice: { name: 'Drouate', players: [] },
+            players: []
+        })
     }
 }

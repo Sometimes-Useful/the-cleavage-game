@@ -4,7 +4,8 @@ import type { GlobalCleavageDrawPileGateway } from '../../../domain/ports/second
 import { AxiosGlobalCleavageDrawPileGateway } from './AxiosGlobalCleavageDrawPileGateway'
 import { FakeGlobalCleavageDrawPileGateway } from './FakeGlobalCleavageDrawPileGateway'
 import { commonCleavage1 } from '../../../domain/tests/testContexts'
-import { backendPort } from '../../../webServer/main'
+import { backendFqdn, backendPort } from '../../../api/backendEnv'
+
 /*
 function retrieveEnvVariable (envVariableName:EnvironmentVariable) {
     const envVariableValue: string | undefined = process.env[envVariableName]
@@ -20,7 +21,7 @@ const fake:IntegrationEnvironnement = {
     adapter: new FakeGlobalCleavageDrawPileGateway()
 }
 const axios:IntegrationEnvironnement = {
-    adapter: new AxiosGlobalCleavageDrawPileGateway('localhost', backendPort)
+    adapter: new AxiosGlobalCleavageDrawPileGateway(backendFqdn, backendPort)
 }
 
 const envs = [

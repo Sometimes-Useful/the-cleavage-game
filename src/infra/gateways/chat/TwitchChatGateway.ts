@@ -98,7 +98,7 @@ export class TwitchChatGateway implements ChatGateway {
         })
         this.tmiClient.on('part', (channel: string, username: string, self: boolean) => {
             console.log(twitchClientLeaveChannelAsUser(channel, username))
-            this.eventBus.sendEvent(new PlayerQuitEvent(new Player(username)))
+            this.eventBus.sendEvent(new PlayerQuitEvent(new Player({ username })))
         })
         this.tmiClient.on('connected', (host: string, port: number) => {
             console.log(twitchClientConnected(host, port))
@@ -111,7 +111,7 @@ export class TwitchChatGateway implements ChatGateway {
         })
         this.tmiClient.on('message', (channel: string, userstate: ChatUserstate, message: string, self: boolean) => {
             console.log(twitchClientMessage, { channel, userstate, message })
-            if (userstate.username) this.sendPlayerMessageEventOnEventBus(new PlayerMessageEvent(new Player(userstate.username), message))
+            if (userstate.username) this.sendPlayerMessageEventOnEventBus(new PlayerMessageEvent(new Player({ username: userstate.username }), message))
         })
     }
 

@@ -1,18 +1,25 @@
 
-import axios from 'axios'
-import type { Cleavage } from '../../../domain/entities/Cleavage'
+import axios, { AxiosInstance } from 'axios'
+import { Cleavage, CleavageDTO } from '../../../domain/entities/Cleavage'
 import type { GlobalCleavageDrawPileGateway } from '../../../domain/ports/secondary/gateways/GlobalCleavageDrawPileGateway'
-import { BACKEND_API_URL } from '../../../webServer/Backend_API_URL'
+import { BACKEND_API_URL } from '../../../api/Backend_API_URL'
 
 export class AxiosGlobalCleavageDrawPileGateway implements GlobalCleavageDrawPileGateway {
     constructor (
-        private endpoint:string,
-        private port:number
-    ) {}
+        endpoint:string,
+        port:number
+    ) {
+        this.backendApiInstance = axios.create({
+            baseURL: `http://${endpoint}:${port}`
+        })
+    }
 
     drawGlobalCleavage (): Promise<Cleavage | undefined> {
-        return this.backendApiInstance.get<Cleavage | undefined>(BACKEND_API_URL.GLOBAL_CLEAVAGE_DRAWPILE_DRAW)
-            .then(response => Promise.resolve(response.data))
+        return this.backendApiInstance.get<CleavageDTO | ''>(BACKEND_API_URL.GLOBAL_CLEAVAGE_DRAWPILE_DRAW)
+            .then(response => {
+                console.log(response.data)
+                return Promise.resolve(response.data ? new Cleavage(response.data) : undefined)
+            })
             .catch(error => Promise.reject(error))
     }
 
@@ -22,7 +29,5 @@ export class AxiosGlobalCleavageDrawPileGateway implements GlobalCleavageDrawPil
             .catch(error => Promise.reject(error))
     }
 
-    private backendApiInstance = axios.create({
-        baseURL: `http://${this.endpoint}:${this.port}`
-    })
+    private backendApiInstance:AxiosInstance
 }

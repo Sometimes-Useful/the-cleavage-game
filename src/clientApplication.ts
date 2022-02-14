@@ -14,7 +14,7 @@ import { InMemoryAutoplayRepository } from './infra/repositories/autoplay/InMemo
 import { ProductionDateGateway } from './infra/gateways/date/ProductionDateGateway'
 import { InMemoryProductionClientEventGateway } from './infra/gateways/event/InMemoryProductionClientEventGateway'
 import { AxiosGlobalCleavageDrawPileGateway } from './infra/gateways/globalCleavageDrawPile/AxiosGlobalCleavageDrawPileGateway'
-import { backendPort } from './webServer/main'
+import { backendFqdn, backendPort } from './api/backendEnv'
 
 const supportedSounds = new Map([
     [SupportedSound.QUACK, new Tone.ToneAudioBuffer('/sounds/quack.mp3')],
@@ -36,7 +36,9 @@ const eventGateway = new InMemoryProductionClientEventGateway()
 const chatGateway = new TwitchChatGateway(eventGateway)
 const randomGateway = new ProductionRandomGateway()
 const dateGateway = new ProductionDateGateway()
-const globalCleavageDrawPileGateway = new AxiosGlobalCleavageDrawPileGateway('localhost', backendPort)
+
+const globalCleavageDrawPileGateway = new AxiosGlobalCleavageDrawPileGateway(backendFqdn, backendPort)
+// const globalCleavageDrawPileGateway = new FakeGlobalCleavageDrawPileGateway()
 const applicationGateways:ProductionClientApplicationGateways = {
     chat: chatGateway,
     event: eventGateway,

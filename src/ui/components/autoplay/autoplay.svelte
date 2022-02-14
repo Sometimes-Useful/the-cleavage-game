@@ -8,7 +8,7 @@
     import InputNumber from "../inputs/inputNumber.svelte";
     let autoplayMinutes:number = 3
     export let newCleavage:Cleavage | undefined
-    const defaultCleavage = () => new Cleavage("",{name:"Gôche",players:[]},{name:"Drouate",players:[]})
+    const defaultCleavage = () => new Cleavage({title: "",leftChoice: {name:"Gôche",players:[]},rightChoice: {name:"Drouate",players:[]}, players:[]})
     const resetCleavageTitleAndSendEvent = (event:ApplicationEvent) =>{
         newCleavage = defaultCleavage()
         applicationEventStore.set(event)

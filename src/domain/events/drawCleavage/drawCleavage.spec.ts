@@ -14,8 +14,8 @@ import { SupportedSound } from '../../entities/SoundType'
 import { theAutoPlayRepositoryDontHaveNextCleavageDate, theAutoPlayRepositoryHasNextCleavageDate } from '../../tests/unitTests/autoplayRepository'
 import { LaunchCleavageEvent } from '../launchCleavage/LaunchCleavageEvent'
 
-const cleavage1 = new Cleavage(cleavageTitle1, { name: 'Gôche', players: [] }, { name: 'Drouate', players: [] })
-const cleavage2 = new Cleavage(cleavageTitle2, { name: 'Gôche', players: [] }, { name: 'Drouate', players: [] })
+const cleavage1 = new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [] }, rightChoice: { name: 'Drouate', players: [] }, players: [] })
+const cleavage2 = new Cleavage({ title: cleavageTitle2, leftChoice: { name: 'Gôche', players: [] }, rightChoice: { name: 'Drouate', players: [] }, players: [] })
 feature(EventType.DRAW_CLEAVAGE, [
     clientScenario('Scenario 1 : With one public cleavage', [
         application => theCleavageRepositoryHasPublicCleavages(Gherkin.GIVEN, application, [cleavage1]),

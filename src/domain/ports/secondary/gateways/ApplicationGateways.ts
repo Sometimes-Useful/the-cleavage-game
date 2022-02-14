@@ -6,7 +6,6 @@ import type { FakeClientEventGateway } from '../../../../infra/gateways/event/Fa
 import type { FakeServerEventGateway } from '../../../../infra/gateways/event/FakeServerEventGateway'
 import type { InMemoryProductionClientEventGateway } from '../../../../infra/gateways/event/InMemoryProductionClientEventGateway'
 import type { InMemoryProductionServerEventGateway } from '../../../../infra/gateways/event/InMemoryProductionServerEventGateway'
-import type { AxiosGlobalCleavageDrawPileGateway } from '../../../../infra/gateways/globalCleavageDrawPile/AxiosGlobalCleavageDrawPileGateway'
 import type { FakeGlobalCleavageDrawPileGateway } from '../../../../infra/gateways/globalCleavageDrawPile/FakeGlobalCleavageDrawPileGateway'
 import type { FakeInterfaceGateway } from '../../../../infra/gateways/interface/FakeInterfaceGateway'
 import type { SvelteAndToneInterfaceGateway } from '../../../../infra/gateways/interface/SvelteAndToneInterfaceGateway'
@@ -39,7 +38,7 @@ export interface FakeClientApplicationGateways extends ClientApplicationGateways
 }
 
 export interface ProductionClientApplicationGateways extends ClientApplicationGateways {
-    globalCleavageDrawPile:AxiosGlobalCleavageDrawPileGateway;
+    globalCleavageDrawPile:GlobalCleavageDrawPileGateway;
     date: ProductionDateGateway
     random: ProductionRandomGateway
     chat: TwitchChatGateway;

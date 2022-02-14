@@ -7,14 +7,10 @@ import { formatTwitchUserMessage, TwitchChatGateway } from './TwitchChatGateway'
 import { FakeClientEventGateway } from '../event/FakeClientEventGateway'
 import { channel, integrationTestMessage, player1, token, username } from '../../../domain/tests/testContexts'
 import { PlayerMessageEvent } from '../../../domain/events/playerMessage/PlayerMessageEvent'
-import { EnvironmentVariable } from './EnvironmentVariable'
 import { Player } from '../../../domain/entities/Player'
 import type { ChatGateway } from '../../../domain/ports/secondary/gateways/ChatGateway'
-function retrieveEnvVariable (envVariableName:EnvironmentVariable) {
-    const envVariableValue: string | undefined = process.env[envVariableName]
-    if (envVariableValue) return envVariableValue
-    throw new Error(`Missing env variable ${envVariableName}`)
-}
+import { retrieveEnvVariable } from '../../retrieveEnvVariable'
+import { EnvironmentVariable } from '../../EnvironmentVariable'
 interface IntegrationEnvironnement {
     adapter: ChatGateway
     username:string
@@ -58,7 +54,7 @@ describe('Integration Test: Chat Gateway', () => {
                     }
                     if (environnement.adapter instanceof TwitchChatGateway)
                         setTimeout(() => {
-                            expect(inMemoryEventBus.events).deep.equal([new PlayerMessageEvent(new Player(environnement.username), formatTwitchUserMessage(messageForPlayer))])
+                            expect(inMemoryEventBus.events).deep.equal([new PlayerMessageEvent(new Player({ username: environnement.username }), formatTwitchUserMessage(messageForPlayer))])
                             done()
                         }, 20)
                 })

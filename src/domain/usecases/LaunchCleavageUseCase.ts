@@ -21,7 +21,12 @@ export class LaunchCleavageUseCase extends UseCase {
 
     private onConnected (event:LaunchCleavageEvent): Promise<void> {
         return this.applicationServices.player.players()
-            .then(players => this.applicationServices.cleavage.saveCleavage(new Cleavage(event.cleavageTitle, { name: event.leftChoiceName, players: [] }, { name: event.rightChoiceName, players: [] }, players)))
+            .then(players => this.applicationServices.cleavage.saveCleavage(new Cleavage({
+                title: event.cleavageTitle,
+                leftChoice: { name: event.leftChoiceName, players: [] },
+                rightChoice: { name: event.rightChoiceName, players: [] },
+                players
+            })))
             .then(() => this.applicationServices.cleavage.loadCleavage())
             .then(cleavage => Promise.all([
                 this.applicationServices.interface.updateCleavage(cleavage),

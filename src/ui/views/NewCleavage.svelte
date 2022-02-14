@@ -17,7 +17,7 @@
         newCleavage = defaultCleavage()
         applicationEventStore.set(event)
     }
-    const defaultCleavage = () => new Cleavage("",{name:"Gôche",players:[]},{name:"Drouate",players:[]})
+    const defaultCleavage = () => new Cleavage({title:"",leftChoice:{name:"Gôche",players:[]},rightChoice: {name:"Drouate",players:[]},players:[]})
     const onClickNewClivageButton = () => resetCleavageTitleAndSendEvent(new LaunchCleavageEvent(newCleavage.title,newCleavage.leftChoice.name,newCleavage.rightChoice.name))
     const onClickCancelButton = () => resetCleavageTitleAndSendEvent(new CancelCleavageEvent())
     const onClickRandomCleavageButton = () => resetCleavageTitleAndSendEvent(new DrawCleavageEvent())

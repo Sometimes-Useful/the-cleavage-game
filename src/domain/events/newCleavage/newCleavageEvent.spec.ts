@@ -25,7 +25,7 @@ feature(EventType.NEW_CLEAVAGE, [
     ]),
     clientScenario(`Scenario 2 : UI updated to ${InterfaceView.NEW_CLEAVAGE} when chat gateway is ${ChatStatus.CONNECTED}.`, [
         application => theInterfaceGatewayHasCurrentView(Gherkin.GIVEN, application, InterfaceView.NONE),
-        application => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_GIVEN, application, new Cleavage(cleavageTitle1, { name: 'Gôche', players: [] }, { name: 'Drouate', players: [] })),
+        application => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_GIVEN, application, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [] }, rightChoice: { name: 'Drouate', players: [] }, players: [] })),
         application => theChatGatewayHasExpectedStatus(Gherkin.AND_GIVEN, application, ChatStatus.CONNECTED),
         application => whenEventOccurs(application, new NewCleavageEvent()),
         application => theEventIsSent(Gherkin.THEN, application, new NavigateEvent(InterfaceView.NEW_CLEAVAGE)),

@@ -1,6 +1,5 @@
 import type { InMemoryAutoplayRepository } from '../../../../infra/repositories/autoplay/InMemoryAutoplayRepository'
 import type { InMemoryCurrentCleavageRepository } from '../../../../infra/repositories/currentCleavage/InMemoryCurrentCleavageRepository'
-import type { GcpGlobalCleavageDrawPileRepository } from '../../../../infra/repositories/globalCleavageDrawPile/GcpGlobalCleavageDrawPileRepository'
 import type { InMemoryGlobalCleavageDrawPileRepository } from '../../../../infra/repositories/globalCleavageDrawPile/InMemoryGlobalCleavageRepository'
 import type { InMemoryPlayerRepository } from '../../../../infra/repositories/player/InMemoryPlayerRepository'
 import type { InMemoryPublicCleavageDrawPileRepository } from '../../../../infra/repositories/publicCleavageDrawPile/InMemoryPublicCleavageDrawPileRepository'
@@ -38,5 +37,5 @@ export interface FakeServerApplicationRepositories extends ServerApplicationRepo
 
 }
 export interface ProductionServerApplicationRepositories extends ServerApplicationRepositories {
-    globalCleavageDrawPileRepository: GcpGlobalCleavageDrawPileRepository
+    globalCleavageDrawPileRepository: GlobalCleavageDrawPileRepository
 }

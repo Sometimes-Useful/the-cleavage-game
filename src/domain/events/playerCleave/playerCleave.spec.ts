@@ -15,9 +15,9 @@ import { theCurrentCleavageRepositoryHasCleavage, theCurrentCleavageRepositoryDo
 import { whenEventOccurs } from '../../tests/unitTests/eventGateway'
 import { thePlayerRepositoryDontHavePlayers, thePlayerRepositoryHasPlayers } from '../../tests/unitTests/playerRepository'
 import type { Player } from '../../entities/Player'
-const cleaveWithoutPlayer = () => new Cleavage(cleavageTitle1, { name: 'Gôche', players: [] }, { name: 'Drouate', players: [] }, [])
-const cleaveWithPlayerLeft = (player:Player) => new Cleavage(cleavageTitle1, { name: 'Gôche', players: [player] }, { name: 'Drouate', players: [] }, [player])
-const cleaveWithPlayerRight = (player:Player) => new Cleavage(cleavageTitle1, { name: 'Gôche', players: [] }, { name: 'Drouate', players: [player] }, [player])
+const cleaveWithoutPlayer = () => new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [] }, rightChoice: { name: 'Drouate', players: [] }, players: [] })
+const cleaveWithPlayerLeft = (player:Player) => new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [player] }, rightChoice: { name: 'Drouate', players: [] }, players: [player] })
+const cleaveWithPlayerRight = (player:Player) => new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [] }, rightChoice: { name: 'Drouate', players: [player] }, players: [player] })
 feature(EventType.PLAYER_CLEAVE, [
     clientScenario(`Scenario 1 : ${PlayerCleave.LEFT}`, [
         application => theInterfaceGatewayHasCurrentView(Gherkin.GIVEN, application, InterfaceView.CURRENT_CLEAVAGE),

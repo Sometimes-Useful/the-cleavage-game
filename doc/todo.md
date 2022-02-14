@@ -1,5 +1,4 @@
-- Draw cleave on global draw pile
-    - DB > Google Datastore
+- there is players on global cleavage draw pile
 - Change Vercel to GCP Serverless
 
 /************
