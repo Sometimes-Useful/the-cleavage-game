@@ -1,0 +1,31 @@
+"use strict";
+/* eslint-disable no-unused-vars */
+exports.__esModule = true;
+exports.EventType = void 0;
+var EventType;
+(function (EventType) {
+    EventType["CONNECT_CHAT"] = "CONNECT_CHAT";
+    EventType["DISCONNECT_CHAT"] = "DISCONNECT_CHAT";
+    EventType["NEW_CLEAVAGE"] = "NEW_CLEAVAGE";
+    EventType["LAUNCH_CLEAVAGE"] = "LAUNCH_CLEAVAGE";
+    EventType["PLAYER_CLEAVE"] = "PLAYER_CLEAVE";
+    EventType["PLAYER_MESSAGE"] = "PLAYER_MESSAGE";
+    EventType["DRAW_CLEAVAGE"] = "DRAW_CLEAVAGE";
+    EventType["PLAYER_SUGGEST_CLEAVAGE"] = "SUGGEST_CLEAVAGE";
+    EventType["PLAYER_ASK_FOR_HELP"] = "PLAYER_ASK_FOR_HELP";
+    EventType["CANCEL_CLEAVAGE"] = "CANCEL_CLEAVAGE";
+    EventType["PLAYER_HYPERLIKE"] = "PLAYER_HYPERLIKE";
+    EventType["PLAYER_APPLAUSE"] = "PLAYER_APPLAUSE";
+    EventType["PLAYER_SHOOT"] = "PLAYER_SHOOT";
+    EventType["PLAYER_WHISTLE"] = "PLAYER_WHISTLE";
+    EventType["APPLICATION_START"] = "APPLICATION_START";
+    EventType["NAVIGATE"] = "NAVIGATE";
+    EventType["CHANGE_MUSIC_VOLUME"] = "CHANGE_MUSIC_VOLUME";
+    EventType["CHANGE_SOUND_VOLUME"] = "CHANGE_SOUND_VOLUME";
+    EventType["PLAYER_QUIT"] = "PLAYER_QUIT";
+    EventType["START_AUTOPLAY"] = "START_AUTOPLAY";
+    EventType["CHECK_AUTOPLAY"] = "CHECK_AUTOPLAY";
+    EventType["STOP_AUTOPLAY"] = "STOP_AUTOPLAY";
+    EventType["DRAW_GLOBAL_CLEAVAGE_DRAWPILE"] = "DRAW_GLOBAL_CLEAVAGE_DRAWPILE";
+    EventType["SAVE_CLEAVAGE_ON_GLOBAL_CLEAVAGE_DRAWPILE"] = "SAVE_CLEAVAGE_ON_GLOBAL_CLEAVAGE_DRAWPILE";
+})(EventType = exports.EventType || (exports.EventType = {}));
