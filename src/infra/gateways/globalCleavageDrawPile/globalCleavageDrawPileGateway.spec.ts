@@ -5,6 +5,7 @@ import { AxiosGlobalCleavageDrawPileGateway } from './AxiosGlobalCleavageDrawPil
 import { FakeGlobalCleavageDrawPileGateway } from './FakeGlobalCleavageDrawPileGateway'
 import { commonCleavage1 } from '../../../domain/tests/testContexts'
 import { backendFqdn, backendPort } from '../../../api/backendEnv'
+import { EnvironmentVariable } from '../../EnvironmentVariable'
 
 interface IntegrationEnvironnement {
     adapter: GlobalCleavageDrawPileGateway
@@ -13,7 +14,10 @@ const fake:IntegrationEnvironnement = {
     adapter: new FakeGlobalCleavageDrawPileGateway()
 }
 const axios:IntegrationEnvironnement = {
-    adapter: new AxiosGlobalCleavageDrawPileGateway(backendFqdn, backendPort)
+    adapter: new AxiosGlobalCleavageDrawPileGateway(
+        backendFqdn(process.env.BACKEND_FQDN, EnvironmentVariable.BACKEND_FQDN),
+        backendPort(process.env.PORT, EnvironmentVariable.BACKEND_PORT)
+    )
 }
 
 const envs = [

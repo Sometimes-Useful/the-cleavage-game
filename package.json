@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha 'src/**/*.spec.ts'",
+    "build":"npm run build:server && npm run build:client",
     "build:client": "rollup -c",
     "build:server": "tsc src/webServer/main.ts --esModuleInterop --outDir build",
     "dev": "rollup -c -w",
     "start": "sirv public --no-clear",
     "start:server": "node build/webServer/main.js",
-    "gcpCloudRun": "npm install --production=false && npm run build:client && npm run start:server",
+    "gcpCloudRun": "npm install && npm run start:server",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "repository": {
