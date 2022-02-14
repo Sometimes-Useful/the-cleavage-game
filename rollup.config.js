@@ -2,13 +2,23 @@ import svelte from 'rollup-plugin-svelte'
 import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
 import livereload from 'rollup-plugin-livereload'
+import replace from '@rollup/plugin-replace'
 import { terser } from 'rollup-plugin-terser'
 import sveltePreprocess from 'svelte-preprocess'
 import typescript from '@rollup/plugin-typescript'
 import css from 'rollup-plugin-css-only'
+import { config } from 'dotenv'
 
 const production = !process.env.ROLLUP_WATCH
-
+config()
+function retrieveEnvVariable (envVariableName) {
+    const envVariableValue = process.env[envVariableName]
+    if (envVariableValue) {
+        console.log(envVariableName + ' - ' + envVariableValue)
+        return envVariableValue
+    }
+    throw new Error(`Missing env variable ${envVariableName}`)
+}
 function serve () {
     let server
 
@@ -39,6 +49,11 @@ export default {
         file: 'public/build/bundle.js'
     },
     plugins: [
+        replace({
+            preventAssignment: true,
+            'process.env.PORT': JSON.stringify(retrieveEnvVariable('PORT')),
+            'process.env.BACKEND_FQDN': JSON.stringify(retrieveEnvVariable('BACKEND_FQDN'))
+        }),
         svelte({
             preprocess: sveltePreprocess({
                 sourceMap: !production,

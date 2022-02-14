@@ -9,14 +9,6 @@ import { retrieveEnvVariable } from '../../retrieveEnvVariable'
 import { EnvironmentVariable } from '../../EnvironmentVariable'
 import { config } from 'dotenv'
 
-/*
-function retrieveEnvVariable (envVariableName:EnvironmentVariable) {
-    const envVariableValue: string | undefined = process.env[envVariableName]
-    if (envVariableValue) return envVariableValue
-    throw new Error(`Missing env variable ${envVariableName}`)
-}
-config()
-*/
 interface IntegrationEnvironnement {
     adapter: GlobalCleavageDrawPileRepository
 }
@@ -26,10 +18,10 @@ const fake:IntegrationEnvironnement = {
 config()
 const gcp:IntegrationEnvironnement = {
     adapter: new GcpGlobalCleavageDrawPileRepository(new GcpDatastore({
-        gcpProjectId: JSON.parse(retrieveEnvVariable(EnvironmentVariable.GCP_PROJECT_ID)).gcpProjectId,
-        gcpClientEmail: JSON.parse(retrieveEnvVariable(EnvironmentVariable.GCP_CLIENT_EMAIL)).gcpClientEmail,
+        gcpProjectId: JSON.parse(retrieveEnvVariable(process.env.GCP_PROJECT_ID, EnvironmentVariable.GCP_PROJECT_ID)).gcpProjectId,
+        gcpClientEmail: JSON.parse(retrieveEnvVariable(process.env.GCP_CLIENT_EMAIL, EnvironmentVariable.GCP_CLIENT_EMAIL)).gcpClientEmail,
         gcpKindPrefix: 'INT',
-        gcpPrivateKey: JSON.parse(retrieveEnvVariable(EnvironmentVariable.GCP_PRIVATE_KEY)).gcpPrivateKey
+        gcpPrivateKey: JSON.parse(retrieveEnvVariable(process.env.GCP_PRIVATE_KEY, EnvironmentVariable.GCP_PRIVATE_KEY)).gcpPrivateKey
     }))
 }
 

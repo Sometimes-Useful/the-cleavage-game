@@ -6,14 +6,6 @@ import { FakeGlobalCleavageDrawPileGateway } from './FakeGlobalCleavageDrawPileG
 import { commonCleavage1 } from '../../../domain/tests/testContexts'
 import { backendFqdn, backendPort } from '../../../api/backendEnv'
 
-/*
-function retrieveEnvVariable (envVariableName:EnvironmentVariable) {
-    const envVariableValue: string | undefined = process.env[envVariableName]
-    if (envVariableValue) return envVariableValue
-    throw new Error(`Missing env variable ${envVariableName}`)
-}
-config()
-*/
 interface IntegrationEnvironnement {
     adapter: GlobalCleavageDrawPileGateway
 }

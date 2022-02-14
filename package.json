@@ -9,8 +9,8 @@
     "build:server": "tsc src/webServer/main.ts --esModuleInterop --outDir build",
     "dev": "rollup -c -w",
     "start": "sirv public --no-clear",
-    "start:server": "npm run build:server && node build/webServer/main.js",
-    "gcpCloudRun": "npm install && npm run start:server",
+    "start:server": "node build/webServer/main.js",
+    "gcpCloudRun": "npm run start:server",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "repository": {
@@ -42,6 +42,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.0",
     "@rollup/plugin-node-resolve": "^11.2.1",
+    "@rollup/plugin-replace": "^3.1.0",
     "@rollup/plugin-typescript": "^8.0.0",
     "@tsconfig/svelte": "^2.0.0",
     "@types/chai": "^4.3.0",
