@@ -28,9 +28,9 @@ const inMemoryEventBus = new FakeClientEventGateway()
 config()
 const twitch:IntegrationEnvironnement = {
     adapter: new TwitchChatGateway(inMemoryEventBus),
-    username: retrieveEnvVariable(EnvironmentVariable.TWITCHUSERNAME),
-    token: retrieveEnvVariable(EnvironmentVariable.TWITCHTOKEN),
-    channel: retrieveEnvVariable(EnvironmentVariable.TWITCHCHANNEL)
+    username: retrieveEnvVariable(process.env.TWITCHUSERNAME, EnvironmentVariable.TWITCHUSERNAME),
+    token: retrieveEnvVariable(process.env.TWITCHTOKEN, EnvironmentVariable.TWITCHTOKEN),
+    channel: retrieveEnvVariable(process.env.TWITCHCHANNEL, EnvironmentVariable.TWITCHCHANNEL)
 }
 
 const envs = [fake, twitch]
