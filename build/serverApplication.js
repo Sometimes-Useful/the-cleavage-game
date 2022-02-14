@@ -16,10 +16,10 @@ var gateways = {
 };
 var repositories = {
     globalCleavageDrawPileRepository: new GcpGlobalCleavageDrawPileRepository_1.GcpGlobalCleavageDrawPileRepository(new GcpDatastore_1.GcpDatastore({
-        gcpProjectId: JSON.parse((0, retrieveEnvVariable_1.retrieveEnvVariable)(EnvironmentVariable_1.EnvironmentVariable.GCP_PROJECT_ID)).gcpProjectId,
-        gcpClientEmail: JSON.parse((0, retrieveEnvVariable_1.retrieveEnvVariable)(EnvironmentVariable_1.EnvironmentVariable.GCP_CLIENT_EMAIL)).gcpClientEmail,
+        gcpProjectId: JSON.parse((0, retrieveEnvVariable_1.retrieveEnvVariable)(process.env.GCP_PROJECT_ID, EnvironmentVariable_1.EnvironmentVariable.GCP_PROJECT_ID)).gcpProjectId,
+        gcpClientEmail: JSON.parse((0, retrieveEnvVariable_1.retrieveEnvVariable)(process.env.GCP_CLIENT_EMAIL, EnvironmentVariable_1.EnvironmentVariable.GCP_CLIENT_EMAIL)).gcpClientEmail,
         gcpKindPrefix: '',
-        gcpPrivateKey: JSON.parse((0, retrieveEnvVariable_1.retrieveEnvVariable)(EnvironmentVariable_1.EnvironmentVariable.GCP_PRIVATE_KEY)).gcpPrivateKey
+        gcpPrivateKey: JSON.parse((0, retrieveEnvVariable_1.retrieveEnvVariable)(process.env.GCP_PRIVATE_KEY, EnvironmentVariable_1.EnvironmentVariable.GCP_PRIVATE_KEY)).gcpPrivateKey
     }))
 };
 exports.serverApplication = new ProductionServerApplication_1.ProductionServerApplication(gateways, repositories);
