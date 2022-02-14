@@ -2,5 +2,4 @@ node_modules
 /public/build/
 .DS_Store
 .env
-/build
 the-cleavage-game_GCP.json
