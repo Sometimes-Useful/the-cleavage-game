@@ -9,8 +9,7 @@ import { channel, integrationTestMessage, player1, token, username } from '../..
 import { PlayerMessageEvent } from '../../../domain/events/playerMessage/PlayerMessageEvent'
 import { Player } from '../../../domain/entities/Player'
 import type { ChatGateway } from '../../../domain/ports/secondary/gateways/ChatGateway'
-import { retrieveEnvVariable } from '../../retrieveEnvVariable'
-import { EnvironmentVariable } from '../../EnvironmentVariable'
+import { onMissingEnvVariable } from '../../EnvironmentVariable'
 interface IntegrationEnvironnement {
     adapter: ChatGateway
     username:string
@@ -26,11 +25,14 @@ const fake:IntegrationEnvironnement = {
 const inMemoryEventBus = new FakeClientEventGateway()
 
 config()
+const twitchUserName = process.env.TWITCHUSERNAME ? process.env.TWITCHUSERNAME : onMissingEnvVariable('process.env.TWITCHUSERNAME')
+const twitchToken = process.env.TWITCHTOKEN ? process.env.TWITCHTOKEN : onMissingEnvVariable('process.env.TWITCHTOKEN')
+const twitchChannel = process.env.TWITCHCHANNEL ? process.env.TWITCHCHANNEL : onMissingEnvVariable('process.env.TWITCHCHANNEL')
 const twitch:IntegrationEnvironnement = {
     adapter: new TwitchChatGateway(inMemoryEventBus),
-    username: retrieveEnvVariable(process.env.TWITCHUSERNAME, EnvironmentVariable.TWITCHUSERNAME),
-    token: retrieveEnvVariable(process.env.TWITCHTOKEN, EnvironmentVariable.TWITCHTOKEN),
-    channel: retrieveEnvVariable(process.env.TWITCHCHANNEL, EnvironmentVariable.TWITCHCHANNEL)
+    username: twitchUserName,
+    token: twitchToken,
+    channel: twitchChannel
 }
 
 const envs = [fake, twitch]

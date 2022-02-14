@@ -10,3 +10,4 @@ export enum EnvironmentVariable {
     BACKEND_FQDN = 'BACKEND_FQDN',
     BACKEND_SHEME = 'BACKEND_SHEME'
 }
+export const onMissingEnvVariable = (envVar:string) => { throw new Error(`Missing env variable ${envVar}`) }

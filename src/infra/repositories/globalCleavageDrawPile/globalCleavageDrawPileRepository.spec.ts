@@ -5,9 +5,8 @@ import type { GlobalCleavageDrawPileRepository } from '../../../domain/ports/sec
 import { InMemoryGlobalCleavageDrawPileRepository } from './InMemoryGlobalCleavageRepository'
 import { GcpGlobalCleavageDrawPileRepository } from './GcpGlobalCleavageDrawPileRepository'
 import { GcpDatastore } from './GcpDatastore'
-import { retrieveEnvVariable } from '../../retrieveEnvVariable'
-import { EnvironmentVariable } from '../../EnvironmentVariable'
 import { config } from 'dotenv'
+import { gcpClientEmail, gcpPrivateKey, gcpProjectId } from '../../../env/serverEnvironnementVariables'
 
 interface IntegrationEnvironnement {
     adapter: GlobalCleavageDrawPileRepository
@@ -18,10 +17,10 @@ const fake:IntegrationEnvironnement = {
 config()
 const gcp:IntegrationEnvironnement = {
     adapter: new GcpGlobalCleavageDrawPileRepository(new GcpDatastore({
-        gcpProjectId: JSON.parse(retrieveEnvVariable(process.env.GCP_PROJECT_ID, EnvironmentVariable.GCP_PROJECT_ID)).gcpProjectId,
-        gcpClientEmail: JSON.parse(retrieveEnvVariable(process.env.GCP_CLIENT_EMAIL, EnvironmentVariable.GCP_CLIENT_EMAIL)).gcpClientEmail,
-        gcpKindPrefix: 'INT',
-        gcpPrivateKey: JSON.parse(retrieveEnvVariable(process.env.GCP_PRIVATE_KEY, EnvironmentVariable.GCP_PRIVATE_KEY)).gcpPrivateKey
+        gcpProjectId: gcpProjectId,
+        gcpClientEmail: gcpClientEmail,
+        gcpPrivateKey: gcpPrivateKey,
+        gcpKindPrefix: 'INT'
     }))
 }
 

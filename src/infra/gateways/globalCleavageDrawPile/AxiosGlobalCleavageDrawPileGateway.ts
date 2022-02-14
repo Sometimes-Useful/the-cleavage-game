@@ -8,11 +8,11 @@ export class AxiosGlobalCleavageDrawPileGateway implements GlobalCleavageDrawPil
     constructor (
         sheme:string,
         endpoint:string,
-        port:number
+        port?:string
     ) {
-        this.backendApiInstance = axios.create({
-            baseURL: `${sheme}://${endpoint}:${port}`
-        })
+        const baseURL = `${sheme}://${endpoint}${port ? `:${parseInt(port).toString()}` : ''}`
+        this.backendApiInstance = axios.create({ baseURL })
+        console.log(`${this.constructor.name} with backend base url: ${baseURL}`)
     }
 
     drawGlobalCleavage (): Promise<Cleavage | undefined> {
