@@ -6,11 +6,12 @@ import { BACKEND_API_URL } from '../../../api/Backend_API_URL'
 
 export class AxiosGlobalCleavageDrawPileGateway implements GlobalCleavageDrawPileGateway {
     constructor (
+        sheme:string,
         endpoint:string,
         port:number
     ) {
         this.backendApiInstance = axios.create({
-            baseURL: `http://${endpoint}:${port}`
+            baseURL: `${sheme}://${endpoint}:${port}`
         })
     }
 
