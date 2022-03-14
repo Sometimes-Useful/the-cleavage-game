@@ -8,18 +8,18 @@ import { theGlobalCleavageDrawPileRepositoryHasCleavage } from '../../tests/unit
 
 feature(EventType.DRAW_GLOBAL_CLEAVAGE_DRAWPILE, [
     serverScenario('Scenario 1 : With on cleavage on draw pile', [
-        application => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.GIVEN, application, commonCleavage1()),
-        application => whenQueryOccursThenHasResult(application, commonCleavage1()),
-        application => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.AND_THEN, application, commonCleavage1())
+        app => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.GIVEN, app, commonCleavage1()),
+        app => whenQueryOccursThenHasResult(app, commonCleavage1()),
+        app => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.AND_THEN, app, commonCleavage1())
     ]),
     serverScenario('Scenario 2 : With 2 cleavages on draw pile', [
-        application => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.GIVEN, application, [commonCleavage1(), commonCleavage2()]),
-        application => whenQueryOccursThenHasResult(application, commonCleavage1()),
-        application => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.AND_THEN, application, [commonCleavage1(), commonCleavage2()])
+        app => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.GIVEN, app, [commonCleavage1(), commonCleavage2()]),
+        app => whenQueryOccursThenHasResult(app, commonCleavage1()),
+        app => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.AND_THEN, app, [commonCleavage1(), commonCleavage2()])
     ]),
     serverScenario('Scenario 3 : With 0 cleavages on draw pile', [
-        application => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.GIVEN, application, []),
-        application => whenQueryOccursThenHasResult(application, undefined),
-        application => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.AND_THEN, application, [])
+        app => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.GIVEN, app, []),
+        app => whenQueryOccursThenHasResult(app, undefined),
+        app => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.AND_THEN, app, [])
     ])
 ])

@@ -16,34 +16,34 @@ const currentDate1 = new Date(Date.UTC(2022, 2, 4, 10, 0, 0))
 const currentDate2 = new Date(Date.UTC(2022, 2, 4, 11, 0, 0))
 feature(EventType.START_AUTOPLAY, [
     clientScenario(`Scenario 1 : Start autoplay with 1 minute autoplay with current date at ${currentDate1.toISOString()}`, [
-        application => theDateGatewayHasCurrentDate(Gherkin.GIVEN, application, currentDate1),
-        application => theInterfaceGatewayHasAutoplayOptionDisabled(Gherkin.AND_THEN, application),
-        application => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, application, newCleavage(cleavageTitle1)),
-        application => whenEventOccurs(application, new StartAutoPlayEvent(1)),
-        application => theEventIsSent(Gherkin.THEN, application, new DrawCleavageEvent()),
-        application => theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_THEN, application, new Date(Date.UTC(2022, 2, 4, 10, 1, 0))),
-        application => theAutoPlayRepositoryHasAutoPlayInterval(Gherkin.AND_THEN, application, 1),
-        application => theInterfaceGatewayHasAutoplayOptionEnabled(Gherkin.AND_THEN, application)
+        app => theDateGatewayHasCurrentDate(Gherkin.GIVEN, app, currentDate1),
+        app => theInterfaceGatewayHasAutoplayOptionDisabled(Gherkin.AND_THEN, app),
+        app => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, app, newCleavage(cleavageTitle1)),
+        app => whenEventOccurs(app, new StartAutoPlayEvent(1)),
+        app => theEventIsSent(Gherkin.THEN, app, new DrawCleavageEvent()),
+        app => theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_THEN, app, new Date(Date.UTC(2022, 2, 4, 10, 1, 0))),
+        app => theAutoPlayRepositoryHasAutoPlayInterval(Gherkin.AND_THEN, app, 1),
+        app => theInterfaceGatewayHasAutoplayOptionEnabled(Gherkin.AND_THEN, app)
     ]),
     clientScenario(`Scenario 2 : Start autoplay with 5 minute autoplay ${currentDate1.toISOString()}`, [
-        application => theDateGatewayHasCurrentDate(Gherkin.GIVEN, application, currentDate1),
-        application => theInterfaceGatewayHasAutoplayOptionDisabled(Gherkin.AND_THEN, application),
-        application => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, application, newCleavage(cleavageTitle1)),
-        application => whenEventOccurs(application, new StartAutoPlayEvent(5)),
-        application => theEventIsSent(Gherkin.THEN, application, new DrawCleavageEvent()),
-        application => theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_THEN, application, new Date(Date.UTC(2022, 2, 4, 10, 5, 0))),
-        application => theAutoPlayRepositoryHasAutoPlayInterval(Gherkin.AND_THEN, application, 5),
-        application => theInterfaceGatewayHasAutoplayOptionEnabled(Gherkin.AND_THEN, application)
+        app => theDateGatewayHasCurrentDate(Gherkin.GIVEN, app, currentDate1),
+        app => theInterfaceGatewayHasAutoplayOptionDisabled(Gherkin.AND_THEN, app),
+        app => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, app, newCleavage(cleavageTitle1)),
+        app => whenEventOccurs(app, new StartAutoPlayEvent(5)),
+        app => theEventIsSent(Gherkin.THEN, app, new DrawCleavageEvent()),
+        app => theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_THEN, app, new Date(Date.UTC(2022, 2, 4, 10, 5, 0))),
+        app => theAutoPlayRepositoryHasAutoPlayInterval(Gherkin.AND_THEN, app, 5),
+        app => theInterfaceGatewayHasAutoplayOptionEnabled(Gherkin.AND_THEN, app)
     ]),
     clientScenario(`Scenario 3 : Start autoplay with 5 minute autoplay ${currentDate2.toISOString()}`, [
-        application => theDateGatewayHasCurrentDate(Gherkin.GIVEN, application, currentDate2),
-        application => theInterfaceGatewayHasAutoplayOptionDisabled(Gherkin.AND_THEN, application),
-        application => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, application, newCleavage(cleavageTitle2)),
-        application => whenEventOccurs(application, new StartAutoPlayEvent(5)),
-        application => theEventIsSent(Gherkin.THEN, application, new DrawCleavageEvent()),
-        application => theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_THEN, application, new Date(Date.UTC(2022, 2, 4, 11, 5, 0))),
-        application => theAutoPlayRepositoryHasAutoPlayInterval(Gherkin.AND_THEN, application, 5),
-        application => theInterfaceGatewayHasAutoplayOptionEnabled(Gherkin.AND_THEN, application)
+        app => theDateGatewayHasCurrentDate(Gherkin.GIVEN, app, currentDate2),
+        app => theInterfaceGatewayHasAutoplayOptionDisabled(Gherkin.AND_THEN, app),
+        app => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, app, newCleavage(cleavageTitle2)),
+        app => whenEventOccurs(app, new StartAutoPlayEvent(5)),
+        app => theEventIsSent(Gherkin.THEN, app, new DrawCleavageEvent()),
+        app => theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_THEN, app, new Date(Date.UTC(2022, 2, 4, 11, 5, 0))),
+        app => theAutoPlayRepositoryHasAutoPlayInterval(Gherkin.AND_THEN, app, 5),
+        app => theInterfaceGatewayHasAutoplayOptionEnabled(Gherkin.AND_THEN, app)
     ])
 ])
 export function newCleavage (title:string): Cleavage {

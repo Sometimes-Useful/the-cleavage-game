@@ -1,5 +1,4 @@
 <script lang="ts">
-    import NewCleavage from "./views/NewCleavage.svelte"
     import ConnectChat from "./views/ConnectChat.svelte"
     import CurrentCleavage from "./views/CurrentCleavage.svelte"
     import About from "./views/About.svelte"
@@ -11,19 +10,18 @@
     import Settings from "./views/Settings.svelte";
     import Intro from "./views/Intro.svelte";
     import Credits from "./views/Credits.svelte";
+import Game from "./views/Game.svelte";
     let forceView:InterfaceView|undefined = undefined
     interfaceViewStore.set(InterfaceView.INTRO)
     onDestroy(()=>$applicationEventStore = new DisconnectChatEvent())
 </script>
 
 <main class="bg-black h-full w-full flex flex-col justify-evenly">
-    {#if  forceView } 
+    {#if forceView } 
         {#if  forceView === InterfaceView.CONNECT_CHAT } 
             <ConnectChat/>
-        {:else if forceView === InterfaceView.CURRENT_CLEAVAGE }
-            <CurrentCleavage/>
-        {:else if forceView === InterfaceView.NEW_CLEAVAGE }
-            <NewCleavage/>
+        {:else if forceView === InterfaceView.GAME }
+            <Game/>
         {:else if forceView === InterfaceView.SETTINGS }
             <Settings/>
         {:else if forceView === InterfaceView.ABOUT }
@@ -32,10 +30,8 @@
     {:else}
         {#if $interfaceViewStore === InterfaceView.CONNECT_CHAT} 
             <ConnectChat/>
-        {:else if  $interfaceViewStore === InterfaceView.CURRENT_CLEAVAGE}
-            <CurrentCleavage/>
-        {:else if  $interfaceViewStore === InterfaceView.NEW_CLEAVAGE}
-            <NewCleavage/>
+        {:else if forceView === InterfaceView.GAME }
+            <Game/>
         {:else if  $interfaceViewStore === InterfaceView.MAIN_MENU}
             <MainMenu/>
         {:else if  $interfaceViewStore === InterfaceView.INTRO}
@@ -55,4 +51,4 @@
     @tailwind base;
     @tailwind components;
     @tailwind utilities;
-  </style>
+</style>

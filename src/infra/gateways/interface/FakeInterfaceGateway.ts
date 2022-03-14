@@ -4,8 +4,25 @@ import type { ApplicationNotification } from '../../../domain/entities/notificat
 import type { Sound } from '../../../domain/entities/sound'
 import type { Music } from '../../../domain/entities/music/Music'
 import type { InterfaceGateway } from '../../../domain/ports/secondary/gateways/InterfaceGateway'
+import type { InterfaceEntityState } from '../../../domain/tests/unitTests/interfaceGateway'
+import { GamePhase } from '../../../domain/entities/GamePhase'
 
 export class FakeInterfaceGateway implements InterfaceGateway {
+    changeGamePhase (gamePhase: GamePhase): Promise<void> {
+        this.gamePhase = gamePhase
+        return Promise.resolve()
+    }
+
+    removeEntityInterfaceState (id: string): Promise<void> {
+        this.interfaceEntitiesState.delete(id)
+        return Promise.resolve()
+    }
+
+    updateEntityInterfaceState (id:string, interfaceEntityState: InterfaceEntityState): Promise<void> {
+        this.interfaceEntitiesState.set(id, interfaceEntityState)
+        return Promise.resolve()
+    }
+
     disableAutoplay (): Promise<void> {
         this.autoplayEnabled = false
         return Promise.resolve()
@@ -55,6 +72,7 @@ export class FakeInterfaceGateway implements InterfaceGateway {
         return Promise.resolve()
     }
 
+    gamePhase: GamePhase = GamePhase.NONE
     currentCleavage: Cleavage|undefined
     notifications: ApplicationNotification[] = [];
     playingSounds: Sound[] = []
@@ -63,4 +81,5 @@ export class FakeInterfaceGateway implements InterfaceGateway {
     autoplayEnabled: boolean = false
     playingMusic: Music | undefined = undefined
     currentView: InterfaceView = InterfaceView.NONE;
+    interfaceEntitiesState: Map<string, InterfaceEntityState> = new Map()
 }

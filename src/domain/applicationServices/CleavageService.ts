@@ -7,14 +7,25 @@ import type { PublicCleavageDrawPileRepository } from '../ports/secondary/reposi
 import type { CurrentCleavageRepository } from '../ports/secondary/repositories/CurrentCleavageRepository'
 import type { ChatGateway } from '../ports/secondary/gateways/ChatGateway'
 import type { GlobalCleavageDrawPileGateway } from '../ports/secondary/gateways/GlobalCleavageDrawPileGateway'
+import type { GamePhaseRepository } from '../ports/secondary/repositories/GamePhaseRepository'
+import type { GamePhase } from '../entities/GamePhase'
 
 export class CleavageApplicationService {
     constructor (
         private publicCleavageDrawPileRepository: PublicCleavageDrawPileRepository,
         private globalCleavageDrawPileGateway:GlobalCleavageDrawPileGateway,
         private currentCleavageRepository:CurrentCleavageRepository,
-        private chatGateway:ChatGateway
+        private chatGateway:ChatGateway,
+        private gamePhaseRepository: GamePhaseRepository
     ) { }
+
+    changeGamePhase (gamePhase: GamePhase): Promise<void> {
+        return this.gamePhaseRepository.changeGamePhase(gamePhase)
+    }
+
+    retrieveCurrentGamePhase (): Promise<GamePhase | undefined> {
+        return this.gamePhaseRepository.retrieveCurrentGamePhase()
+    }
 
     saveGlobalCleavage (cleavage: Cleavage): Promise<void> {
         const currentClevageDto = cleavage.toDto()

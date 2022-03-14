@@ -11,15 +11,17 @@ import type { FakeInterfaceGateway } from '../../../../infra/gateways/interface/
 import type { SvelteAndToneInterfaceGateway } from '../../../../infra/gateways/interface/SvelteAndToneInterfaceGateway'
 import type { FakeRandomGateway } from '../../../../infra/gateways/random/FakeRandomGateway'
 import type { ProductionRandomGateway } from '../../../../infra/gateways/random/ProductionRandomGateway'
+import type { FakeUuidGateway } from '../../../../infra/gateways/uuid/FakeUuidGateway'
 import type { ChatGateway } from './ChatGateway'
 import type { DateGateway } from './DateGateway'
 import type { EventGatewaySecondary } from './EventGatewaySecondary'
 import type { GlobalCleavageDrawPileGateway } from './GlobalCleavageDrawPileGateway'
 import type { InterfaceGateway } from './InterfaceGateway'
-
 import type { RandomGateway } from './RandomGateway'
+import type { UuidGateway } from './UuidGateway'
 
 export interface ClientApplicationGateways {
+    uuid:UuidGateway
     globalCleavageDrawPile:GlobalCleavageDrawPileGateway;
     date: DateGateway;
     chat: ChatGateway;
@@ -29,6 +31,7 @@ export interface ClientApplicationGateways {
 }
 
 export interface FakeClientApplicationGateways extends ClientApplicationGateways {
+    uuid: FakeUuidGateway
     globalCleavageDrawPile: FakeGlobalCleavageDrawPileGateway
     date: FakeDateGateway;
     random: FakeRandomGateway;

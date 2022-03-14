@@ -46,7 +46,7 @@ describe('Integration Test: Chat Gateway', () => {
                 it('Then the adapter is connected.', () => environnement.adapter.isConnected().then(isConnected => expect(isConnected).to.be.true))
             })
             describe('Send Message to player', () => {
-                const messageForPlayer = new MessageForPlayer(player1, integrationTestMessage)
+                const messageForPlayer = new MessageForPlayer(player1(), integrationTestMessage)
                 it('Given the adapter is connected.', () => environnement.adapter.isConnected().then(isConnected => { expect(isConnected).to.be.true }))
                 it('When sendMessageToPlayer occurs.', () => environnement.adapter.sendMessageToPlayer(messageForPlayer)).timeout(2000)
                 it('Then the chat has the message.', (done) => {

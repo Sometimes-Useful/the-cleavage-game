@@ -14,37 +14,39 @@ import { theInterfaceGatewayDontHaveCleavage, theInterfaceGatewayHasCurrentCleav
 import { whenEventOccurs, theEventIsSent } from '../../tests/unitTests/eventGateway'
 import { DrawCleavageEvent } from '../drawCleavage/DrawCleavageEvent'
 import { theAutoPlayRepositoryDontHaveNextCleavageDate, theAutoPlayRepositoryHasNextCleavageDate } from '../../tests/unitTests/autoplayRepository'
+import { ChangeGamePhaseEvent } from '../changeGamePhase/ChangeGamePhaseEvent'
+import { GamePhase } from '../../entities/GamePhase'
 
 feature(EventType.NEW_CLEAVAGE, [
-    clientScenario(`Scenario 1 : UI updated to ${InterfaceView.CONNECT_CHAT} when chat gateway is ${ChatStatus.DISCONNECTED}.`, [
-        application => theInterfaceGatewayHasCurrentView(Gherkin.GIVEN, application, InterfaceView.NONE),
-        application => theChatGatewayHasExpectedStatus(Gherkin.AND_GIVEN, application, ChatStatus.DISCONNECTED),
-        application => whenEventOccurs(application, new NewCleavageEvent()),
-        application => theEventIsSent(Gherkin.THEN, application, new NavigateEvent(InterfaceView.CONNECT_CHAT)),
-        application => theInterfaceGatewayHasCurrentView(Gherkin.AND_THEN, application, InterfaceView.NONE)
+    clientScenario(`Scenario 1 : Navigate to ${InterfaceView.CONNECT_CHAT} when chat gateway is ${ChatStatus.DISCONNECTED}.`, [
+        app => theInterfaceGatewayHasCurrentView(Gherkin.GIVEN, app, InterfaceView.GAME),
+        app => theChatGatewayHasExpectedStatus(Gherkin.AND_GIVEN, app, ChatStatus.DISCONNECTED),
+        app => whenEventOccurs(app, new NewCleavageEvent()),
+        app => theEventIsSent(Gherkin.THEN, app, new NavigateEvent(InterfaceView.CONNECT_CHAT)),
+        app => theInterfaceGatewayHasCurrentView(Gherkin.AND_THEN, app, InterfaceView.GAME)
     ]),
-    clientScenario(`Scenario 2 : UI updated to ${InterfaceView.NEW_CLEAVAGE} when chat gateway is ${ChatStatus.CONNECTED}.`, [
-        application => theInterfaceGatewayHasCurrentView(Gherkin.GIVEN, application, InterfaceView.NONE),
-        application => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_GIVEN, application, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [] }, rightChoice: { name: 'Drouate', players: [] }, players: [] })),
-        application => theChatGatewayHasExpectedStatus(Gherkin.AND_GIVEN, application, ChatStatus.CONNECTED),
-        application => whenEventOccurs(application, new NewCleavageEvent()),
-        application => theEventIsSent(Gherkin.THEN, application, new NavigateEvent(InterfaceView.NEW_CLEAVAGE)),
-        application => theInterfaceGatewayHasCurrentView(Gherkin.AND_THEN, application, InterfaceView.NONE),
-        application => theInterfaceGatewayDontHaveCleavage(Gherkin.AND_THEN, application)
+    clientScenario(`Scenario 2 : Change game phase to ${GamePhase.NEW_CLEAVAGE} when chat gateway is ${ChatStatus.CONNECTED}.`, [
+        app => theInterfaceGatewayHasCurrentView(Gherkin.GIVEN, app, InterfaceView.GAME),
+        app => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_GIVEN, app, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [] }, rightChoice: { name: 'Drouate', players: [] }, players: [] })),
+        app => theChatGatewayHasExpectedStatus(Gherkin.AND_GIVEN, app, ChatStatus.CONNECTED),
+        app => whenEventOccurs(app, new NewCleavageEvent()),
+        app => theEventIsSent(Gherkin.THEN, app, new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE)),
+        app => theInterfaceGatewayHasCurrentView(Gherkin.AND_THEN, app, InterfaceView.GAME),
+        app => theInterfaceGatewayDontHaveCleavage(Gherkin.AND_THEN, app)
     ]),
     clientScenario('Scenario 3 : on autoplay enabled.', [
-        application => theChatGatewayHasExpectedStatus(Gherkin.GIVEN, application, ChatStatus.CONNECTED),
-        application => theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_GIVEN, application, new Date()),
-        application => whenEventOccurs(application, new NewCleavageEvent()),
-        application => theEventIsSent(Gherkin.THEN, application, [
-            new NavigateEvent(InterfaceView.NEW_CLEAVAGE),
+        app => theChatGatewayHasExpectedStatus(Gherkin.GIVEN, app, ChatStatus.CONNECTED),
+        app => theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_GIVEN, app, new Date()),
+        app => whenEventOccurs(app, new NewCleavageEvent()),
+        app => theEventIsSent(Gherkin.THEN, app, [
+            new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE),
             new DrawCleavageEvent()
         ])
     ]),
     clientScenario('Scenario 4 : on autoplay disabled.', [
-        application => theChatGatewayHasExpectedStatus(Gherkin.GIVEN, application, ChatStatus.CONNECTED),
-        application => theAutoPlayRepositoryDontHaveNextCleavageDate(Gherkin.AND_GIVEN, application),
-        application => whenEventOccurs(application, new NewCleavageEvent()),
-        application => theEventIsSent(Gherkin.THEN, application, new NavigateEvent(InterfaceView.NEW_CLEAVAGE))
+        app => theChatGatewayHasExpectedStatus(Gherkin.GIVEN, app, ChatStatus.CONNECTED),
+        app => theAutoPlayRepositoryDontHaveNextCleavageDate(Gherkin.AND_GIVEN, app),
+        app => whenEventOccurs(app, new NewCleavageEvent()),
+        app => theEventIsSent(Gherkin.THEN, app, new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE))
     ])
 ])

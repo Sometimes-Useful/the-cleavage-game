@@ -18,60 +18,60 @@ const cleavage1 = new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gô
 const cleavage2 = new Cleavage({ title: cleavageTitle2, leftChoice: { name: 'Gôche', players: [] }, rightChoice: { name: 'Drouate', players: [] }, players: [] })
 feature(EventType.DRAW_CLEAVAGE, [
     clientScenario('Scenario 1 : With one public cleavage', [
-        application => theCleavageRepositoryHasPublicCleavages(Gherkin.GIVEN, application, [cleavage1]),
-        application => whenEventOccurs(application, new DrawCleavageEvent()),
-        application => theInterfaceGatewayHasCurrentCleavage(Gherkin.THEN, application, cleavage1),
-        application => theCleavageRepositoryHasPublicCleavages(Gherkin.AND_THEN, application, []),
-        application => theInterfaceGatewayHasPlayingSounds(Gherkin.AND_THEN, application, [new Sound(SupportedSound.DICE_ROLL)]),
-        application => theEventIsSent(Gherkin.AND_THEN, application, [])
+        app => theCleavageRepositoryHasPublicCleavages(Gherkin.GIVEN, app, [cleavage1]),
+        app => whenEventOccurs(app, new DrawCleavageEvent()),
+        app => theInterfaceGatewayHasCurrentCleavage(Gherkin.THEN, app, cleavage1),
+        app => theCleavageRepositoryHasPublicCleavages(Gherkin.AND_THEN, app, []),
+        app => theInterfaceGatewayHasPlayingSounds(Gherkin.AND_THEN, app, [new Sound(SupportedSound.DICE_ROLL)]),
+        app => theEventIsSent(Gherkin.AND_THEN, app, [])
     ]),
     clientScenario('Scenario 2 : With two public cleavages', [
-        application => theCleavageRepositoryHasPublicCleavages(Gherkin.GIVEN, application, [cleavage1, cleavage2]),
-        application => whenEventOccurs(application, new DrawCleavageEvent()),
-        application => theInterfaceGatewayHasCurrentCleavage(Gherkin.THEN, application, cleavage1),
-        application => theCleavageRepositoryHasPublicCleavages(Gherkin.AND_THEN, application, [cleavage2]),
-        application => theInterfaceGatewayHasPlayingSounds(Gherkin.AND_THEN, application, [new Sound(SupportedSound.DICE_ROLL)]),
-        application => theEventIsSent(Gherkin.AND_THEN, application, [])
+        app => theCleavageRepositoryHasPublicCleavages(Gherkin.GIVEN, app, [cleavage1, cleavage2]),
+        app => whenEventOccurs(app, new DrawCleavageEvent()),
+        app => theInterfaceGatewayHasCurrentCleavage(Gherkin.THEN, app, cleavage1),
+        app => theCleavageRepositoryHasPublicCleavages(Gherkin.AND_THEN, app, [cleavage2]),
+        app => theInterfaceGatewayHasPlayingSounds(Gherkin.AND_THEN, app, [new Sound(SupportedSound.DICE_ROLL)]),
+        app => theEventIsSent(Gherkin.AND_THEN, app, [])
     ]),
     clientScenario('Scenario 3 : No public cleavages and no global cleavage', [
-        application => theCleavageRepositoryHasPublicCleavages(Gherkin.GIVEN, application, []),
-        application => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_GIVEN, application, cleavage1),
-        application => theGlobalCleavageDrawPileGatewayDontHaveCleavages(Gherkin.AND_GIVEN, application),
-        application => whenEventOccurs(application, new DrawCleavageEvent()),
-        application => theInterfaceGatewayDontHaveCleavage(Gherkin.THEN, application),
-        application => theInterfaceGatewayHasNotifications(Gherkin.AND_THEN, application, noCleavageAvailableNotification),
-        application => theCleavageRepositoryHasPublicCleavages(Gherkin.AND_THEN, application, []),
-        application => theInterfaceGatewayHasPlayingSounds(Gherkin.AND_THEN, application, [new Sound(SupportedSound.ERROR)]),
-        application => theEventIsSent(Gherkin.AND_THEN, application, [])
+        app => theCleavageRepositoryHasPublicCleavages(Gherkin.GIVEN, app, []),
+        app => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_GIVEN, app, cleavage1),
+        app => theGlobalCleavageDrawPileGatewayDontHaveCleavages(Gherkin.AND_GIVEN, app),
+        app => whenEventOccurs(app, new DrawCleavageEvent()),
+        app => theInterfaceGatewayDontHaveCleavage(Gherkin.THEN, app),
+        app => theInterfaceGatewayHasNotifications(Gherkin.AND_THEN, app, noCleavageAvailableNotification),
+        app => theCleavageRepositoryHasPublicCleavages(Gherkin.AND_THEN, app, []),
+        app => theInterfaceGatewayHasPlayingSounds(Gherkin.AND_THEN, app, [new Sound(SupportedSound.ERROR)]),
+        app => theEventIsSent(Gherkin.AND_THEN, app, [])
     ]),
     clientScenario('Scenario 4 : No public cleavages and one global cleavage', [
-        application => theCleavageRepositoryHasPublicCleavages(Gherkin.GIVEN, application, []),
-        application => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_GIVEN, application, cleavage1),
-        application => theGlobalCleavageDrawPileGatewayHasCleavages(Gherkin.AND_GIVEN, application, cleavage2),
-        application => whenEventOccurs(application, new DrawCleavageEvent()),
-        application => theGlobalCleavageDrawPileGatewayHasCleavages(Gherkin.THEN, application, cleavage2),
-        application => theCleavageRepositoryHasPublicCleavages(Gherkin.AND_THEN, application, []),
-        application => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_THEN, application, cleavage2),
-        application => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_THEN, application, cleavage2),
-        application => theInterfaceGatewayHasPlayingSounds(Gherkin.AND_THEN, application, [new Sound(SupportedSound.DICE_ROLL)]),
-        application => theEventIsSent(Gherkin.AND_THEN, application, [])
+        app => theCleavageRepositoryHasPublicCleavages(Gherkin.GIVEN, app, []),
+        app => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_GIVEN, app, cleavage1),
+        app => theGlobalCleavageDrawPileGatewayHasCleavages(Gherkin.AND_GIVEN, app, cleavage2),
+        app => whenEventOccurs(app, new DrawCleavageEvent()),
+        app => theGlobalCleavageDrawPileGatewayHasCleavages(Gherkin.THEN, app, cleavage2),
+        app => theCleavageRepositoryHasPublicCleavages(Gherkin.AND_THEN, app, []),
+        app => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_THEN, app, cleavage2),
+        app => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_THEN, app, cleavage2),
+        app => theInterfaceGatewayHasPlayingSounds(Gherkin.AND_THEN, app, [new Sound(SupportedSound.DICE_ROLL)]),
+        app => theEventIsSent(Gherkin.AND_THEN, app, [])
     ]),
     clientScenario('Scenario 5 : Launch cleavage on autoplay', [
-        application => theAutoPlayRepositoryHasNextCleavageDate(Gherkin.GIVEN, application, new Date()),
-        application => theGlobalCleavageDrawPileGatewayHasCleavages(Gherkin.AND_GIVEN, application, cleavage2),
-        application => whenEventOccurs(application, new DrawCleavageEvent()),
-        application => theCurrentCleavageRepositoryHasCleavage(Gherkin.THEN, application, cleavage2),
-        application => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_THEN, application, cleavage2),
-        application => theInterfaceGatewayHasPlayingSounds(Gherkin.AND_THEN, application, [new Sound(SupportedSound.DICE_ROLL)]),
-        application => theEventIsSent(Gherkin.AND_THEN, application, new LaunchCleavageEvent(cleavage2.title, cleavage2.leftChoice.name, cleavage2.rightChoice.name))
+        app => theAutoPlayRepositoryHasNextCleavageDate(Gherkin.GIVEN, app, new Date()),
+        app => theGlobalCleavageDrawPileGatewayHasCleavages(Gherkin.AND_GIVEN, app, cleavage2),
+        app => whenEventOccurs(app, new DrawCleavageEvent()),
+        app => theCurrentCleavageRepositoryHasCleavage(Gherkin.THEN, app, cleavage2),
+        app => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_THEN, app, cleavage2),
+        app => theInterfaceGatewayHasPlayingSounds(Gherkin.AND_THEN, app, [new Sound(SupportedSound.DICE_ROLL)]),
+        app => theEventIsSent(Gherkin.AND_THEN, app, new LaunchCleavageEvent(cleavage2.title, cleavage2.leftChoice.name, cleavage2.rightChoice.name))
     ]),
     clientScenario("Scenario 6 : Don't Launch cleavage when there is no autoplay date", [
-        application => theAutoPlayRepositoryDontHaveNextCleavageDate(Gherkin.GIVEN, application),
-        application => theGlobalCleavageDrawPileGatewayHasCleavages(Gherkin.AND_GIVEN, application, cleavage2),
-        application => whenEventOccurs(application, new DrawCleavageEvent()),
-        application => theCurrentCleavageRepositoryHasCleavage(Gherkin.THEN, application, cleavage2),
-        application => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_THEN, application, cleavage2),
-        application => theInterfaceGatewayHasPlayingSounds(Gherkin.AND_THEN, application, [new Sound(SupportedSound.DICE_ROLL)]),
-        application => theEventIsSent(Gherkin.AND_THEN, application, [])
+        app => theAutoPlayRepositoryDontHaveNextCleavageDate(Gherkin.GIVEN, app),
+        app => theGlobalCleavageDrawPileGatewayHasCleavages(Gherkin.AND_GIVEN, app, cleavage2),
+        app => whenEventOccurs(app, new DrawCleavageEvent()),
+        app => theCurrentCleavageRepositoryHasCleavage(Gherkin.THEN, app, cleavage2),
+        app => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_THEN, app, cleavage2),
+        app => theInterfaceGatewayHasPlayingSounds(Gherkin.AND_THEN, app, [new Sound(SupportedSound.DICE_ROLL)]),
+        app => theEventIsSent(Gherkin.AND_THEN, app, [])
     ])
 ])

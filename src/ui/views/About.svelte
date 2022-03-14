@@ -21,6 +21,8 @@
     <Paragraph text={gameDescription}/>
     <Paragraph text={projectDescription} center={true}/>
     <LinkComponent text="GitHub" href="https://github.com/Sometimes-Useful/the-cleavage-game" newTab={true}/>
+    <LinkComponent text="Replay du dev" href="https://youtube.com/playlist?list=PL4jAusJfrmMsRWjFhgjZXcPnEZdkUnLGc" newTab={true}/>
+    <LinkComponent text="Chaine Twitch pour le live" href="https://www.twitch.tv/benjaminbohec" newTab={true}/>
     <Paragraph text={donationDescription} center={true}/>
 </div>
 <div class="flex flex-col w-full  items-center">

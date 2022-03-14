@@ -15,6 +15,9 @@ import { ProductionDateGateway } from './infra/gateways/date/ProductionDateGatew
 import { InMemoryProductionClientEventGateway } from './infra/gateways/event/InMemoryProductionClientEventGateway'
 import { AxiosGlobalCleavageDrawPileGateway } from './infra/gateways/globalCleavageDrawPile/AxiosGlobalCleavageDrawPileGateway'
 import { clientBackendFqdn, clientBackendPort, clientBackendSheme } from './env/clientEnvironnementVariables'
+import { InMemoryBarRepository } from './infra/repositories/bar/InMemoryBarRepository'
+import { InMemoryGamePhaseRepository } from './infra/repositories/gamePhase/InMemoryGamePhaseRepository'
+import { ProductionUuidGateway } from './infra/gateways/uuid/ProductionUuidGateway'
 
 const supportedSounds = new Map([
     [SupportedSound.QUACK, new Tone.ToneAudioBuffer('/sounds/quack.mp3')],
@@ -36,27 +39,26 @@ const eventGateway = new InMemoryProductionClientEventGateway()
 const chatGateway = new TwitchChatGateway(eventGateway)
 const randomGateway = new ProductionRandomGateway()
 const dateGateway = new ProductionDateGateway()
-
 const globalCleavageDrawPileGateway = new AxiosGlobalCleavageDrawPileGateway(clientBackendSheme, clientBackendFqdn, clientBackendPort)
-// const globalCleavageDrawPileGateway = new FakeGlobalCleavageDrawPileGateway()
+const uuidGateway = new ProductionUuidGateway()
+
 const applicationGateways:ProductionClientApplicationGateways = {
     chat: chatGateway,
     event: eventGateway,
     interface: interfaceGateway,
     random: randomGateway,
     date: dateGateway,
-    globalCleavageDrawPile: globalCleavageDrawPileGateway
+    globalCleavageDrawPile: globalCleavageDrawPileGateway,
+    uuid: uuidGateway
 }
 
-const publicCleavageDrawPileRepository = new InMemoryPublicCleavageDrawPileRepository()
-const playerRepository = new InMemoryPlayerRepository()
-const currentCleavageRepository = new InMemoryCurrentCleavageRepository()
-const autoplayRepository = new InMemoryAutoplayRepository()
 const applicationRepositories:ProductionClientApplicationRepositories = {
-    publicCleavageDrawPile: publicCleavageDrawPileRepository,
-    currentCleavage: currentCleavageRepository,
-    player: playerRepository,
-    autoplay: autoplayRepository
+    publicCleavageDrawPile: new InMemoryPublicCleavageDrawPileRepository(),
+    currentCleavage: new InMemoryCurrentCleavageRepository(),
+    player: new InMemoryPlayerRepository(),
+    autoplay: new InMemoryAutoplayRepository(),
+    gamePhase: new InMemoryGamePhaseRepository(),
+    bar: new InMemoryBarRepository()
 }
 
 export const clientApplication = new ProductionClientApplication(applicationGateways, applicationRepositories)

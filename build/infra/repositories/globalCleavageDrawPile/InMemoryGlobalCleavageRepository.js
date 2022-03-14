@@ -20,8 +20,7 @@ var InMemoryGlobalCleavageDrawPileRepository = /** @class */ (function () {
         return Promise.resolve();
     };
     InMemoryGlobalCleavageDrawPileRepository.prototype.hasCleavage = function (cleavage) {
-        var hasCleavage = this.cleavagesDrawPile.some(function (globalCleavage) { return globalCleavage.title === cleavage.title; });
-        return Promise.resolve(hasCleavage);
+        return Promise.resolve(this.cleavagesDrawPile.some(function (globalCleavage) { return globalCleavage.title === cleavage.title; }));
     };
     return InMemoryGlobalCleavageDrawPileRepository;
 }());

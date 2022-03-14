@@ -1,5 +1,6 @@
 import type { Cleavage } from '../../../domain/entities/Cleavage'
 import type { CurrentCleavageRepository } from '../../../domain/ports/secondary/repositories/CurrentCleavageRepository'
+import { cleavageUndefined } from '../../../messages/infra'
 
 export class InMemoryCurrentCleavageRepository implements CurrentCleavageRepository {
     hasCleavage (): Promise<boolean> {
@@ -9,7 +10,7 @@ export class InMemoryCurrentCleavageRepository implements CurrentCleavageReposit
     load (): Promise<Cleavage> {
         return this.cleavage
             ? Promise.resolve(this.cleavage)
-            : Promise.reject(new Error('Cleavage is undefined.'))
+            : Promise.reject(new Error(cleavageUndefined))
     }
 
     save (cleavage: Cleavage): Promise<void> {

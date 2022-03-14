@@ -19,9 +19,9 @@ const cleavage1Dto:CleavageDTO = {
 
 feature(EventType.CANCEL_CLEAVAGE, [
     clientScenario('Scenario 1 : Cancel Cleavage', [
-        application => theInterfaceGatewayHasCurrentCleavage(Gherkin.GIVEN, application, new Cleavage(cleavage1Dto)),
-        application => whenEventOccurs(application, new CancelCleavageEvent()),
-        application => theInterfaceGatewayDontHaveCleavage(Gherkin.THEN, application),
-        application => theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, application, new Sound(SupportedSound.QUACK))
+        app => theInterfaceGatewayHasCurrentCleavage(Gherkin.GIVEN, app, new Cleavage(cleavage1Dto)),
+        app => whenEventOccurs(app, new CancelCleavageEvent()),
+        app => theInterfaceGatewayDontHaveCleavage(Gherkin.THEN, app),
+        app => theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, app, new Sound(SupportedSound.QUACK))
     ])
 ])

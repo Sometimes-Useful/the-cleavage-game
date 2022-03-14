@@ -9,7 +9,7 @@ import { whenEventOccurs, theEventIsSent } from '../../tests/unitTests/eventGate
 
 feature(EventType.APPLICATION_START, [
     clientScenario('Scenario 1 : Main menu on application start.', [
-        application => whenEventOccurs(application, new ApplicationStartEvent()),
-        application => theEventIsSent(Gherkin.THEN, application, new NavigateEvent(InterfaceView.MAIN_MENU))
+        app => whenEventOccurs(app, new ApplicationStartEvent()),
+        app => theEventIsSent(Gherkin.THEN, app, new NavigateEvent(InterfaceView.MAIN_MENU))
     ])
 ])

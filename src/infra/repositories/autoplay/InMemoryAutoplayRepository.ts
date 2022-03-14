@@ -1,4 +1,5 @@
 import type { AutoplayRepository } from '../../../domain/ports/secondary/repositories/AutoplayRepository'
+import { nexAutoplayDateIsUndefined } from '../../../messages/infra'
 
 export class InMemoryAutoplayRepository implements AutoplayRepository {
     configureNextAutoPlay (date: Date | null): Promise<void> {
@@ -18,7 +19,7 @@ export class InMemoryAutoplayRepository implements AutoplayRepository {
     retrieveNextAutoPlayDate (): Promise<Date> {
         return this.nextCleavageDate
             ? Promise.resolve(this.nextCleavageDate)
-            : Promise.reject(new Error('next autoplay date is undefined.'))
+            : Promise.reject(new Error(nexAutoplayDateIsUndefined))
     }
 
     hasAutoplay (): Promise<boolean> {

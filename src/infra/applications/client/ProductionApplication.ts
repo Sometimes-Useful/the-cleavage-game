@@ -1,4 +1,5 @@
 import { AutoplayApplicationService } from '../../../domain/applicationServices/AutoplayApplicationService'
+import { BarApplicationService } from '../../../domain/applicationServices/BarApplicationService'
 import { ChatApplicationService } from '../../../domain/applicationServices/ChatApplicationService'
 import { CleavageApplicationService } from '../../../domain/applicationServices/CleavageService'
 import { EventApplicationService } from '../../../domain/applicationServices/EventApplicationService'
@@ -24,10 +25,11 @@ export class ProductionClientApplication {
                 const applicationServices = {
                     chat: new ChatApplicationService(this.gateways.chat, this.gateways.interface),
                     event: new EventApplicationService(this.gateways.event),
-                    cleavage: new CleavageApplicationService(this.repositories.publicCleavageDrawPile, this.gateways.globalCleavageDrawPile, this.repositories.currentCleavage, this.gateways.chat),
+                    cleavage: new CleavageApplicationService(this.repositories.publicCleavageDrawPile, this.gateways.globalCleavageDrawPile, this.repositories.currentCleavage, this.gateways.chat, this.repositories.gamePhase),
                     interface: new InterfaceApplicationService(this.gateways.interface),
-                    player: new PlayerApplicationService(this.repositories.player),
-                    autoplay: new AutoplayApplicationService(this.repositories.autoplay, this.gateways.date)
+                    player: new PlayerApplicationService(this.repositories.player, this.gateways.event),
+                    autoplay: new AutoplayApplicationService(this.repositories.autoplay, this.gateways.date),
+                    bar: new BarApplicationService(this.repositories.bar, this.gateways.event, this.gateways.uuid)
                 }
                 this.gateways.event.configureController(new PrimaryClientController(applicationServices))
                 applicationEventStore.subscribe(event => { if (event) this.gateways.event.sendEvent(event) })

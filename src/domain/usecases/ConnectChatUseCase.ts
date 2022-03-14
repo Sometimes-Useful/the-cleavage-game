@@ -3,11 +3,10 @@ import { UseCase } from './UseCase'
 import type { ConnectChatEvent } from '../events/connectChat/ConnectChatEvent'
 import { alreadyConnectedToChatNotification } from '../entities/notification/notifications'
 import type { InterfaceApplicationService } from '../applicationServices/InterfaceApplicationService'
-import { InterfaceView } from '../entities/InterfaceView'
 import { mainMusic } from '../entities/music/mainMusic'
 import type { EventApplicationService } from '../applicationServices/EventApplicationService'
-import { NavigateEvent } from '../events/navigateEvent/NavigateEvent'
 import { WelcomeMessage } from '../entities/message'
+import { CreateBarEvent } from '../events/createBar/CreateBarEvent'
 
 interface ConnectChatUseCaseApplicationServices {
     chat:ChatApplicationService
@@ -37,7 +36,7 @@ export class ConnectChatUseCase extends UseCase {
 
     private onConnected (): Promise<void> {
         return Promise.all([
-            this.applicationServices.event.sentEvent(new NavigateEvent(InterfaceView.NEW_CLEAVAGE)),
+            this.applicationServices.event.sentEvent(new CreateBarEvent()),
             this.applicationServices.chat.sendMessage(new WelcomeMessage()),
             this.applicationServices.interface.playMusic(mainMusic)
         ])

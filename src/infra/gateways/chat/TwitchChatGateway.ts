@@ -8,6 +8,7 @@ import type { ChatGateway } from '../../../domain/ports/secondary/gateways/ChatG
 import type { InMemoryProductionClientEventGateway } from '../event/InMemoryProductionClientEventGateway'
 
 const noTwitchClientSet = 'No Twitch Client Set'
+
 export class TwitchChatGateway implements ChatGateway {
     constructor (
         private eventBus:InMemoryProductionClientEventGateway,
@@ -98,7 +99,7 @@ export class TwitchChatGateway implements ChatGateway {
         })
         this.tmiClient.on('part', (channel: string, username: string, self: boolean) => {
             console.log(twitchClientLeaveChannelAsUser(channel, username))
-            this.eventBus.sendEvent(new PlayerQuitEvent(new Player({ username })))
+            this.eventBus.sendEvent(new PlayerQuitEvent(username))
         })
         this.tmiClient.on('connected', (host: string, port: number) => {
             console.log(twitchClientConnected(host, port))

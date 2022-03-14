@@ -8,26 +8,25 @@ import { theChatGatewayHasExpectedStatus, theChatGatewaySendMessage } from '../.
 import { clientScenario } from '../../tests/clientScenario'
 import { feature } from '../../tests/feature'
 import { channel, token, username } from '../../tests/testContexts'
-import { InterfaceView } from '../../entities/InterfaceView'
 import { mainMusic } from '../../entities/music/mainMusic'
 import { EventType } from '../EventType'
-import { NavigateEvent } from '../navigateEvent/NavigateEvent'
 import { WelcomeMessage } from '../../entities/message'
 import { whenEventOccurs, theEventIsSent } from '../../tests/unitTests/eventGateway'
+import { CreateBarEvent } from '../createBar/CreateBarEvent'
 feature(EventType.CONNECT_CHAT, [
     clientScenario('Scenario 1 : Connect Chat on chat DISCONNECTED', [
-        application => theInterfaceGatewayDontPlayMusic(Gherkin.AND_THEN, application),
-        application => theChatGatewayHasExpectedStatus(Gherkin.AND_GIVEN, application, ChatStatus.DISCONNECTED),
-        application => whenEventOccurs(application, new ConnectChatEvent(username, token, channel)),
-        application => theChatGatewayHasExpectedStatus(Gherkin.THEN, application, ChatStatus.CONNECTED),
-        application => theEventIsSent(Gherkin.AND_THEN, application, new NavigateEvent(InterfaceView.NEW_CLEAVAGE)),
-        application => theChatGatewaySendMessage(Gherkin.THEN, application, new WelcomeMessage()),
-        application => theInterfaceGatewayHasPlayingMusic(Gherkin.AND_THEN, application, mainMusic)
+        app => theInterfaceGatewayDontPlayMusic(Gherkin.GIVEN, app),
+        app => theChatGatewayHasExpectedStatus(Gherkin.AND_GIVEN, app, ChatStatus.DISCONNECTED),
+        app => whenEventOccurs(app, new ConnectChatEvent(username, token, channel)),
+        app => theChatGatewayHasExpectedStatus(Gherkin.THEN, app, ChatStatus.CONNECTED),
+        app => theEventIsSent(Gherkin.AND_THEN, app, new CreateBarEvent()),
+        app => theChatGatewaySendMessage(Gherkin.THEN, app, new WelcomeMessage()),
+        app => theInterfaceGatewayHasPlayingMusic(Gherkin.AND_THEN, app, mainMusic)
     ]),
     clientScenario("Scenario 2 : Can't Connect Chat on chat already CONNECTED", [
-        application => theChatGatewayHasExpectedStatus(Gherkin.AND_GIVEN, application, ChatStatus.CONNECTED),
-        application => whenEventOccurs(application, new ConnectChatEvent(username, token, channel)),
-        application => theChatGatewayHasExpectedStatus(Gherkin.THEN, application, ChatStatus.CONNECTED),
-        application => theInterfaceGatewayHasNotifications(Gherkin.AND_THEN, application, alreadyConnectedToChatNotification)
+        app => theChatGatewayHasExpectedStatus(Gherkin.AND_GIVEN, app, ChatStatus.CONNECTED),
+        app => whenEventOccurs(app, new ConnectChatEvent(username, token, channel)),
+        app => theChatGatewayHasExpectedStatus(Gherkin.THEN, app, ChatStatus.CONNECTED),
+        app => theInterfaceGatewayHasNotifications(Gherkin.AND_THEN, app, alreadyConnectedToChatNotification)
     ])
 ])

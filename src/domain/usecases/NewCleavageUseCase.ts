@@ -7,6 +7,8 @@ import type { EventApplicationService } from '../applicationServices/EventApplic
 import { NavigateEvent } from '../events/navigateEvent/NavigateEvent'
 import type { AutoplayApplicationService } from '../applicationServices/AutoplayApplicationService'
 import { DrawCleavageEvent } from '../events/drawCleavage/DrawCleavageEvent'
+import { ChangeGamePhaseEvent } from '../events/changeGamePhase/ChangeGamePhaseEvent'
+import { GamePhase } from '../entities/GamePhase'
 export interface NewCleavageUseCaseApplicationServices {
     autoplay: AutoplayApplicationService
     interface: InterfaceApplicationService,
@@ -32,7 +34,7 @@ export class NewCleavageUseCase extends UseCase {
         return this.applicationServices.interface.newCleavage()
             .then(() => this.applicationServices.autoplay.hasAutoplay())
             .then(hasAutoplay => this.applicationServices.event.sentEvents([
-                new NavigateEvent(InterfaceView.NEW_CLEAVAGE),
+                new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE),
                 ...(hasAutoplay ? [new DrawCleavageEvent()] : [])
             ]))
             .catch(error => Promise.reject(error))

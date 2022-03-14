@@ -39,7 +39,8 @@
     "express": "^4.17.2",
     "sirv-cli": "^2.0.2",
     "tmi.js": "^1.8.5",
-    "tone": "^14.7.77"
+    "tone": "^14.7.77",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.0",
@@ -51,6 +52,7 @@
     "@types/express": "^4.17.13",
     "@types/mocha": "^9.1.0",
     "@types/tmi.js": "^1.8.1",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.11.0",
     "@typescript-eslint/parser": "^5.11.0",
     "autoprefixer": "^10.4.2",

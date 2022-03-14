@@ -5,7 +5,7 @@ var express_1 = require("express");
 var Cleavage_1 = require("../../domain/entities/Cleavage");
 var SaveCleavageOnGlobalCleavageDrawPileEvent_1 = require("../../domain/events/saveCleavageOnGlobalCleavageDrawPile/SaveCleavageOnGlobalCleavageDrawPileEvent");
 var Backend_API_URL_1 = require("../../api/Backend_API_URL");
-function expressCommandApi(app, application) {
+function expressCommandApi(app, app) {
     app.use((0, express_1.json)());
     app.post(Backend_API_URL_1.BACKEND_API_URL.GLOBAL_CLEAVAGE_DRAWPILE_SAVE, function (req, res, next) {
         return application.gateways.event.sendEvent(new SaveCleavageOnGlobalCleavageDrawPileEvent_1.SaveCleavageOnGlobalCleavageDrawPileEvent(cleavageDTOFromBody(req.body)))

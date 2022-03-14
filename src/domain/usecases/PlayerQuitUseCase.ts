@@ -17,10 +17,22 @@ export class PlayerQuitUseCase extends UseCase {
     ) { super() }
 
     execute (event: PlayerQuitEvent): Promise<void> {
-        return this.applicationServices.player.removePlayer(event.player)
+        return this.applicationServices.player.players()
+            .then(players => {
+                const player = players.find(player => player.username === event.username)
+                return player ? this.onPlayer(player) : this.onMissingPlayer()
+            })
+    }
+
+    private onMissingPlayer (): Promise<void> {
+        return Promise.resolve()
+    }
+
+    private onPlayer (player:Player): Promise<void> {
+        return this.applicationServices.player.removePlayer(player)
             .then(() => this.applicationServices.cleavage.hasCleavage())
             .then(hasCleavage => hasCleavage
-                ? this.onCleavage(event.player)
+                ? this.onCleavage(player)
                 : Promise.resolve()
             )
             .catch(error => Promise.reject(error))

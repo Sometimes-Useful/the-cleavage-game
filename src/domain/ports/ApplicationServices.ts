@@ -5,6 +5,7 @@ import type { CleavageApplicationService } from '../applicationServices/Cleavage
 import type { PlayerApplicationService } from '../applicationServices/PlayerApplicationService'
 import type { AutoplayApplicationService } from '../applicationServices/AutoplayApplicationService'
 import type { GlobalCleavageDrawPileApplicationService } from '../applicationServices/GlobalCleavageDrawPileApplicationService'
+import type { BarApplicationService } from '../applicationServices/BarApplicationService'
 
 export interface ClientApplicationServices {
     player: PlayerApplicationService
@@ -13,6 +14,7 @@ export interface ClientApplicationServices {
     event: EventApplicationService;
     cleavage: CleavageApplicationService;
     autoplay: AutoplayApplicationService
+    bar:BarApplicationService
 }
 
 export interface ServerApplicationServices {

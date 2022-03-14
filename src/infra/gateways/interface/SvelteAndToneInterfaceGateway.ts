@@ -5,16 +5,34 @@ import type { Music } from '../../../domain/entities/music/Music'
 import type { SupportedMusic } from '../../../domain/entities/music/SupportedMusic'
 import { InterfaceView } from '../../../domain/entities/InterfaceView'
 import { defaultMusicVolumeLevel, defaultSoundVolumeLevel } from './defaultVolumeLevels'
-import { autoplayStore, currentCleavageStore, interfaceViewStore, musicVolumeStore, soundVolumeStore } from '../../../ui/stores/stores'
+import { autoplayStore, currentCleavageStore, gamePhaseStore, interfaceViewStore, musicVolumeStore, soundVolumeStore } from '../../../ui/stores/stores'
 import * as Tone from 'tone'
 import type { SupportedSound } from '../../../domain/entities/SoundType'
 import type { InterfaceGateway } from '../../../domain/ports/secondary/gateways/InterfaceGateway'
+import type { InterfaceEntityState } from '../../../domain/tests/unitTests/interfaceGateway'
+import type { GamePhase } from '../../../domain/entities/GamePhase'
 
 export class SvelteAndToneInterfaceGateway implements InterfaceGateway {
+    interfaceState: Map<string, InterfaceEntityState> = new Map()
     constructor (
         private supportedSounds :Map<SupportedSound, Tone.ToneAudioBuffer>,
         private supportedMusics: Map<SupportedMusic, Tone.ToneAudioBuffer>
     ) {}
+
+    changeGamePhase (gamePhase: GamePhase): Promise<void> {
+        gamePhaseStore.set(gamePhase)
+        return Promise.resolve()
+    }
+
+    removeEntityInterfaceState (id: string): Promise<void> {
+        this.interfaceState.delete(id)
+        return Promise.resolve()
+    }
+
+    updateEntityInterfaceState (id: string, interfaceEntityState: InterfaceEntityState): Promise<void> {
+        this.interfaceState.set(id, interfaceEntityState)
+        return Promise.resolve()
+    }
 
     disableAutoplay (): Promise<void> {
         autoplayStore.set(false)

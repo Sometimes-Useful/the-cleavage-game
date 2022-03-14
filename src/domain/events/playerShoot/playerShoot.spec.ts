@@ -12,7 +12,7 @@ import { PlayerShootEvent } from './PlayerShootEvent'
 
 feature(EventType.PLAYER_SHOOT, [
     clientScenario('Scenario 1 : Player shoot', [
-        application => whenEventOccurs(application, new PlayerShootEvent()),
-        application => theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, application, new Sound(SupportedSound.SHOOT))
+        app => whenEventOccurs(app, new PlayerShootEvent()),
+        app => theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, app, new Sound(SupportedSound.SHOOT))
     ])
 ])

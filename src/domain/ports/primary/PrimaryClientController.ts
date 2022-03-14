@@ -1,5 +1,4 @@
 import type { ApplicationEvent } from '../../events/GameEvent'
-import type { UseCase } from '../../usecases/UseCase'
 import type { ClientApplicationServices } from '../ApplicationServices'
 import { EventType } from '../../events/EventType'
 import { ApplicationStartUseCase } from '../../usecases/ApplicationStartUseCase'
@@ -25,6 +24,16 @@ import { PlayerMessageUseCase } from '../../usecases/PlayerMessageUseCase'
 import { CheckAutoplayUseCase } from '../../usecases/CheckAutoplayUseCase'
 import { StartAutoplayUseCase } from '../../usecases/StartAutoplayUseCase'
 import { StopAutoplayUseCase } from '../../usecases/StopAutoplayUseCase'
+import { PlayerJoinBarUseCase } from '../../usecases/PlayerJoinBarUseCase'
+import { PlayerMoveUseCase } from '../../usecases/PlayerMoveUseCase'
+import { InstallNewTableUseCase } from '../../usecases/InstallNewTableUseCase'
+import { InstallNewStoolsOnTableUseCase } from '../../usecases/InstallNewStoolsOnTableUseCase'
+import { TableStoolAvailableUseCase } from '../../usecases/TableStoolAvailableUseCase'
+import { CreateBarUseCase } from '../../usecases/CreateBarUseCase'
+import type { UseCase } from '../../usecases/UseCase'
+import { InstallNewStoolsOnBarUseCase } from '../../usecases/InstallNewStoolsOnBarUseCase'
+import { DrawUseCase } from '../../usecases/DrawUseCase'
+import { ChangeGamePhaseUseCase } from '../../usecases/ChangeGamePhaseUseCase'
 
 export class PrimaryClientController {
     constructor (private applicationServices: ClientApplicationServices) {
@@ -50,6 +59,15 @@ export class PrimaryClientController {
         this.useCases.set(EventType.START_AUTOPLAY, new StartAutoplayUseCase(this.applicationServices))
         this.useCases.set(EventType.CHECK_AUTOPLAY, new CheckAutoplayUseCase(this.applicationServices))
         this.useCases.set(EventType.STOP_AUTOPLAY, new StopAutoplayUseCase(this.applicationServices))
+        this.useCases.set(EventType.PLAYER_JOIN_BAR, new PlayerJoinBarUseCase(this.applicationServices))
+        this.useCases.set(EventType.PLAYER_MOVE, new PlayerMoveUseCase(this.applicationServices))
+        this.useCases.set(EventType.INSTALL_NEW_TABLE, new InstallNewTableUseCase(this.applicationServices))
+        this.useCases.set(EventType.INSTALL_NEW_STOOLS_ON_TABLE, new InstallNewStoolsOnTableUseCase(this.applicationServices))
+        this.useCases.set(EventType.TABLE_STOOL_AVAILABLE, new TableStoolAvailableUseCase(this.applicationServices))
+        this.useCases.set(EventType.CREATE_BAR, new CreateBarUseCase(this.applicationServices))
+        this.useCases.set(EventType.INSTALL_NEW_STOOLS_ON_BAR, new InstallNewStoolsOnBarUseCase(this.applicationServices))
+        this.useCases.set(EventType.DRAW, new DrawUseCase(this.applicationServices))
+        this.useCases.set(EventType.CHANGE_GAME_PHASE, new ChangeGamePhaseUseCase(this.applicationServices))
     }
 
     executeEvent (event: ApplicationEvent): Promise<void> {
