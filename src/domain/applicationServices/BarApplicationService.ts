@@ -16,10 +16,10 @@ import type { BarRepository } from '../ports/secondary/repositories/BarRepositor
 import type { PhysicalEntity } from '../tests/PhysicalEntity'
 import type { Table } from '../tests/Table'
 import { Direction } from './Direction'
-import { Sprite } from '../events/playerMove/Sprite'
 import { GamePhase } from '../entities/GamePhase'
 import { ChangeGamePhaseEvent } from '../events/changeGamePhase/ChangeGamePhaseEvent'
 import { InstallNewStoolsOnTableEvent } from '../events/installNewStoolsOnTable/InstallNewStoolsOnTableEvent'
+import { SpriteType } from '../entities/SpriteType'
 
 interface PostionAndDirection {
     position:Position,
@@ -38,7 +38,7 @@ export class BarApplicationService {
                 uuids.forEach((uuid, index) => { stools[index].id = uuid })
                 return Promise.all(stools.map(stool => this.barRepository.addAvailableBarStool(stool)))
             })
-            .then(results => this.eventGateway.sendEvents(stools.map(stool => new DrawEvent(stool.id, { position: stool.position, sprite: Sprite.STOOL }))))
+            .then(results => this.eventGateway.sendEvents(stools.map(stool => new DrawEvent(stool.id, { position: stool.position, spriteType: SpriteType.STOOL }))))
             .catch(error => Promise.reject(error))
     }
 
@@ -74,7 +74,7 @@ export class BarApplicationService {
         })
             .then(() => this.eventGateway.sendEvents([
                 new InstallNewStoolsOnBarEvent(),
-                new DrawEvent(uuid, { position: this.defaultBarPosition, sprite: Sprite.BAR }),
+                new DrawEvent(uuid, { position: this.defaultBarPosition, spriteType: SpriteType.BAR }),
                 new NavigateEvent(InterfaceView.GAME),
                 new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE)
             ]))

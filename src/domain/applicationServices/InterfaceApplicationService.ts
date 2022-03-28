@@ -1,12 +1,12 @@
 import type { Cleavage } from '../entities/Cleavage'
 import type { GamePhase } from '../entities/GamePhase'
+import type { InterfaceEntityState } from '../entities/InterfaceEntityState'
 import type { InterfaceView } from '../entities/InterfaceView'
 import type { Music } from '../entities/music/Music'
 import type { ApplicationNotification } from '../entities/notification/Notification'
 import { noCleavageAvailableNotification } from '../entities/notification/notifications'
 import type { Sound } from '../entities/sound'
 import type { InterfaceGateway } from '../ports/secondary/gateways/InterfaceGateway'
-import type { InterfaceEntityState } from '../tests/unitTests/interfaceGateway'
 
 export class InterfaceApplicationService {
     changeGamePhase (gamePhase: GamePhase):Promise<void> {

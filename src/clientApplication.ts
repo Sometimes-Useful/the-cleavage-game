@@ -18,6 +18,8 @@ import { InMemoryBarRepository } from './infra/repositories/bar/InMemoryBarRepos
 import { InMemoryGamePhaseRepository } from './infra/repositories/gamePhase/InMemoryGamePhaseRepository'
 import { ProductionUuidGateway } from './infra/gateways/uuid/ProductionUuidGateway'
 import { SvelteTonePixiInterfaceGateway } from './infra/gateways/interface/SvelteTonePixiInterfaceGateway'
+import { Application } from 'pixi.js'
+import { SpriteType } from './domain/entities/SpriteType'
 
 const supportedSounds = new Map([
     [SupportedSound.QUACK, new Tone.ToneAudioBuffer('/sounds/quack.mp3')],
@@ -34,7 +36,15 @@ const supportedMusics = new Map([
     [SupportedMusic.MAIN, new Tone.ToneAudioBuffer('/music/Ken_Hamm-Buckbreak.mp3')]
 ])
 
-const interfaceGateway = new SvelteTonePixiInterfaceGateway(supportedSounds, supportedMusics)
+const spriteAssets:Map<SpriteType, string> = new Map([
+    [SpriteType.BAR, '/textures/bar.png'],
+    [SpriteType.STOOL, '/textures/stool.png'],
+    [SpriteType.PLAYER, '/textures/player.png']
+])
+
+const pixiApplication = new Application()
+
+const interfaceGateway = new SvelteTonePixiInterfaceGateway(supportedSounds, supportedMusics, pixiApplication, spriteAssets)
 const eventGateway = new InMemoryProductionClientEventGateway()
 const chatGateway = new TwitchChatGateway(eventGateway)
 const randomGateway = new ProductionRandomGateway()

@@ -28,7 +28,7 @@
         newCleavage = currentCleavage ? currentCleavage :defaultCleavage()
     })
 </script>
-<div class="flex flex-row w-full px-2 pb-2">
+<div id="commandHud" class="flex flex-row w-full px-2 pb-2 pt-1">
     {#if $gamePhaseStore === GamePhase.CLEAVING}
         <div class="flex flex-col w-full items-start">
         </div> 

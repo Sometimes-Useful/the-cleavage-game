@@ -1,4 +1,5 @@
-import type { InterfaceEntityState } from '../../tests/unitTests/interfaceGateway'
+
+import type { InterfaceEntityState } from '../../entities/InterfaceEntityState'
 import { EventType } from '../EventType'
 import { ApplicationEvent } from '../GameEvent'
 

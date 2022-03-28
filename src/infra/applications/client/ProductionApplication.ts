@@ -5,6 +5,7 @@ import { CleavageApplicationService } from '../../../domain/applicationServices/
 import { EventApplicationService } from '../../../domain/applicationServices/EventApplicationService'
 import { InterfaceApplicationService } from '../../../domain/applicationServices/InterfaceApplicationService'
 import { PlayerApplicationService } from '../../../domain/applicationServices/PlayerApplicationService'
+import type { Size } from '../../../domain/entities/Size'
 import { ApplicationStartEvent } from '../../../domain/events/applicationStart/ApplicationStartEvent'
 import { CheckAutoplayEvent } from '../../../domain/events/checkAutoplay/CheckAutoplayEvent'
 import { PrimaryClientController } from '../../../domain/ports/primary/PrimaryClientController'
@@ -40,5 +41,13 @@ export class ProductionClientApplication {
                 return Promise.resolve()
             })
             .catch(error => console.error(error))
+    }
+
+    public addingViewToDom (htmlElement: HTMLElement): Promise<void> {
+        return this.gateways.interface.addingViewToDom(htmlElement)
+    }
+
+    public changeResolution (resolution:Size): Promise<void> {
+        return this.gateways.interface.changeResolution(resolution)
     }
 }

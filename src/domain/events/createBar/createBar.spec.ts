@@ -11,9 +11,9 @@ import { bar } from '../../tests/testContexts'
 import { DrawEvent } from '../draw/DrawEvent'
 import { InstallNewStoolsOnBarEvent } from '../installNewStoolOnBar/InstallNewStoolsOnBarEvent'
 import { theUuidGatewayHasUuids } from '../../tests/unitTests/uuidGateway'
-import { Sprite } from '../playerMove/Sprite'
 import { ChangeGamePhaseEvent } from '../changeGamePhase/ChangeGamePhaseEvent'
 import { GamePhase } from '../../entities/GamePhase'
+import { SpriteType } from '../../entities/SpriteType'
 feature(EventType.CREATE_BAR, [
     clientScenario('Scenario 1', [
         app => theBarRepositoryHasBar(Gherkin.GIVEN, app, { id: '0', position: { x: 99999, y: 99999 }, size: { width: 99999, height: 99999 } }),
@@ -22,7 +22,7 @@ feature(EventType.CREATE_BAR, [
         app => theBarRepositoryHasBar(Gherkin.THEN, app, bar),
         app => theEventIsSent(Gherkin.AND_THEN, app, [
             new InstallNewStoolsOnBarEvent(),
-            new DrawEvent(bar.id, { position: bar.position, sprite: Sprite.BAR }),
+            new DrawEvent(bar.id, { position: bar.position, spriteType: SpriteType.BAR }),
             new NavigateEvent(InterfaceView.GAME),
             new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE)
         ])

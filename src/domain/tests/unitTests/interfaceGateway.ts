@@ -8,9 +8,8 @@ import type { Music } from '../../entities/music/Music'
 import type { Sound } from '../../entities/sound'
 import { detailedComparisonMessage, isGiven, stringifyWithDetailledSetAndMap } from './unitTests'
 import type { Gherkin } from '../Gherkin'
-import type { Position } from '../../entities/Position'
-import type { Sprite } from '../../events/playerMove/Sprite'
 import type { GamePhase } from '../../entities/GamePhase'
+import type { InterfaceEntityState } from '../../entities/InterfaceEntityState'
 
 export const theInterfaceGatewayHasNotifications = (gherkinPrefix: Gherkin, application: FakeClientApplication, expectedNotifications: ApplicationNotification[] | ApplicationNotification) => {
     const notifications = Array.isArray(expectedNotifications) ? expectedNotifications : [expectedNotifications]
@@ -77,11 +76,6 @@ export const theInterfaceGatewayHasAutoplayOptionEnabled = (gherkinPrefix:Gherki
         if (isGiven(gherkinPrefix)) application.gateways.interface.autoplayEnabled = true
         expect(application.gateways.interface.autoplayEnabled).equal(true)
     })
-
-export interface InterfaceEntityState {
-    position:Position,
-    sprite:Sprite
-}
 
 export const theInterfaceGatewayHasEntityInterfaceState = (gherkinPrefix:Gherkin, application:FakeClientApplication, interfaceEntitiesState:Map<string, InterfaceEntityState>):Test =>
     it(`${gherkinPrefix} the interface gateway has entity interface state`, () => {

@@ -8,7 +8,7 @@ import { Gherkin } from '../../tests/Gherkin'
 import { bar, barStools } from '../../tests/testContexts'
 import { DrawEvent } from '../draw/DrawEvent'
 import { theUuidGatewayHasUuids } from '../../tests/unitTests/uuidGateway'
-import { Sprite } from '../playerMove/Sprite'
+import { SpriteType } from '../../entities/SpriteType'
 
 feature(EventType.INSTALL_NEW_STOOLS_ON_BAR, [
     clientScenario('Scenario 1', [
@@ -17,6 +17,6 @@ feature(EventType.INSTALL_NEW_STOOLS_ON_BAR, [
         app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, barStools.map(stool => stool.id)),
         app => whenEventOccurs(app, new InstallNewStoolsOnBarEvent()),
         app => theBarRepositoryHasAvailableStoolBars(Gherkin.THEN, app, barStools),
-        app => theEventIsSent(Gherkin.AND_THEN, app, barStools.map(stool => new DrawEvent(stool.id, { position: stool.position, sprite: Sprite.STOOL })))
+        app => theEventIsSent(Gherkin.AND_THEN, app, barStools.map(stool => new DrawEvent(stool.id, { position: stool.position, spriteType: SpriteType.STOOL })))
     ])
 ])

@@ -1,9 +1,9 @@
 
 import type { Player } from '../entities/Player'
 import type { Position } from '../entities/Position'
+import { SpriteType } from '../entities/SpriteType'
 import { DrawEvent } from '../events/draw/DrawEvent'
 import { PlayerJoinBarEvent } from '../events/playerJoinBar/PlayerJoinBarEvent'
-import { Sprite } from '../events/playerMove/Sprite'
 import type { EventGatewaySecondary } from '../ports/secondary/gateways/EventGatewaySecondary'
 import type { PlayerRepository } from '../ports/secondary/repositories/PlayerRepository'
 
@@ -19,7 +19,7 @@ export class PlayerApplicationService {
                 player.position = position
                 return this.playerRepository.save(player)
             })
-            .then(() => this.eventGateway.sendEvent(new DrawEvent(username, { position, sprite: Sprite.PLAYER })))
+            .then(() => this.eventGateway.sendEvent(new DrawEvent(username, { position, spriteType: SpriteType.PLAYER })))
             .catch(error => Promise.reject(error))
     }
 

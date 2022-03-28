@@ -1,12 +1,12 @@
 import type { Cleavage } from '../../../entities/Cleavage'
 import type { GamePhase } from '../../../entities/GamePhase'
+import type { InterfaceEntityState } from '../../../entities/InterfaceEntityState'
 import type { InterfaceView } from '../../../entities/InterfaceView'
 import type { Music } from '../../../entities/music/Music'
 import type { ApplicationNotification } from '../../../entities/notification/Notification'
 import type { Position } from '../../../entities/Position'
 import type { Sound } from '../../../entities/sound'
-import type { Sprite } from '../../../events/playerMove/Sprite'
-import type { InterfaceEntityState } from '../../../tests/unitTests/interfaceGateway'
+import type { SpriteType } from '../../../entities/SpriteType'
 
 export interface InterfaceGateway {
     changeGamePhase(gamePhase: GamePhase):Promise<void>
@@ -24,4 +24,4 @@ export interface InterfaceGateway {
     changeView(interfaceView: InterfaceView): Promise<void>;
 }
 
-export const interfaceEntityState = (position:Position, sprite:Sprite): InterfaceEntityState => ({ position, sprite })
+export const interfaceEntityState = (position:Position, sprite:SpriteType): InterfaceEntityState => ({ position, spriteType: sprite })
