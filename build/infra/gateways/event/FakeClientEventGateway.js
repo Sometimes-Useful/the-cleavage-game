@@ -24,6 +24,22 @@ var FakeClientEventGateway = /** @class */ (function (_super) {
         _this.events = [];
         return _this;
     }
+    FakeClientEventGateway.prototype.sendEvents = function (events) {
+        var _this = this;
+        var sendNextEvent = function () {
+            var event = events.shift();
+            return event
+                ? _this.sendEvent(event)
+                    .then(function () { return sendNextEvent(); })["catch"](function (error) { return Promise.reject(error); })
+                : Promise.resolve();
+        };
+        return sendNextEvent();
+        /*
+        return Promise.all(events.map(event => this.sendEvent(event)))
+            .then(results => Promise.resolve())
+            .catch(error => Promise.reject(error))
+        */
+    };
     FakeClientEventGateway.prototype.sendEvent = function (event) {
         this.events.push(event);
         return Promise.resolve();

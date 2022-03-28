@@ -20,6 +20,8 @@ var UseCase_1 = require("./UseCase");
 var InterfaceView_1 = require("../entities/InterfaceView");
 var Cleavage_1 = require("../entities/Cleavage");
 var NavigateEvent_1 = require("../events/navigateEvent/NavigateEvent");
+var ChangeGamePhaseEvent_1 = require("../events/changeGamePhase/ChangeGamePhaseEvent");
+var GamePhase_1 = require("../entities/GamePhase");
 var LaunchCleavageUseCase = /** @class */ (function (_super) {
     __extends(LaunchCleavageUseCase, _super);
     function LaunchCleavageUseCase(applicationServices) {
@@ -48,7 +50,7 @@ var LaunchCleavageUseCase = /** @class */ (function (_super) {
             _this.applicationServices.interface.updateCleavage(cleavage),
             _this.applicationServices.cleavage.saveGlobalCleavage(cleavage)
         ]); })
-            .then(function (results) { return _this.applicationServices.event.sentEvent(new NavigateEvent_1.NavigateEvent(InterfaceView_1.InterfaceView.CURRENT_CLEAVAGE)); })["catch"](function (error) { return Promise.reject(error); });
+            .then(function (results) { return _this.applicationServices.event.sentEvent(new ChangeGamePhaseEvent_1.ChangeGamePhaseEvent(GamePhase_1.GamePhase.CLEAVING)); })["catch"](function (error) { return Promise.reject(error); });
     };
     return LaunchCleavageUseCase;
 }(UseCase_1.UseCase));

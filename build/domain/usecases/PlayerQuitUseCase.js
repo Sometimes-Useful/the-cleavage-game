@@ -26,10 +26,21 @@ var PlayerQuitUseCase = /** @class */ (function (_super) {
     }
     PlayerQuitUseCase.prototype.execute = function (event) {
         var _this = this;
-        return this.applicationServices.player.removePlayer(event.player)
+        return this.applicationServices.player.players()
+            .then(function (players) {
+            var player = players.find(function (player) { return player.username === event.username; });
+            return player ? _this.onPlayer(player) : _this.onMissingPlayer();
+        });
+    };
+    PlayerQuitUseCase.prototype.onMissingPlayer = function () {
+        return Promise.resolve();
+    };
+    PlayerQuitUseCase.prototype.onPlayer = function (player) {
+        var _this = this;
+        return this.applicationServices.player.removePlayer(player)
             .then(function () { return _this.applicationServices.cleavage.hasCleavage(); })
             .then(function (hasCleavage) { return hasCleavage
-            ? _this.onCleavage(event.player)
+            ? _this.onCleavage(player)
             : Promise.resolve(); })["catch"](function (error) { return Promise.reject(error); });
     };
     PlayerQuitUseCase.prototype.onCleavage = function (player) {

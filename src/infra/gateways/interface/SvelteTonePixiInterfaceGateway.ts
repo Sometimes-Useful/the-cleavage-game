@@ -7,16 +7,18 @@ import { InterfaceView } from '../../../domain/entities/InterfaceView'
 import { defaultMusicVolumeLevel, defaultSoundVolumeLevel } from './defaultVolumeLevels'
 import { autoplayStore, currentCleavageStore, gamePhaseStore, interfaceViewStore, musicVolumeStore, soundVolumeStore } from '../../../ui/stores/stores'
 import * as Tone from 'tone'
+import type { Application } from 'pixi.js'
 import type { SupportedSound } from '../../../domain/entities/SoundType'
 import type { InterfaceGateway } from '../../../domain/ports/secondary/gateways/InterfaceGateway'
 import type { InterfaceEntityState } from '../../../domain/tests/unitTests/interfaceGateway'
 import type { GamePhase } from '../../../domain/entities/GamePhase'
 
-export class SvelteAndToneInterfaceGateway implements InterfaceGateway {
+export class SvelteTonePixiInterfaceGateway implements InterfaceGateway {
     interfaceState: Map<string, InterfaceEntityState> = new Map()
     constructor (
         private supportedSounds :Map<SupportedSound, Tone.ToneAudioBuffer>,
-        private supportedMusics: Map<SupportedMusic, Tone.ToneAudioBuffer>
+        private supportedMusics: Map<SupportedMusic, Tone.ToneAudioBuffer>,
+        private pixiApplication: Application
     ) {}
 
     changeGamePhase (gamePhase: GamePhase): Promise<void> {

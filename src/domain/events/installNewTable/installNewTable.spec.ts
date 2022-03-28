@@ -7,7 +7,7 @@ import { theBarRepositoryDontHaveTable, theBarRepositoryHasBar, theBarRepository
 import { theEventIsSent, whenEventOccurs } from '../../tests/unitTests/eventGateway'
 import { theUuidGatewayHasUuids } from '../../tests/unitTests/uuidGateway'
 import { EventType } from '../EventType'
-import { InstallNewStoolsOnTableEvent } from '../installNewStoolOnTable/InstallNewStoolsOnTableEvent'
+import { InstallNewStoolsOnTableEvent } from '../installNewStoolsOnTable/InstallNewStoolsOnTableEvent'
 import { InstallNewTableEvent } from './InstallNewTableEvent'
 
 feature(EventType.INSTALL_NEW_TABLE, [

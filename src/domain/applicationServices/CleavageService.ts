@@ -23,7 +23,7 @@ export class CleavageApplicationService {
         return this.gamePhaseRepository.changeGamePhase(gamePhase)
     }
 
-    retrieveCurrentGamePhase (): Promise<GamePhase | undefined> {
+    retrieveCurrentGamePhase (): Promise<GamePhase> {
         return this.gamePhaseRepository.retrieveCurrentGamePhase()
     }
 

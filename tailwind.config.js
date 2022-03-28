@@ -3,11 +3,17 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                'cleavage-game-': '#243c5a'
+                'no-emphasis': '#A79B94',
+                'dark-background': '#190F00',
+                'cleave-left': '#B80000',
+                'cleave-right': '#0000B8',
+                'low-emphasis': '#6C5118',
+                'medium-emphasis': '#BF923B',
+                'high-emphasis': '#E8D7B7'
             }
         },
         fontFamily: {
-            sans: ['Comic Sans MS']
+            sans: ['Arial']
         }
     },
     plugins: []

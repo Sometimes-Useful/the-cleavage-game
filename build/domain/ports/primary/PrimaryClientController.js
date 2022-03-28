@@ -25,6 +25,15 @@ var PlayerMessageUseCase_1 = require("../../usecases/PlayerMessageUseCase");
 var CheckAutoplayUseCase_1 = require("../../usecases/CheckAutoplayUseCase");
 var StartAutoplayUseCase_1 = require("../../usecases/StartAutoplayUseCase");
 var StopAutoplayUseCase_1 = require("../../usecases/StopAutoplayUseCase");
+var PlayerJoinBarUseCase_1 = require("../../usecases/PlayerJoinBarUseCase");
+var PlayerMoveUseCase_1 = require("../../usecases/PlayerMoveUseCase");
+var InstallNewTableUseCase_1 = require("../../usecases/InstallNewTableUseCase");
+var InstallNewStoolsOnTableUseCase_1 = require("../../usecases/InstallNewStoolsOnTableUseCase");
+var TableStoolAvailableUseCase_1 = require("../../usecases/TableStoolAvailableUseCase");
+var CreateBarUseCase_1 = require("../../usecases/CreateBarUseCase");
+var InstallNewStoolsOnBarUseCase_1 = require("../../usecases/InstallNewStoolsOnBarUseCase");
+var DrawUseCase_1 = require("../../usecases/DrawUseCase");
+var ChangeGamePhaseUseCase_1 = require("../../usecases/ChangeGamePhaseUseCase");
 var PrimaryClientController = /** @class */ (function () {
     function PrimaryClientController(applicationServices) {
         this.applicationServices = applicationServices;
@@ -51,6 +60,15 @@ var PrimaryClientController = /** @class */ (function () {
         this.useCases.set(EventType_1.EventType.START_AUTOPLAY, new StartAutoplayUseCase_1.StartAutoplayUseCase(this.applicationServices));
         this.useCases.set(EventType_1.EventType.CHECK_AUTOPLAY, new CheckAutoplayUseCase_1.CheckAutoplayUseCase(this.applicationServices));
         this.useCases.set(EventType_1.EventType.STOP_AUTOPLAY, new StopAutoplayUseCase_1.StopAutoplayUseCase(this.applicationServices));
+        this.useCases.set(EventType_1.EventType.PLAYER_JOIN_BAR, new PlayerJoinBarUseCase_1.PlayerJoinBarUseCase(this.applicationServices));
+        this.useCases.set(EventType_1.EventType.PLAYER_MOVE, new PlayerMoveUseCase_1.PlayerMoveUseCase(this.applicationServices));
+        this.useCases.set(EventType_1.EventType.INSTALL_NEW_TABLE, new InstallNewTableUseCase_1.InstallNewTableUseCase(this.applicationServices));
+        this.useCases.set(EventType_1.EventType.INSTALL_NEW_STOOLS_ON_TABLE, new InstallNewStoolsOnTableUseCase_1.InstallNewStoolsOnTableUseCase(this.applicationServices));
+        this.useCases.set(EventType_1.EventType.TABLE_STOOL_AVAILABLE, new TableStoolAvailableUseCase_1.TableStoolAvailableUseCase(this.applicationServices));
+        this.useCases.set(EventType_1.EventType.CREATE_BAR, new CreateBarUseCase_1.CreateBarUseCase(this.applicationServices));
+        this.useCases.set(EventType_1.EventType.INSTALL_NEW_STOOLS_ON_BAR, new InstallNewStoolsOnBarUseCase_1.InstallNewStoolsOnBarUseCase(this.applicationServices));
+        this.useCases.set(EventType_1.EventType.DRAW, new DrawUseCase_1.DrawUseCase(this.applicationServices));
+        this.useCases.set(EventType_1.EventType.CHANGE_GAME_PHASE, new ChangeGamePhaseUseCase_1.ChangeGamePhaseUseCase(this.applicationServices));
     }
     PrimaryClientController.prototype.executeEvent = function (event) {
         var usecase = this.useCases.get(event.eventType);

@@ -5,7 +5,6 @@ import type { Size } from '../entities/Size'
 import type { Stool } from '../entities/Stool'
 import { InstallNewStoolsOnBarEvent } from '../events/installNewStoolOnBar/InstallNewStoolsOnBarEvent'
 import { DrawEvent } from '../events/draw/DrawEvent'
-import { InstallNewStoolsOnTableEvent } from '../events/installNewStoolOnTable/InstallNewStoolsOnTableEvent'
 import { InstallNewTableEvent } from '../events/installNewTable/InstallNewTableEvent'
 import { NavigateEvent } from '../events/navigateEvent/NavigateEvent'
 import { PlayerMoveEvent } from '../events/playerMove/PlayerMoveEvent'
@@ -20,6 +19,7 @@ import { Direction } from './Direction'
 import { Sprite } from '../events/playerMove/Sprite'
 import { GamePhase } from '../entities/GamePhase'
 import { ChangeGamePhaseEvent } from '../events/changeGamePhase/ChangeGamePhaseEvent'
+import { InstallNewStoolsOnTableEvent } from '../events/installNewStoolsOnTable/InstallNewStoolsOnTableEvent'
 
 interface PostionAndDirection {
     position:Position,
@@ -91,7 +91,7 @@ export class BarApplicationService {
         private uuidGateway: UuidGateway
     ) {}
 
-    onOccupiedBarStool (occupiedStool: OccupiedStool): Promise<void> {
+    installPlayerFromBarStoolToTableStool (occupiedStool: OccupiedStool): Promise<void> {
         return this.barRepository.freeBarStool(occupiedStool.username)
             .then(() => this.barRepository.nextAvailableTableStool())
             .then(tableStool => this.occupyTableStool(tableStool, occupiedStool.username))
@@ -132,8 +132,7 @@ export class BarApplicationService {
 
     private onStoolsForTable (stools: Stool[]): Promise<void> {
         return Promise.all(stools.map(stool => this.barRepository.addAvailableTableStool(stool)))
-            .then(results => Promise.all(stools.map(stool => this.eventGateway.sendEvent(new TableStoolAvailableEvent()))))
-            .then(results => Promise.resolve())
+            .then(results => this.eventGateway.sendEvent(new TableStoolAvailableEvent()))
             .catch(error => Promise.reject(error))
     }
 

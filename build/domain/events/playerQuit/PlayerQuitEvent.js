@@ -20,9 +20,9 @@ var EventType_1 = require("../EventType");
 var GameEvent_1 = require("../GameEvent");
 var PlayerQuitEvent = /** @class */ (function (_super) {
     __extends(PlayerQuitEvent, _super);
-    function PlayerQuitEvent(player) {
+    function PlayerQuitEvent(username) {
         var _this = _super.call(this) || this;
-        _this.player = player;
+        _this.username = username;
         _this.eventType = EventType_1.EventType.PLAYER_QUIT;
         return _this;
     }

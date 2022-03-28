@@ -18,10 +18,9 @@ exports.__esModule = true;
 exports.ConnectChatUseCase = void 0;
 var UseCase_1 = require("./UseCase");
 var notifications_1 = require("../entities/notification/notifications");
-var InterfaceView_1 = require("../entities/InterfaceView");
 var mainMusic_1 = require("../entities/music/mainMusic");
-var NavigateEvent_1 = require("../events/navigateEvent/NavigateEvent");
 var message_1 = require("../entities/message");
+var CreateBarEvent_1 = require("../events/createBar/CreateBarEvent");
 var ConnectChatUseCase = /** @class */ (function (_super) {
     __extends(ConnectChatUseCase, _super);
     function ConnectChatUseCase(applicationServices) {
@@ -43,7 +42,7 @@ var ConnectChatUseCase = /** @class */ (function (_super) {
     };
     ConnectChatUseCase.prototype.onConnected = function () {
         return Promise.all([
-            this.applicationServices.event.sentEvent(new NavigateEvent_1.NavigateEvent(InterfaceView_1.InterfaceView.NEW_CLEAVAGE)),
+            this.applicationServices.event.sentEvent(new CreateBarEvent_1.CreateBarEvent()),
             this.applicationServices.chat.sendMessage(new message_1.WelcomeMessage()),
             this.applicationServices.interface.playMusic(mainMusic_1.mainMusic)
         ])

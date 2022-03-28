@@ -7,8 +7,10 @@ import { isGiven } from './unitTests'
 import type { FakeServerApplication } from '../../../infra/applications/server/FakeServerApplication'
 import type { Cleavage } from '../../entities/Cleavage'
 
-export const whenEventOccurs = (application: FakeClientApplication|FakeServerApplication, event: ApplicationEvent): Test =>
-    it(`When the event '${event.eventType}' occurs.`, () => application.gateways.event.onEvent(event))
+export const whenEventOccurs = (application: FakeClientApplication|FakeServerApplication, event: ApplicationEvent|ApplicationEvent[]): Test =>
+    Array.isArray(event)
+        ? it(`When events '${event.map(event => event.eventType)}' occurs.`, () => application.gateways.event.onEvents(event))
+        : it(`When the event '${event.eventType}' occurs.`, () => application.gateways.event.onEvent(event))
 
 export const whenQueryOccursThenHasResult = (application: FakeServerApplication, expectedResult:Cleavage|undefined): Test =>
     it(whenDrawGlobalCleavageDrawPileOccursMessage(expectedResult), () => application.queryController.drawGlobalCleavageDrawPile()

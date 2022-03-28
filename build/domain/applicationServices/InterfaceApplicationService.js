@@ -6,6 +6,15 @@ var InterfaceApplicationService = /** @class */ (function () {
     function InterfaceApplicationService(interfaceGateway) {
         this.interfaceGateway = interfaceGateway;
     }
+    InterfaceApplicationService.prototype.changeGamePhase = function (gamePhase) {
+        return this.interfaceGateway.changeGamePhase(gamePhase);
+    };
+    InterfaceApplicationService.prototype.removeEntityInterfaceState = function (id) {
+        return this.interfaceGateway.removeEntityInterfaceState(id);
+    };
+    InterfaceApplicationService.prototype.updateEntityInterfaceState = function (id, interfaceEntityState) {
+        return this.interfaceGateway.updateEntityInterfaceState(id, interfaceEntityState);
+    };
     InterfaceApplicationService.prototype.disableAutoplay = function () {
         return this.interfaceGateway.disableAutoplay();
     };

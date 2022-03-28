@@ -2,7 +2,6 @@ import * as Tone from 'tone'
 import { SupportedMusic } from './domain/entities/music/SupportedMusic'
 import { ProductionClientApplication } from './infra/applications/client/ProductionApplication'
 import { TwitchChatGateway } from './infra/gateways/chat/TwitchChatGateway'
-import { SvelteAndToneInterfaceGateway } from './infra/gateways/interface/SvelteAndToneInterfaceGateway'
 import { InMemoryPlayerRepository } from './infra/repositories/player/InMemoryPlayerRepository'
 import { InMemoryCurrentCleavageRepository } from './infra/repositories/currentCleavage/InMemoryCurrentCleavageRepository'
 import { SupportedSound } from './domain/entities/SoundType'
@@ -18,6 +17,7 @@ import { clientBackendFqdn, clientBackendPort, clientBackendSheme } from './env/
 import { InMemoryBarRepository } from './infra/repositories/bar/InMemoryBarRepository'
 import { InMemoryGamePhaseRepository } from './infra/repositories/gamePhase/InMemoryGamePhaseRepository'
 import { ProductionUuidGateway } from './infra/gateways/uuid/ProductionUuidGateway'
+import { SvelteTonePixiInterfaceGateway } from './infra/gateways/interface/SvelteTonePixiInterfaceGateway'
 
 const supportedSounds = new Map([
     [SupportedSound.QUACK, new Tone.ToneAudioBuffer('/sounds/quack.mp3')],
@@ -34,7 +34,7 @@ const supportedMusics = new Map([
     [SupportedMusic.MAIN, new Tone.ToneAudioBuffer('/music/Ken_Hamm-Buckbreak.mp3')]
 ])
 
-const interfaceGateway = new SvelteAndToneInterfaceGateway(supportedSounds, supportedMusics)
+const interfaceGateway = new SvelteTonePixiInterfaceGateway(supportedSounds, supportedMusics)
 const eventGateway = new InMemoryProductionClientEventGateway()
 const chatGateway = new TwitchChatGateway(eventGateway)
 const randomGateway = new ProductionRandomGateway()

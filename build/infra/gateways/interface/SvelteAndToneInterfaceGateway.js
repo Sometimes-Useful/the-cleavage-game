@@ -28,11 +28,24 @@ var SvelteAndToneInterfaceGateway = /** @class */ (function () {
     function SvelteAndToneInterfaceGateway(supportedSounds, supportedMusics) {
         this.supportedSounds = supportedSounds;
         this.supportedMusics = supportedMusics;
+        this.interfaceState = new Map();
         this.musicVolumeFader = new Tone.Volume(Tone.gainToDb(defaultVolumeLevels_1.defaultMusicVolumeLevel / 100)).toDestination();
         this.soundVolumeFader = new Tone.Volume(Tone.gainToDb(defaultVolumeLevels_1.defaultSoundVolumeLevel / 100)).toDestination();
         this.currentView = InterfaceView_1.InterfaceView.NONE;
         this.toneReady = false;
     }
+    SvelteAndToneInterfaceGateway.prototype.changeGamePhase = function (gamePhase) {
+        stores_1.gamePhaseStore.set(gamePhase);
+        return Promise.resolve();
+    };
+    SvelteAndToneInterfaceGateway.prototype.removeEntityInterfaceState = function (id) {
+        this.interfaceState["delete"](id);
+        return Promise.resolve();
+    };
+    SvelteAndToneInterfaceGateway.prototype.updateEntityInterfaceState = function (id, interfaceEntityState) {
+        this.interfaceState.set(id, interfaceEntityState);
+        return Promise.resolve();
+    };
     SvelteAndToneInterfaceGateway.prototype.disableAutoplay = function () {
         stores_1.autoplayStore.set(false);
         return Promise.resolve();

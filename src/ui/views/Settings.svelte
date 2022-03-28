@@ -15,15 +15,16 @@
     soundVolumeStore.subscribe(volume => soundVolume = volume)
     musicVolumeStore.subscribe(volume => musicVolume = volume)
 </script>
-
-<div class="flex flex-col w-full items-center">
-    <Title/>
-    <Subtitle subtitle="Options"/>
-</div>
-<div class="flex flex-col w-full items-center">
-    <Slider id="musicVolume" text="Volume - Musique" onInput={onMusicVolumeChange} value={musicVolume}/>
-    <Slider id="soundVolume" text="Volume - Sons" onInput={onSoundVolumeChange} value={soundVolume}/>
-</div>
-<div class="flex flex-col w-full  items-center">
-    <Button onClick={()=>applicationEventStore.set(new NavigateEvent(InterfaceView.MAIN_MENU))} text="Menu Principal!"/>
-</div>
+<main class="bg-dark-background h-full w-full flex flex-col justify-evenly">
+    <div class="flex flex-col w-full items-center">
+        <Title/>
+        <Subtitle subtitle="Options"/>
+    </div>
+    <div class="flex flex-col w-full items-center">
+        <Slider id="musicVolume" text="Volume - Musique" onInput={onMusicVolumeChange} value={musicVolume}/>
+        <Slider id="soundVolume" text="Volume - Sons" onInput={onSoundVolumeChange} value={soundVolume}/>
+    </div>
+    <div class="flex flex-col w-full  items-center">
+        <Button onClick={()=>applicationEventStore.set(new NavigateEvent(InterfaceView.MAIN_MENU))} text="Menu Principal!"/>
+    </div>
+</main>

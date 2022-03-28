@@ -24,6 +24,11 @@ var FakeServerEventGateway = /** @class */ (function (_super) {
         _this.events = [];
         return _this;
     }
+    FakeServerEventGateway.prototype.sendEvents = function (events) {
+        var _this = this;
+        return Promise.all(events.map(function (event) { return _this.sendEvent(event); }))
+            .then(function (results) { return Promise.resolve(); })["catch"](function (error) { return Promise.reject(error); });
+    };
     FakeServerEventGateway.prototype.sendEvent = function (event) {
         this.events.push(event);
         return Promise.resolve();

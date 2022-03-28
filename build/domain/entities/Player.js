@@ -4,10 +4,12 @@ exports.Player = void 0;
 var Player = /** @class */ (function () {
     function Player(playerDTO) {
         this.username = playerDTO.username;
+        this.position = playerDTO.position;
     }
     Player.prototype.toDto = function () {
         return {
-            username: this.username
+            username: this.username,
+            position: this.position
         };
     };
     return Player;

@@ -1,6 +1,5 @@
 <script lang="ts">
     import ConnectChat from "./views/ConnectChat.svelte"
-    import CurrentCleavage from "./views/CurrentCleavage.svelte"
     import About from "./views/About.svelte"
     import { InterfaceView } from "../domain/entities/InterfaceView";
     import { onDestroy } from 'svelte';
@@ -16,7 +15,6 @@ import Game from "./views/Game.svelte";
     onDestroy(()=>$applicationEventStore = new DisconnectChatEvent())
 </script>
 
-<main class="bg-black h-full w-full flex flex-col justify-evenly">
     {#if forceView } 
         {#if  forceView === InterfaceView.CONNECT_CHAT } 
             <ConnectChat/>
@@ -30,7 +28,7 @@ import Game from "./views/Game.svelte";
     {:else}
         {#if $interfaceViewStore === InterfaceView.CONNECT_CHAT} 
             <ConnectChat/>
-        {:else if forceView === InterfaceView.GAME }
+        {:else if $interfaceViewStore === InterfaceView.GAME }
             <Game/>
         {:else if  $interfaceViewStore === InterfaceView.MAIN_MENU}
             <MainMenu/>
@@ -44,8 +42,7 @@ import Game from "./views/Game.svelte";
             <About/>
         {/if}
     {/if}
-    
-</main>
+
 
 <style lang="postcss" global>
     @tailwind base;

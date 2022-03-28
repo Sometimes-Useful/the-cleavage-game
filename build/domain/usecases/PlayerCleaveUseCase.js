@@ -18,8 +18,8 @@ exports.__esModule = true;
 exports.PlayerCleaveUseCase = void 0;
 var UseCase_1 = require("./UseCase");
 var MessageForPlayer_1 = require("../entities/MessageForPlayer");
-var InterfaceView_1 = require("../entities/InterfaceView");
 var playerMessages_1 = require("../entities/playerMessages");
+var GamePhase_1 = require("../entities/GamePhase");
 var PlayerCleaveUseCase = /** @class */ (function (_super) {
     __extends(PlayerCleaveUseCase, _super);
     function PlayerCleaveUseCase(applicationServices) {
@@ -30,12 +30,12 @@ var PlayerCleaveUseCase = /** @class */ (function (_super) {
     PlayerCleaveUseCase.prototype.execute = function (event) {
         var _this = this;
         return this.applicationServices.player.addPlayer(event.player)
-            .then(function () { return _this.applicationServices.interface.retrieveCurrentView(); })
-            .then(function (currentView) { return currentView !== InterfaceView_1.InterfaceView.CURRENT_CLEAVAGE
+            .then(function () { return _this.applicationServices.cleavage.retrieveCurrentGamePhase(); })
+            .then(function (currentGamePhase) { return currentGamePhase !== GamePhase_1.GamePhase.CLEAVING
             ? _this.applicationServices.chat.sendMessageToPlayer(new MessageForPlayer_1.MessageForPlayer(event.player, playerMessages_1.waitForCleavageLaunchMessage))
-            : _this.onCurrentCleavage(event); })["catch"](function (error) { return Promise.reject(error); });
+            : _this.onCleavingPhase(event); })["catch"](function (error) { return Promise.reject(error); });
     };
-    PlayerCleaveUseCase.prototype.onCurrentCleavage = function (event) {
+    PlayerCleaveUseCase.prototype.onCleavingPhase = function (event) {
         var _this = this;
         return this.applicationServices.cleavage.hasCleavage()
             .then(function (hasCleavage) { return hasCleavage

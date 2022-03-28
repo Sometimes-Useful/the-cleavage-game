@@ -8,7 +8,7 @@ import type { InMemoryProductionClientEventGateway } from '../../../../infra/gat
 import type { InMemoryProductionServerEventGateway } from '../../../../infra/gateways/event/InMemoryProductionServerEventGateway'
 import type { FakeGlobalCleavageDrawPileGateway } from '../../../../infra/gateways/globalCleavageDrawPile/FakeGlobalCleavageDrawPileGateway'
 import type { FakeInterfaceGateway } from '../../../../infra/gateways/interface/FakeInterfaceGateway'
-import type { SvelteAndToneInterfaceGateway } from '../../../../infra/gateways/interface/SvelteAndToneInterfaceGateway'
+import type { SvelteTonePixiInterfaceGateway } from '../../../../infra/gateways/interface/SvelteTonePixiInterfaceGateway'
 import type { FakeRandomGateway } from '../../../../infra/gateways/random/FakeRandomGateway'
 import type { ProductionRandomGateway } from '../../../../infra/gateways/random/ProductionRandomGateway'
 import type { FakeUuidGateway } from '../../../../infra/gateways/uuid/FakeUuidGateway'
@@ -46,7 +46,7 @@ export interface ProductionClientApplicationGateways extends ClientApplicationGa
     random: ProductionRandomGateway
     chat: TwitchChatGateway;
     event: InMemoryProductionClientEventGateway;
-    interface: SvelteAndToneInterfaceGateway;
+    interface: SvelteTonePixiInterfaceGateway;
 }
 
 export interface ServerApplicationGateways {

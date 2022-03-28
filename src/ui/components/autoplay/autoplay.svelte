@@ -10,7 +10,7 @@
     const onClickStartAutoPlay = () => resetCleavageTitleAndSendEvent(new StartAutoPlayEvent(autoplayMinutes))
     const onClickStopAutoPlay = () => resetCleavageTitleAndSendEvent(new StopAutoplayEvent())
 </script>
-<div class="flex flex-col items-end">
+<div class="flex flex-row items-end justify-end">
     {#if $autoplayStore }
         <Button onClick={onClickStopAutoPlay} text="Stop Auto Play!"/>
     {:else}

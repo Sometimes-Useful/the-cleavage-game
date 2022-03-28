@@ -1,6 +1,7 @@
 "use strict";
 exports.__esModule = true;
 exports.InMemoryAutoplayRepository = void 0;
+var infra_1 = require("../../../messages/infra");
 var InMemoryAutoplayRepository = /** @class */ (function () {
     function InMemoryAutoplayRepository() {
         this.autoplayInterval = 0;
@@ -19,7 +20,7 @@ var InMemoryAutoplayRepository = /** @class */ (function () {
     InMemoryAutoplayRepository.prototype.retrieveNextAutoPlayDate = function () {
         return this.nextCleavageDate
             ? Promise.resolve(this.nextCleavageDate)
-            : Promise.reject(new Error('next autoplay date is undefined.'));
+            : Promise.reject(new Error(infra_1.nexAutoplayDateIsUndefined));
     };
     InMemoryAutoplayRepository.prototype.hasAutoplay = function () {
         return Promise.resolve(this.nextCleavageDate !== undefined);

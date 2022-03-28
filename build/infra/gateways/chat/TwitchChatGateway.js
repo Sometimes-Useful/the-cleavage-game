@@ -1,4 +1,20 @@
 "use strict";
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 exports.__esModule = true;
 exports.formatTwitchUserMessage = exports.TwitchChatGateway = void 0;
 var tmi_js_1 = require("tmi.js");
@@ -38,7 +54,7 @@ var TwitchChatGateway = /** @class */ (function () {
         this.clientEvents();
         return this.tmiClient.connect()
             .then(function (_a) {
-            var host = _a[0], port = _a[1];
+            var _b = __read(_a, 2), host = _b[0], port = _b[1];
             _this.isClientConnected = true;
             return tmiClient.join(channel);
         })
@@ -79,7 +95,7 @@ var TwitchChatGateway = /** @class */ (function () {
                         : _this.tmiClient.disconnect();
                 })
                     .then(function (_a) {
-                    var host = _a[0], port = _a[1];
+                    var _b = __read(_a, 2), host = _b[0], port = _b[1];
                     console.log(twitchClientDisconnect, 'host :', host, 'port :', port);
                     _this.isClientConnected = false;
                     _this.tmiClient = null;
@@ -99,7 +115,7 @@ var TwitchChatGateway = /** @class */ (function () {
         });
         this.tmiClient.on('part', function (channel, username, self) {
             console.log(twitchClientLeaveChannelAsUser(channel, username));
-            _this.eventBus.sendEvent(new PlayerQuitEvent_1.PlayerQuitEvent(new Player_1.Player({ username: username })));
+            _this.eventBus.sendEvent(new PlayerQuitEvent_1.PlayerQuitEvent(username));
         });
         this.tmiClient.on('connected', function (host, port) {
             console.log(twitchClientConnected(host, port));

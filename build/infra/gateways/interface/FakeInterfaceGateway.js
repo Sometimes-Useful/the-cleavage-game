@@ -2,8 +2,10 @@
 exports.__esModule = true;
 exports.FakeInterfaceGateway = void 0;
 var InterfaceView_1 = require("../../../domain/entities/InterfaceView");
+var GamePhase_1 = require("../../../domain/entities/GamePhase");
 var FakeInterfaceGateway = /** @class */ (function () {
     function FakeInterfaceGateway() {
+        this.gamePhase = GamePhase_1.GamePhase.NONE;
         this.notifications = [];
         this.playingSounds = [];
         this.musicVolume = 0;
@@ -11,7 +13,20 @@ var FakeInterfaceGateway = /** @class */ (function () {
         this.autoplayEnabled = false;
         this.playingMusic = undefined;
         this.currentView = InterfaceView_1.InterfaceView.NONE;
+        this.interfaceEntitiesState = new Map();
     }
+    FakeInterfaceGateway.prototype.changeGamePhase = function (gamePhase) {
+        this.gamePhase = gamePhase;
+        return Promise.resolve();
+    };
+    FakeInterfaceGateway.prototype.removeEntityInterfaceState = function (id) {
+        this.interfaceEntitiesState["delete"](id);
+        return Promise.resolve();
+    };
+    FakeInterfaceGateway.prototype.updateEntityInterfaceState = function (id, interfaceEntityState) {
+        this.interfaceEntitiesState.set(id, interfaceEntityState);
+        return Promise.resolve();
+    };
     FakeInterfaceGateway.prototype.disableAutoplay = function () {
         this.autoplayEnabled = false;
         return Promise.resolve();

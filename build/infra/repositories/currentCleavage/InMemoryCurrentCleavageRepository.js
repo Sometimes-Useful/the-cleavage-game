@@ -1,6 +1,7 @@
 "use strict";
 exports.__esModule = true;
 exports.InMemoryCurrentCleavageRepository = void 0;
+var infra_1 = require("../../../messages/infra");
 var InMemoryCurrentCleavageRepository = /** @class */ (function () {
     function InMemoryCurrentCleavageRepository() {
     }
@@ -10,7 +11,7 @@ var InMemoryCurrentCleavageRepository = /** @class */ (function () {
     InMemoryCurrentCleavageRepository.prototype.load = function () {
         return this.cleavage
             ? Promise.resolve(this.cleavage)
-            : Promise.reject(new Error('Cleavage is undefined.'));
+            : Promise.reject(new Error(infra_1.cleavageUndefined));
     };
     InMemoryCurrentCleavageRepository.prototype.save = function (cleavage) {
         this.cleavage = cleavage;

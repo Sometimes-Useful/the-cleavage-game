@@ -9,11 +9,13 @@ import type { AutoplayApplicationService } from '../applicationServices/Autoplay
 import { DrawCleavageEvent } from '../events/drawCleavage/DrawCleavageEvent'
 import { ChangeGamePhaseEvent } from '../events/changeGamePhase/ChangeGamePhaseEvent'
 import { GamePhase } from '../entities/GamePhase'
+import type { CleavageApplicationService } from '../applicationServices/CleavageService'
 export interface NewCleavageUseCaseApplicationServices {
     autoplay: AutoplayApplicationService
     interface: InterfaceApplicationService,
     chat:ChatApplicationService,
-    event:EventApplicationService
+    event:EventApplicationService,
+    cleavage: CleavageApplicationService
 }
 
 export class NewCleavageUseCase extends UseCase {
@@ -32,10 +34,15 @@ export class NewCleavageUseCase extends UseCase {
 
     private onConnected (): void | PromiseLike<void> {
         return this.applicationServices.interface.newCleavage()
-            .then(() => this.applicationServices.autoplay.hasAutoplay())
-            .then(hasAutoplay => this.applicationServices.event.sentEvents([
-                new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE),
-                ...(hasAutoplay ? [new DrawCleavageEvent()] : [])
+            .then(() => Promise.all([
+                this.applicationServices.autoplay.hasAutoplay(),
+                this.applicationServices.interface.retrieveCurrentView(),
+                this.applicationServices.cleavage.retrieveCurrentGamePhase()
+            ]))
+            .then(([hasAutoplay, currentView, currentGamePhase]) => this.applicationServices.event.sentEvents([
+                ...currentGamePhase === GamePhase.NEW_CLEAVAGE ? [] : [new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE)],
+                ...currentView !== InterfaceView.GAME ? [new NavigateEvent(InterfaceView.GAME)] : [],
+                ...hasAutoplay ? [new DrawCleavageEvent()] : []
             ]))
             .catch(error => Promise.reject(error))
     }

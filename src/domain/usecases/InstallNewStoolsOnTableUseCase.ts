@@ -1,5 +1,5 @@
 import type { BarApplicationService } from '../applicationServices/BarApplicationService'
-import type { InstallNewStoolsOnTableEvent } from '../events/installNewStoolOnTable/InstallNewStoolsOnTableEvent'
+import type { InstallNewStoolsOnTableEvent } from '../events/installNewStoolsOnTable/InstallNewStoolsOnTableEvent'
 import { UseCase } from './UseCase'
 
 interface InstallNewStoolsOnTableUseCaseApplicationServices {

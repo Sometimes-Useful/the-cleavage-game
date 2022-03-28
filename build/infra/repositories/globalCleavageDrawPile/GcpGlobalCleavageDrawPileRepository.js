@@ -6,6 +6,7 @@ var GcpGlobalCleavageDrawPileRepository = /** @class */ (function () {
     function GcpGlobalCleavageDrawPileRepository(gcpDatastore) {
         this.gcpDatastore = gcpDatastore;
         this.globalCleavageKind = 'globalCleavage';
+        this.cleavageTitleProperty = 'title';
     }
     GcpGlobalCleavageDrawPileRepository.prototype.retrieveGlobalCleavageByIndex = function (globalCleavageIndex) {
         return this.gcpDatastore.retreiveRecordByOffset(this.globalCleavageKind, globalCleavageIndex)
@@ -19,7 +20,8 @@ var GcpGlobalCleavageDrawPileRepository = /** @class */ (function () {
             .then(function (result) { return result instanceof Error ? Promise.reject(result) : Promise.resolve(); })["catch"](function (error) { return Promise.reject(error); });
     };
     GcpGlobalCleavageDrawPileRepository.prototype.hasCleavage = function (cleavage) {
-        return this.gcpDatastore.queryRecordsOnGoogleDatastore(this.globalCleavageKind, [{ property: 'title', operator: '=', value: cleavage.title }])
+        var cleavageWithTitleFilter = { property: this.cleavageTitleProperty, operator: '=', value: cleavage[this.cleavageTitleProperty] };
+        return this.gcpDatastore.queryRecordsOnGoogleDatastore(this.globalCleavageKind, [cleavageWithTitleFilter])
             .then(function (result) { return result instanceof Error ? Promise.resolve(false) : result.length === 1; })["catch"](function (error) { return Promise.reject(error); });
     };
     GcpGlobalCleavageDrawPileRepository.prototype.deleteGlobalCleavage = function (cleavage) {

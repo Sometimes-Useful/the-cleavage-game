@@ -5,12 +5,19 @@ var Cleavage_1 = require("../entities/Cleavage");
 var MessageForPlayer_1 = require("../entities/MessageForPlayer");
 var PlayerCleave_1 = require("../entities/PlayerCleave");
 var CleavageApplicationService = /** @class */ (function () {
-    function CleavageApplicationService(publicCleavageDrawPileRepository, globalCleavageDrawPileGateway, currentCleavageRepository, chatGateway) {
+    function CleavageApplicationService(publicCleavageDrawPileRepository, globalCleavageDrawPileGateway, currentCleavageRepository, chatGateway, gamePhaseRepository) {
         this.publicCleavageDrawPileRepository = publicCleavageDrawPileRepository;
         this.globalCleavageDrawPileGateway = globalCleavageDrawPileGateway;
         this.currentCleavageRepository = currentCleavageRepository;
         this.chatGateway = chatGateway;
+        this.gamePhaseRepository = gamePhaseRepository;
     }
+    CleavageApplicationService.prototype.changeGamePhase = function (gamePhase) {
+        return this.gamePhaseRepository.changeGamePhase(gamePhase);
+    };
+    CleavageApplicationService.prototype.retrieveCurrentGamePhase = function () {
+        return this.gamePhaseRepository.retrieveCurrentGamePhase();
+    };
     CleavageApplicationService.prototype.saveGlobalCleavage = function (cleavage) {
         var currentClevageDto = cleavage.toDto();
         currentClevageDto.players = [];

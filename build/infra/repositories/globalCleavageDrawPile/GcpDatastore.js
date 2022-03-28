@@ -2,6 +2,7 @@
 exports.__esModule = true;
 exports.GcpDatastore = void 0;
 var datastore_1 = require("@google-cloud/datastore");
+var infra_1 = require("../../../messages/infra");
 var GcpDatastore = /** @class */ (function () {
     function GcpDatastore(gcpDatastoreInteractorConfiguration) {
         this.keyPathSeparator = '/';
@@ -9,7 +10,7 @@ var GcpDatastore = /** @class */ (function () {
             gcpDatastoreInteractorConfiguration.gcpPrivateKey === undefined ||
             gcpDatastoreInteractorConfiguration.gcpProjectId === undefined ||
             gcpDatastoreInteractorConfiguration.gcpKindPrefix === undefined)
-            throw new Error("gcpDatastoreInteractorConfiguration bad configuration : ".concat(JSON.stringify(gcpDatastoreInteractorConfiguration)));
+            throw new Error((0, infra_1.gcpBadConfiguration)(gcpDatastoreInteractorConfiguration));
         this.kindPrefix = gcpDatastoreInteractorConfiguration.gcpKindPrefix;
         this.gcpDatastore = new datastore_1.Datastore({
             projectId: gcpDatastoreInteractorConfiguration.gcpProjectId,
@@ -20,18 +21,17 @@ var GcpDatastore = /** @class */ (function () {
         });
     }
     GcpDatastore.prototype.retreiveRecordByOffset = function (kind, offset) {
-        var query = this.gcpDatastore.createQuery(this.kindPrefix.concat(kind));
-        query.offsetVal = offset;
-        query.limitVal = 1;
+        var query = this.gcpDatastore.createQuery(this.kindPrefix.concat(kind)).offset(offset).limit(1);
+        console.log((0, infra_1.gcpQueryOffsetStart)(query));
         return this.gcpDatastore.runQuery(query)
             .then(function (queryResponse) {
             var entities = queryResponse[0];
-            console.log("\u2714\uFE0F  ".concat(entities.length, " entities retrieved on kind '").concat(kind, "' at offset '").concat(offset, "'."));
-            if (entities.length === 1)
-                return entities[0];
-            if (entities.length === 0)
-                return new Error("No entity of kind '".concat(kind, "' at offset '").concat(offset, "'"));
-            return new Error("Multiple entities of kind '".concat(kind, "' at offset '").concat(offset, "' ?!"));
+            console.log((0, infra_1.entityRetreivedAtOffset)(entities, query));
+            return entities.length === 1
+                ? entities[0]
+                : entities.length === 0
+                    ? new Error((0, infra_1.retreiveRecordByOffsetErrorNoEntity)(kind, offset))
+                    : new Error((0, infra_1.retreiveRecordByOffsetErrorMultipleEntities)(kind, offset));
         })["catch"](function (error) { return Promise.reject(error); });
     };
     GcpDatastore.prototype.retreiveRecordQuantity = function (kind) {
@@ -42,81 +42,57 @@ var GcpDatastore = /** @class */ (function () {
     };
     GcpDatastore.prototype.queryRecordsOnGoogleDatastore = function (kind, filters) {
         kind = this.kindPrefix.concat(kind);
-        console.log("\u2699\uFE0F  queryRecordsOnGoogleDatastore - ".concat(kind, " "));
+        console.log((0, infra_1.queryRecordsStart)(kind));
         var query = this.gcpDatastore.createQuery(kind);
         filters.forEach(function (filter) {
-            console.log("\u2699\uFE0F  ".concat(filter.property).concat(filter.operator).concat(filter.value));
+            console.log((0, infra_1.queryRecordsFilter)(filter));
             query.filter(filter.property, filter.operator, filter.value);
         });
         return query.run()
             .then(function (queryResponse) {
             var entities = queryResponse[0];
             filters.forEach(function (filter) { if (filter.value === 'ERROR')
-                throw new Error("Filter ".concat(filter.value, " Error")); });
-            console.log("\u2714\uFE0F  ".concat(entities.length, " entities retrieved on kind ").concat(kind, " according to filters."));
+                throw new Error((0, infra_1.queryRecordsError)(filter)); });
+            console.log((0, infra_1.queryRecordsSuccess)(entities, kind));
             return entities;
         })["catch"](function (error) { return error; });
     };
-    GcpDatastore.prototype.retreiveRecordOnGoogleDatastore = function (path) {
-        var _this = this;
-        return new Promise(function (resolve) {
-            var keyPathString = _this.kindPrefix.concat(path.join(_this.keyPathSeparator));
-            console.log("\u2699\uFE0F  retreiveRecordOnGoogleDatastore - ".concat(keyPathString));
-            var pathTypes = keyPathString.split(_this.keyPathSeparator);
-            var keyOption = { path: pathTypes };
-            var key = _this.gcpDatastore.key(keyOption);
-            _this.gcpDatastore.get(key, function (error, entity) {
-                if (error) {
-                    console.log("\u274C ".concat(error.message));
-                    resolve(error);
-                }
-                else {
-                    console.log("\u2714\uFE0F  Entity with key path ".concat(keyPathString, " retreived from datastore."));
-                    return resolve(entity);
-                }
-            });
+    GcpDatastore.prototype.retreiveRecordOnGoogleDatastore = function (gcpEntitypath) {
+        var path = this.kindPrefix.concat(gcpEntitypath.join(this.keyPathSeparator));
+        console.log((0, infra_1.retreiveRecordStart)(path));
+        return this.gcpDatastore.get(this.gcpDatastore.key({ path: path.split(this.keyPathSeparator) }))
+            .then(function (result) {
+            console.log((0, infra_1.retreiveRecordSuccess)(path));
+            return Promise.resolve(result[0]);
+        })["catch"](function (error) {
+            console.log((0, infra_1.retreiveRecordError)(error));
+            return Promise.resolve(error);
         });
     };
-    GcpDatastore.prototype.deleteRecordOnGoogleDatastore = function (path) {
-        var _this = this;
-        return new Promise(function (resolve) {
-            var keyPathString = _this.kindPrefix.concat(path.join(_this.keyPathSeparator));
-            console.log("\u2699\uFE0F  deleteRecordOnGoogleDatastore - ".concat(keyPathString));
-            var keyOption = { path: keyPathString.split(_this.keyPathSeparator) };
-            var key = _this.gcpDatastore.key(keyOption);
-            _this.gcpDatastore["delete"](key, function (error) {
-                if (error) {
-                    console.log("\u274C  ".concat(error.message));
-                    resolve(error);
-                }
-                else {
-                    console.log("\u2714\uFE0F  Entity with key path ".concat(keyPathString, " deleted on datastore."));
-                    resolve();
-                }
-            });
+    GcpDatastore.prototype.deleteRecordOnGoogleDatastore = function (gcpEntitypath) {
+        var path = this.kindPrefix.concat(gcpEntitypath.join(this.keyPathSeparator));
+        console.log((0, infra_1.deleteRecordStart)(path));
+        return this.gcpDatastore["delete"](this.gcpDatastore.key({ path: path.split(this.keyPathSeparator) }))
+            .then(function (result) {
+            console.log((0, infra_1.deleteRecordSuccess)(path));
+            return Promise.resolve();
+        })["catch"](function (error) {
+            console.log((0, infra_1.deleteRecordError)(error));
+            return Promise.resolve(error);
         });
     };
-    GcpDatastore.prototype.saveRecordOnGoogleDatastore = function (path, entity) {
-        var _this = this;
-        return new Promise(function (resolve) {
-            var keyPathString = _this.kindPrefix.concat(path.join(_this.keyPathSeparator));
-            console.log("\u2699\uFE0F  saveRecordOnGoogleDatastore - ".concat(keyPathString));
-            var keyOption = { path: keyPathString.split(_this.keyPathSeparator) };
-            var key = _this.gcpDatastore.key(keyOption);
-            var callback = function (error) {
-                if (error) {
-                    console.log("\u274C  ".concat(error.message));
-                    resolve(error);
-                }
-                else {
-                    console.log("\u2714\uFE0F  Entity with key path ".concat(keyPathString, " saved on datastore."));
-                    resolve();
-                }
-            };
-            _this.gcpDatastore.save({ key: key, data: entity }, function () { return callback(); });
+    GcpDatastore.prototype.saveRecordOnGoogleDatastore = function (gcpEntitypath, entity) {
+        var path = this.kindPrefix.concat(gcpEntitypath.join(this.keyPathSeparator));
+        console.log((0, infra_1.saveRecordStart)(path));
+        return this.gcpDatastore.save({ key: this.gcpDatastore.key({ path: path.split(this.keyPathSeparator) }), data: entity })
+            .then(function (response) {
+            console.log((0, infra_1.saveRecordSuccess)(path));
+            return Promise.resolve();
+        })["catch"](function (error) {
+            console.log((0, infra_1.saveRecordError)(error));
+            return Promise.resolve(error);
         });
     };
     return GcpDatastore;
 }());
 exports.GcpDatastore = GcpDatastore;
-// const noEntityWithPathErrorMessage = (keyPath:string):string => `No entity with path ${keyPath}`

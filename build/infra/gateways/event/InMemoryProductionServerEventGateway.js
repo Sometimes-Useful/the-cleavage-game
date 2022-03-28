@@ -22,6 +22,11 @@ var InMemoryProductionServerEventGateway = /** @class */ (function (_super) {
     function InMemoryProductionServerEventGateway() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    InMemoryProductionServerEventGateway.prototype.sendEvents = function (events) {
+        var _this = this;
+        return Promise.all(events.map(function (event) { return _this.sendEvent(event); }))
+            .then(function (results) { return Promise.resolve(); })["catch"](function (error) { return Promise.reject(error); });
+    };
     InMemoryProductionServerEventGateway.prototype.sendEvent = function (event) {
         console.log('SERVER NEW EVENT', event);
         return this.onEvent(event);
