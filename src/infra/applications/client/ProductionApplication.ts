@@ -37,7 +37,7 @@ export class ProductionClientApplication {
                 applicationEventStore.set(new ApplicationStartEvent())
                 console.log('Application started.')
                 const checkAutoPlayIntervalSeconds = (seconds:number) => seconds * 1000
-                setInterval(() => this.gateways.event.sendEvent(new CheckAutoplayEvent()), checkAutoPlayIntervalSeconds(1))
+                setInterval(() => this.gateways.event.sendEvent(new CheckAutoplayEvent()), checkAutoPlayIntervalSeconds(5))
                 return Promise.resolve()
             })
             .catch(error => console.error(error))

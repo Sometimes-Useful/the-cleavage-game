@@ -14,14 +14,14 @@ import { newCleavage } from '../startAutoPlay/StartAutoPlay.spec'
 feature(EventType.PLAYER_SUGGEST_CLEAVAGE, [
     clientScenario('Scenario 1 : With no public cleavage', [
         app => theCleavageRepositoryHasPublicCleavages(Gherkin.GIVEN, app, []),
-        app => whenEventOccurs(app, new PlayerSuggestCleavageEvent(player1(), newCleavage(cleavageTitle1))),
+        app => whenEventOccurs(app, new PlayerSuggestCleavageEvent(player1().username, newCleavage(cleavageTitle1))),
         app => theCleavageRepositoryHasPublicCleavages(Gherkin.THEN, app, [newCleavage(cleavageTitle1)]),
-        app => theChatGatewaySendMessageToPlayer(Gherkin.AND_THEN, app, new MessageForPlayer(player1(), cleavageSuggested(player1(), cleavageTitle1)))
+        app => theChatGatewaySendMessageToPlayer(Gherkin.AND_THEN, app, new MessageForPlayer(player1().username, cleavageSuggested(player1().username, cleavageTitle1)))
     ]),
     clientScenario('Scenario 2 : With still existing public cleavage', [
         app => theCleavageRepositoryHasPublicCleavages(Gherkin.GIVEN, app, newCleavage(cleavageTitle1)),
-        app => whenEventOccurs(app, new PlayerSuggestCleavageEvent(player1(), newCleavage(cleavageTitle1))),
+        app => whenEventOccurs(app, new PlayerSuggestCleavageEvent(player1().username, newCleavage(cleavageTitle1))),
         app => theCleavageRepositoryHasPublicCleavages(Gherkin.THEN, app, newCleavage(cleavageTitle1)),
-        app => theChatGatewaySendMessageToPlayer(Gherkin.THEN, app, new MessageForPlayer(player1(), cleavageAlreadySuggested))
+        app => theChatGatewaySendMessageToPlayer(Gherkin.THEN, app, new MessageForPlayer(player1().username, cleavageAlreadySuggested))
     ])
 ])

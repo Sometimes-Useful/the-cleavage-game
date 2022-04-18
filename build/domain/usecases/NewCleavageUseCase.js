@@ -66,13 +66,12 @@ var NewCleavageUseCase = /** @class */ (function (_super) {
         return this.applicationServices.interface.newCleavage()
             .then(function () { return Promise.all([
             _this.applicationServices.autoplay.hasAutoplay(),
-            _this.applicationServices.interface.retrieveCurrentView()
+            _this.applicationServices.interface.retrieveCurrentView(),
+            _this.applicationServices.cleavage.retrieveCurrentGamePhase()
         ]); })
             .then(function (_a) {
-            var _b = __read(_a, 2), hasAutoplay = _b[0], currentView = _b[1];
-            return _this.applicationServices.event.sentEvents(__spreadArray(__spreadArray([
-                new ChangeGamePhaseEvent_1.ChangeGamePhaseEvent(GamePhase_1.GamePhase.NEW_CLEAVAGE)
-            ], __read((currentView !== InterfaceView_1.InterfaceView.GAME ? [new NavigateEvent_1.NavigateEvent(InterfaceView_1.InterfaceView.GAME)] : [])), false), __read((hasAutoplay ? [new DrawCleavageEvent_1.DrawCleavageEvent()] : [])), false));
+            var _b = __read(_a, 3), hasAutoplay = _b[0], currentView = _b[1], currentGamePhase = _b[2];
+            return _this.applicationServices.event.sentEvents(__spreadArray(__spreadArray(__spreadArray([], __read(currentGamePhase === GamePhase_1.GamePhase.NEW_CLEAVAGE ? [] : [new ChangeGamePhaseEvent_1.ChangeGamePhaseEvent(GamePhase_1.GamePhase.NEW_CLEAVAGE)]), false), __read(currentView !== InterfaceView_1.InterfaceView.GAME ? [new NavigateEvent_1.NavigateEvent(InterfaceView_1.InterfaceView.GAME)] : []), false), __read(hasAutoplay ? [new DrawCleavageEvent_1.DrawCleavageEvent()] : []), false));
         })["catch"](function (error) { return Promise.reject(error); });
     };
     return NewCleavageUseCase;

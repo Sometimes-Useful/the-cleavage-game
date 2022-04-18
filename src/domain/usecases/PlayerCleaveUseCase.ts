@@ -23,10 +23,10 @@ export class PlayerCleaveUseCase extends UseCase {
     ) { super() }
 
     execute (event: PlayerCleaveEvent): Promise<void> {
-        return this.applicationServices.player.addPlayer(event.player)
+        return this.applicationServices.player.addPlayer(event.username)
             .then(() => this.applicationServices.cleavage.retrieveCurrentGamePhase())
             .then(currentGamePhase => currentGamePhase !== GamePhase.CLEAVING
-                ? this.applicationServices.chat.sendMessageToPlayer(new MessageForPlayer(event.player, waitForCleavageLaunchMessage))
+                ? this.applicationServices.chat.sendMessageToPlayer(new MessageForPlayer(event.username, waitForCleavageLaunchMessage))
                 : this.onCleavingPhase(event)
             )
             .catch(error => Promise.reject(error))
@@ -36,7 +36,7 @@ export class PlayerCleaveUseCase extends UseCase {
         return this.applicationServices.cleavage.hasCleavage()
             .then(hasCleavage => hasCleavage
                 ? this.onCleavage(event)
-                : this.applicationServices.chat.sendMessageToPlayer(noCleavagePleaseWait(event.player))
+                : this.applicationServices.chat.sendMessageToPlayer(noCleavagePleaseWait(event.username))
             )
             .catch(error => Promise.reject(error))
     }

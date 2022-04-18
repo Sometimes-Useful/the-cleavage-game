@@ -1,23 +1,21 @@
-import { Player, PlayerDTO } from './Player'
-
 export interface ChoiceDTO {
     name:string,
-    players:PlayerDTO[]
+    players:string[]
 }
 
 export class Choice {
     constructor (choiceDto:ChoiceDTO) {
         this.name = choiceDto.name
-        this.players = choiceDto.players.map(player => new Player(player))
+        this.players = choiceDto.players
     }
 
     toDTO ():ChoiceDTO {
         return {
             name: this.name,
-            players: this.players.map(player => player.toDto())
+            players: this.players
         }
     }
 
     name: string;
-    players: Player[];
+    players: string[];
 }

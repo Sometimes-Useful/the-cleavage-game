@@ -39,7 +39,8 @@ const supportedMusics = new Map([
 const spriteAssets:Map<SpriteType, string> = new Map([
     [SpriteType.BAR, '/textures/bar.png'],
     [SpriteType.STOOL, '/textures/stool.png'],
-    [SpriteType.PLAYER, '/textures/player.png']
+    [SpriteType.PLAYER, '/textures/player.png'],
+    [SpriteType.TABLE, '/textures/table.png']
 ])
 
 const pixiApplication = new Application()

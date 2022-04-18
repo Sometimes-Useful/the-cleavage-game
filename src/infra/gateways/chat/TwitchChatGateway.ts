@@ -3,7 +3,6 @@ import { PlayerMessageEvent } from '../../../domain/events/playerMessage/PlayerM
 import { MessageForPlayer } from '../../../domain/entities/MessageForPlayer'
 import type { Message } from '../../../domain/entities/message'
 import { PlayerQuitEvent } from '../../../domain/events/playerQuit/PlayerQuitEvent'
-import { Player } from '../../../domain/entities/Player'
 import type { ChatGateway } from '../../../domain/ports/secondary/gateways/ChatGateway'
 import type { InMemoryProductionClientEventGateway } from '../event/InMemoryProductionClientEventGateway'
 
@@ -59,7 +58,7 @@ export class TwitchChatGateway implements ChatGateway {
     private sendTmiMessage (tmiClient:Client, channel:string, message: MessageForPlayer|Message): Promise<void> {
         const messages = message.message.split('\n')
         if (message instanceof MessageForPlayer)
-            messages[0] = formatTwitchUserMessage(new MessageForPlayer(message.player, messages[0]))
+            messages[0] = formatTwitchUserMessage(new MessageForPlayer(message.username, messages[0]))
         return Promise.all(messages.map(message => tmiClient.say(channel, message)))
             .then(results => Promise.resolve())
             .catch(error => Promise.reject(error))
@@ -112,7 +111,7 @@ export class TwitchChatGateway implements ChatGateway {
         })
         this.tmiClient.on('message', (channel: string, userstate: ChatUserstate, message: string, self: boolean) => {
             console.log(twitchClientMessage, { channel, userstate, message })
-            if (userstate.username) this.sendPlayerMessageEventOnEventBus(new PlayerMessageEvent(new Player({ username: userstate.username }), message))
+            if (userstate.username) this.sendPlayerMessageEventOnEventBus(new PlayerMessageEvent(userstate.username, message))
         })
     }
 
@@ -132,6 +131,6 @@ const twitchClientConnected = (host:string, port:number) => `Twitch client conne
 const twitchClientMessage = 'Twitch client message'
 const twitchClientDisconnecting = 'Twitch client disconnecting ...'
 const twitchClientDisconnect = 'Twitch client disconnected.'
-export const formatTwitchUserMessage = (messageForPlayer: MessageForPlayer): string => `@${messageForPlayer.player.username} >>> ${messageForPlayer.message}`
+export const formatTwitchUserMessage = (messageForPlayer: MessageForPlayer): string => `@${messageForPlayer.username} >>> ${messageForPlayer.message}`
 const twitchClientJoinChannelAsUser = (channel: string, username: string): string => `${username} joint channel '${channel}'.`
 const twitchClientLeaveChannelAsUser = (channel: string, username: string): string => `${username} leave channel '${channel}'.`

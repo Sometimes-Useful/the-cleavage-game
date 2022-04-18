@@ -19,8 +19,8 @@ feature(EventType.PLAYER_QUIT, [
     ]),
     clientScenario(`Scenario 2 : ${JSON.stringify(player1())} quit when there is current cleavage`, [
         app => thePlayerRepositoryHasPlayers(Gherkin.GIVEN, app, [player1()]),
-        app => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, app, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [player1()] }, rightChoice: { name: 'Drouate', players: [] }, players: [player1()] })),
-        app => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_GIVEN, app, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [player1()] }, rightChoice: { name: 'Drouate', players: [] }, players: [player1()] })),
+        app => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, app, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [player1().username] }, rightChoice: { name: 'Drouate', players: [] }, players: [player1().username] })),
+        app => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_GIVEN, app, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [player1().username] }, rightChoice: { name: 'Drouate', players: [] }, players: [player1().username] })),
         app => whenEventOccurs(app, new PlayerQuitEvent(player1().username)),
         app => thePlayerRepositoryDontHavePlayers(Gherkin.AND_THEN, app),
         app => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_THEN, app, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [] }, rightChoice: { name: 'Drouate', players: [] }, players: [] })),

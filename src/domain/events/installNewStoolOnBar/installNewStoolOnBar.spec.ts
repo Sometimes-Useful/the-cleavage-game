@@ -17,6 +17,6 @@ feature(EventType.INSTALL_NEW_STOOLS_ON_BAR, [
         app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, barStools.map(stool => stool.id)),
         app => whenEventOccurs(app, new InstallNewStoolsOnBarEvent()),
         app => theBarRepositoryHasAvailableStoolBars(Gherkin.THEN, app, barStools),
-        app => theEventIsSent(Gherkin.AND_THEN, app, barStools.map(stool => new DrawEvent(stool.id, { position: stool.position, spriteType: SpriteType.STOOL })))
+        app => theEventIsSent(Gherkin.AND_THEN, app, barStools.map(stool => new DrawEvent(stool.id, { position: stool.position, spriteType: SpriteType.STOOL, size: stool.size })))
     ])
 ])

@@ -38,7 +38,7 @@ export class BarApplicationService {
                 uuids.forEach((uuid, index) => { stools[index].id = uuid })
                 return Promise.all(stools.map(stool => this.barRepository.addAvailableBarStool(stool)))
             })
-            .then(results => this.eventGateway.sendEvents(stools.map(stool => new DrawEvent(stool.id, { position: stool.position, spriteType: SpriteType.STOOL }))))
+            .then(results => this.eventGateway.sendEvents(stools.map(stool => new DrawEvent(stool.id, { position: stool.position, spriteType: SpriteType.STOOL, size: stool.size }))))
             .catch(error => Promise.reject(error))
     }
 
@@ -74,7 +74,7 @@ export class BarApplicationService {
         })
             .then(() => this.eventGateway.sendEvents([
                 new InstallNewStoolsOnBarEvent(),
-                new DrawEvent(uuid, { position: this.defaultBarPosition, spriteType: SpriteType.BAR }),
+                new DrawEvent(uuid, { position: this.defaultBarPosition, spriteType: SpriteType.BAR, size: this.defaultBarSize }),
                 new NavigateEvent(InterfaceView.GAME),
                 new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE)
             ]))
@@ -100,7 +100,10 @@ export class BarApplicationService {
 
     private occupyTableStool (tableStool: Stool, username: string): Promise<void> {
         return this.barRepository.setOccupiedTableStool(username, tableStool)
-            .then(() => this.eventGateway.sendEvent(new PlayerMoveEvent(username, tableStool.position)))
+            .then(() => this.eventGateway.sendEvent(new PlayerMoveEvent(username, {
+                x: this.precisionRound(tableStool.position.x + this.tableStoolPlayerOffsetPosition.x, 2),
+                y: this.precisionRound(tableStool.position.y + this.tableStoolPlayerOffsetPosition.y, 2)
+            })))
             .catch(error => Promise.reject(error))
     }
 
@@ -132,7 +135,10 @@ export class BarApplicationService {
 
     private onStoolsForTable (stools: Stool[]): Promise<void> {
         return Promise.all(stools.map(stool => this.barRepository.addAvailableTableStool(stool)))
-            .then(results => this.eventGateway.sendEvent(new TableStoolAvailableEvent()))
+            .then(results => this.eventGateway.sendEvents([
+                new TableStoolAvailableEvent(),
+                ...stools.map(stool => new DrawEvent(stool.id, { position: stool.position, size: stool.size, spriteType: SpriteType.STOOL }))
+            ]))
             .catch(error => Promise.reject(error))
     }
 
@@ -227,7 +233,10 @@ export class BarApplicationService {
     private installTable (table:Table): Promise<void> {
         console.log(JSON.stringify(table))
         return this.barRepository.addTable(table)
-            .then(() => this.eventGateway.sendEvent(new InstallNewStoolsOnTableEvent(table.id)))
+            .then(() => this.eventGateway.sendEvents([
+                new InstallNewStoolsOnTableEvent(table.id),
+                new DrawEvent(table.id, { position: table.position, size: table.size, spriteType: SpriteType.TABLE })
+            ]))
             .catch(error => Promise.reject(error))
     }
 
@@ -274,4 +283,5 @@ export class BarApplicationService {
     private readonly defaultBarPosition = { x: 0, y: 0 }
     private readonly defaultBarSize = { width: 8.2, height: 6.8 }
     private readonly firstStoolOffset:Position = { x: 0.6, y: -0.4 }
+    private readonly tableStoolPlayerOffsetPosition: Position = { x: -0.1, y: -0.5 }
 }

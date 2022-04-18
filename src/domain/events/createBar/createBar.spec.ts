@@ -22,7 +22,7 @@ feature(EventType.CREATE_BAR, [
         app => theBarRepositoryHasBar(Gherkin.THEN, app, bar),
         app => theEventIsSent(Gherkin.AND_THEN, app, [
             new InstallNewStoolsOnBarEvent(),
-            new DrawEvent(bar.id, { position: bar.position, spriteType: SpriteType.BAR }),
+            new DrawEvent(bar.id, { position: bar.position, spriteType: SpriteType.BAR, size: bar.size }),
             new NavigateEvent(InterfaceView.GAME),
             new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE)
         ])

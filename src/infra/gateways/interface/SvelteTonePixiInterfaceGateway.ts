@@ -13,14 +13,14 @@ import type { InterfaceGateway } from '../../../domain/ports/secondary/gateways/
 import type { GamePhase } from '../../../domain/entities/GamePhase'
 import type { Size } from '../../../domain/entities/Size'
 import { PixiApplicationCommon } from './PixiApplicationCommon'
-import type { SpriteType } from '../../../domain/entities/SpriteType'
+import { SpriteType } from '../../../domain/entities/SpriteType'
 import type { InterfaceEntityState } from '../../../domain/entities/InterfaceEntityState'
 
 interface PixiJsEntity extends InterfaceEntityState {
     pixiSprite:Sprite
 }
 const entityIdMissingOnPixiEntities = (entityId:string) => `Entity id '${entityId} missing on pixiEntities'`
-const missingSpriteType = (spriteType: SpriteType) => `Missing shape type '${spriteType}''`
+const missingSpriteType = (spriteType: SpriteType) => `Missing texture for sprite type '${spriteType}''`
 
 export class SvelteTonePixiInterfaceGateway extends PixiApplicationCommon implements InterfaceGateway {
     constructor (
@@ -32,23 +32,24 @@ export class SvelteTonePixiInterfaceGateway extends PixiApplicationCommon implem
 
     public addingViewToDom (htmlElement:HTMLElement):Promise<void> {
         htmlElement.appendChild(this.pixiApplication.view)
-        console.log(`Adding pixi view to HTML element id ${htmlElement.id}`)
         return Promise.resolve()
     }
 
     public changeResolution (resolution: Size): Promise<void> {
-        this.updateInterfaceStates()
-        this.resizePixiAppRenderer(this.conserveAspectRatio(resolution))
-        console.log(`Resolution changed to ${JSON.stringify(resolution)}`)
+        return this.resizePixiAppRenderer(this.conserveAspectRatio(resolution))
+            .then(() => this.updateInterfaceStates())
+            .catch(error => Promise.reject(error))
+    }
+
+    private resizePixiAppRenderer (resolution:Size):Promise<void> {
+        this.pixiApplication.renderer.resize(resolution.width, resolution.height)
         return Promise.resolve()
     }
 
-    private resizePixiAppRenderer (resolution:Size) {
-        this.pixiApplication.renderer.resize(resolution.width, resolution.height)
-    }
-
     private updateInterfaceStates () {
-        for (const [, pixiEntity] of this.pixiEntities) this.updatePixiEntityGraphically(pixiEntity)
+        return Promise.all([...this.pixiEntities.values()].map(pixiEntity => this.updatePixiEntityGraphically(pixiEntity)))
+            .then(() => this.pixiApplication.stage.sortChildren())
+            .catch(error => Promise.reject(error))
     }
 
     private updatePixiEntityGraphically (pixiEntity: PixiJsEntity):Promise<void> {
@@ -62,8 +63,8 @@ export class SvelteTonePixiInterfaceGateway extends PixiApplicationCommon implem
 
     private updatePixiEntitySize (pixiEntity: PixiJsEntity) {
         const resolution = this.retrieveResolution()
-        pixiEntity.pixiSprite.width = resolution.width / this.drawingZone.width
-        pixiEntity.pixiSprite.height = resolution.height / this.drawingZone.height
+        pixiEntity.pixiSprite.width = resolution.width / this.drawingZone.width * pixiEntity.size.width
+        pixiEntity.pixiSprite.height = resolution.height / this.drawingZone.height * pixiEntity.size.height
     }
 
     public retrieveResolution (): Size {
@@ -71,9 +72,11 @@ export class SvelteTonePixiInterfaceGateway extends PixiApplicationCommon implem
     }
 
     private updatePixiEntityAbsolutePosition (pixiEntity:PixiJsEntity) :Promise<void> {
-        const absolutePosition = this.relativePositionToAbsolutePosition(pixiEntity.position, this.offset, this.retrieveResolution())
+        const absolutePosition = this.relativePositionToAbsolutePosition(pixiEntity.position, this.retrieveResolution())
         pixiEntity.pixiSprite.x = absolutePosition.x
         pixiEntity.pixiSprite.y = absolutePosition.y
+        pixiEntity.pixiSprite.zIndex = pixiEntity.spriteType === SpriteType.PLAYER ? 1 : 0
+        if (pixiEntity.spriteType === SpriteType.PLAYER) console.log(pixiEntity.position)
         return Promise.resolve()
     }
 
@@ -96,9 +99,13 @@ export class SvelteTonePixiInterfaceGateway extends PixiApplicationCommon implem
 
     updateEntityInterfaceState (id: string, interfaceEntityState: InterfaceEntityState): Promise<void> {
         const pixiEntity = this.pixiEntities.get(id)
-        return pixiEntity
-            ? this.updatePixiEntity(pixiEntity, interfaceEntityState)
-            : this.createPixiEntity(id, interfaceEntityState)
+        return (
+            pixiEntity
+                ? this.updatePixiEntity(pixiEntity, interfaceEntityState)
+                : this.createPixiEntity(id, interfaceEntityState)
+        )
+            .then(() => this.pixiApplication.stage.sortChildren())
+            .catch(error => Promise.reject(error))
     }
 
     private createPixiEntity (entityId:string, interfaceEntityState: InterfaceEntityState):Promise<void> {
@@ -107,6 +114,7 @@ export class SvelteTonePixiInterfaceGateway extends PixiApplicationCommon implem
         const sprite = this.pixiApplication.stage.addChild(Sprite.from(textureSourceUrl))
         this.pixiEntities.set(entityId, {
             position: interfaceEntityState.position,
+            size: interfaceEntityState.size,
             spriteType: interfaceEntityState.spriteType,
             pixiSprite: sprite
         })

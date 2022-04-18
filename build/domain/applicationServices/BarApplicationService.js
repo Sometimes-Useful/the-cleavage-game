@@ -40,16 +40,16 @@ exports.BarApplicationService = void 0;
 var InterfaceView_1 = require("../entities/InterfaceView");
 var InstallNewStoolsOnBarEvent_1 = require("../events/installNewStoolOnBar/InstallNewStoolsOnBarEvent");
 var DrawEvent_1 = require("../events/draw/DrawEvent");
-var InstallNewStoolsOnTableEvent_1 = require("../events/installNewStoolOnTable/InstallNewStoolsOnTableEvent");
 var InstallNewTableEvent_1 = require("../events/installNewTable/InstallNewTableEvent");
 var NavigateEvent_1 = require("../events/navigateEvent/NavigateEvent");
 var PlayerMoveEvent_1 = require("../events/playerMove/PlayerMoveEvent");
 var PlayerQuitEvent_1 = require("../events/playerQuit/PlayerQuitEvent");
 var TableStoolAvailableEvent_1 = require("../events/tableStoolAvailable/TableStoolAvailableEvent");
 var Direction_1 = require("./Direction");
-var Sprite_1 = require("../events/playerMove/Sprite");
 var GamePhase_1 = require("../entities/GamePhase");
 var ChangeGamePhaseEvent_1 = require("../events/changeGamePhase/ChangeGamePhaseEvent");
+var InstallNewStoolsOnTableEvent_1 = require("../events/installNewStoolsOnTable/InstallNewStoolsOnTableEvent");
+var SpriteType_1 = require("../entities/SpriteType");
 var BarApplicationService = /** @class */ (function () {
     function BarApplicationService(barRepository, eventGateway, uuidGateway) {
         this.barRepository = barRepository;
@@ -74,7 +74,7 @@ var BarApplicationService = /** @class */ (function () {
             uuids.forEach(function (uuid, index) { stools[index].id = uuid; });
             return Promise.all(stools.map(function (stool) { return _this.barRepository.addAvailableBarStool(stool); }));
         })
-            .then(function (results) { return _this.eventGateway.sendEvents(stools.map(function (stool) { return new DrawEvent_1.DrawEvent(stool.id, { position: stool.position, sprite: Sprite_1.Sprite.STOOL }); })); })["catch"](function (error) { return Promise.reject(error); });
+            .then(function (results) { return _this.eventGateway.sendEvents(stools.map(function (stool) { return new DrawEvent_1.DrawEvent(stool.id, { position: stool.position, spriteType: SpriteType_1.SpriteType.STOOL }); })); })["catch"](function (error) { return Promise.reject(error); });
     };
     BarApplicationService.prototype.makeBarStools = function () {
         var barStools = [];
@@ -108,7 +108,7 @@ var BarApplicationService = /** @class */ (function () {
         })
             .then(function () { return _this.eventGateway.sendEvents([
             new InstallNewStoolsOnBarEvent_1.InstallNewStoolsOnBarEvent(),
-            new DrawEvent_1.DrawEvent(uuid, { position: _this.defaultBarPosition, sprite: Sprite_1.Sprite.BAR }),
+            new DrawEvent_1.DrawEvent(uuid, { position: _this.defaultBarPosition, spriteType: SpriteType_1.SpriteType.BAR }),
             new NavigateEvent_1.NavigateEvent(InterfaceView_1.InterfaceView.GAME),
             new ChangeGamePhaseEvent_1.ChangeGamePhaseEvent(GamePhase_1.GamePhase.NEW_CLEAVAGE)
         ]); })["catch"](function (error) { return Promise.reject(error); });
@@ -116,7 +116,7 @@ var BarApplicationService = /** @class */ (function () {
     BarApplicationService.prototype.askForNewTable = function () {
         return this.eventGateway.sendEvent(new InstallNewTableEvent_1.InstallNewTableEvent());
     };
-    BarApplicationService.prototype.onOccupiedBarStool = function (occupiedStool) {
+    BarApplicationService.prototype.installPlayerFromBarStoolToTableStool = function (occupiedStool) {
         var _this = this;
         return this.barRepository.freeBarStool(occupiedStool.username)
             .then(function () { return _this.barRepository.nextAvailableTableStool(); })
@@ -154,8 +154,7 @@ var BarApplicationService = /** @class */ (function () {
     BarApplicationService.prototype.onStoolsForTable = function (stools) {
         var _this = this;
         return Promise.all(stools.map(function (stool) { return _this.barRepository.addAvailableTableStool(stool); }))
-            .then(function (results) { return Promise.all(stools.map(function (stool) { return _this.eventGateway.sendEvent(new TableStoolAvailableEvent_1.TableStoolAvailableEvent()); })); })
-            .then(function (results) { return Promise.resolve(); })["catch"](function (error) { return Promise.reject(error); });
+            .then(function (results) { return _this.eventGateway.sendEvent(new TableStoolAvailableEvent_1.TableStoolAvailableEvent()); })["catch"](function (error) { return Promise.reject(error); });
     };
     BarApplicationService.prototype.stoolsForTable = function (table) {
         var tableStoolsPromise = [];

@@ -5,6 +5,7 @@ import type { InterfaceView } from '../../../entities/InterfaceView'
 import type { Music } from '../../../entities/music/Music'
 import type { ApplicationNotification } from '../../../entities/notification/Notification'
 import type { Position } from '../../../entities/Position'
+import type { Size } from '../../../entities/Size'
 import type { Sound } from '../../../entities/sound'
 import type { SpriteType } from '../../../entities/SpriteType'
 
@@ -24,4 +25,4 @@ export interface InterfaceGateway {
     changeView(interfaceView: InterfaceView): Promise<void>;
 }
 
-export const interfaceEntityState = (position:Position, sprite:SpriteType): InterfaceEntityState => ({ position, spriteType: sprite })
+export const interfaceEntityState = (position:Position, spriteType:SpriteType, size:Size): InterfaceEntityState => ({ position, spriteType, size })

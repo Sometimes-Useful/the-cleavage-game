@@ -29,8 +29,8 @@ feature(EventType.LAUNCH_CLEAVAGE, [
         app => whenEventOccurs(app, new LaunchCleavageEvent(cleavageTitle1, 'Gôche', 'Drouate')),
         app => theInterfaceGatewayHasCurrentView(Gherkin.THEN, app, InterfaceView.GAME),
         app => theEventIsSent(Gherkin.AND_THEN, app, new ChangeGamePhaseEvent(GamePhase.CLEAVING)),
-        app => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_THEN, app, new Cleavage({ title: cleavageTitle1, leftChoice: leftChoice.toDTO(), rightChoice: rightChoice.toDTO(), players: [player1()] })),
-        app => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_THEN, app, new Cleavage({ title: cleavageTitle1, leftChoice: leftChoice.toDTO(), rightChoice: rightChoice.toDTO(), players: [player1()] }))
+        app => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_THEN, app, new Cleavage({ title: cleavageTitle1, leftChoice: leftChoice.toDTO(), rightChoice: rightChoice.toDTO(), players: [player1().username] })),
+        app => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_THEN, app, new Cleavage({ title: cleavageTitle1, leftChoice: leftChoice.toDTO(), rightChoice: rightChoice.toDTO(), players: [player1().username] }))
     ]),
     clientScenario(`Scenario 2 : Navigate to ${InterfaceView.CONNECT_CHAT} on chat gateway ${ChatStatus.DISCONNECTED}.`, [
         app => theInterfaceGatewayHasCurrentView(Gherkin.GIVEN, app, InterfaceView.GAME),
@@ -55,7 +55,7 @@ feature(EventType.LAUNCH_CLEAVAGE, [
         app => whenEventOccurs(app, new LaunchCleavageEvent(cleavageTitle1, 'yes', 'no')),
         app => theInterfaceGatewayHasCurrentView(Gherkin.THEN, app, InterfaceView.GAME),
         app => theEventIsSent(Gherkin.AND_THEN, app, new ChangeGamePhaseEvent(GamePhase.CLEAVING)),
-        app => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_THEN, app, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'yes', players: [] }, rightChoice: { name: 'no', players: [] }, players: [player1()] })),
-        app => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_THEN, app, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'yes', players: [] }, rightChoice: { name: 'no', players: [] }, players: [player1()] }))
+        app => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_THEN, app, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'yes', players: [] }, rightChoice: { name: 'no', players: [] }, players: [player1().username] })),
+        app => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_THEN, app, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'yes', players: [] }, rightChoice: { name: 'no', players: [] }, players: [player1().username] }))
     ])
 ])

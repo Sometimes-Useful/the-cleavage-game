@@ -1,12 +1,11 @@
 import { applicationMessagePrefix } from './applicationMessagePrefix'
 import { AuthorizedMessage } from './AuthorizedMessage'
-import type { Player } from './Player'
 
-export function dontKnowWhatToDoWithThatMessage (player: Player): string {
-    return `I don't know what to do with that ${player.username}.`
+export function dontKnowWhatToDoWithThatMessage (username: string): string {
+    return `I don't know what to do with that ${username}.`
 }
 export const waitForCleavageLaunchMessage = 'Wait for cleavage launch! 👀'
-export const cleavageSuggested = (player:Player, cleavageTitle:string): string => `Cleavage '${cleavageTitle}' suggested to streamer.\n You rocks ${player.username}! 👍`
+export const cleavageSuggested = (username:string, cleavageTitle:string): string => `Cleavage '${cleavageTitle}' suggested to streamer.\n You rocks ${username}! 👍`
 export const cleavageAlreadySuggested = 'Cleavage already suggested.'
 export const helpMessage:string =
 `Le jeu du clivage!

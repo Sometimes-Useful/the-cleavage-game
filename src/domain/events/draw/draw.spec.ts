@@ -12,21 +12,21 @@ import { SpriteType } from '../../entities/SpriteType'
 feature(EventType.DRAW, [
     clientScenario('Scenario 1 - Draw bar', [
         app => theInterfaceGatewayHasEntityInterfaceState(Gherkin.GIVEN, app, new Map()),
-        app => whenEventOccurs(app, new DrawEvent(bar.id, { position: bar.position, spriteType: SpriteType.BAR })),
-        app => theInterfaceGatewayHasEntityInterfaceState(Gherkin.THEN, app, new Map([[bar.id, interfaceEntityState(bar.position, SpriteType.BAR)]]))
+        app => whenEventOccurs(app, new DrawEvent(bar.id, { position: bar.position, spriteType: SpriteType.BAR, size: bar.size })),
+        app => theInterfaceGatewayHasEntityInterfaceState(Gherkin.THEN, app, new Map([[bar.id, interfaceEntityState(bar.position, SpriteType.BAR, bar.size)]]))
     ]),
     clientScenario('Scenario 2 - Draw stool', [
         app => theInterfaceGatewayHasEntityInterfaceState(Gherkin.GIVEN, app, new Map()),
-        app => whenEventOccurs(app, new DrawEvent(stool1A.id, { position: stool1A.position, spriteType: SpriteType.STOOL })),
-        app => theInterfaceGatewayHasEntityInterfaceState(Gherkin.THEN, app, new Map([[stool1A.id, interfaceEntityState(stool1A.position, SpriteType.STOOL)]]))
+        app => whenEventOccurs(app, new DrawEvent(stool1A.id, { position: stool1A.position, spriteType: SpriteType.STOOL, size: stool1A.size })),
+        app => theInterfaceGatewayHasEntityInterfaceState(Gherkin.THEN, app, new Map([[stool1A.id, interfaceEntityState(stool1A.position, SpriteType.STOOL, stool1A.size)]]))
     ]),
     clientScenario('Scenario 3 - ReDraw stool', [
-        app => theInterfaceGatewayHasEntityInterfaceState(Gherkin.GIVEN, app, new Map([[stool1A.id, interfaceEntityState(stool1B.position, SpriteType.STOOL)]])),
-        app => whenEventOccurs(app, new DrawEvent(stool1A.id, { position: stool1C.position, spriteType: SpriteType.STOOL })),
-        app => theInterfaceGatewayHasEntityInterfaceState(Gherkin.THEN, app, new Map([[stool1A.id, interfaceEntityState(stool1C.position, SpriteType.STOOL)]]))
+        app => theInterfaceGatewayHasEntityInterfaceState(Gherkin.GIVEN, app, new Map([[stool1A.id, interfaceEntityState(stool1B.position, SpriteType.STOOL, stool1A.size)]])),
+        app => whenEventOccurs(app, new DrawEvent(stool1A.id, { position: stool1C.position, spriteType: SpriteType.STOOL, size: stool1A.size })),
+        app => theInterfaceGatewayHasEntityInterfaceState(Gherkin.THEN, app, new Map([[stool1A.id, interfaceEntityState(stool1C.position, SpriteType.STOOL, stool1A.size)]]))
     ]),
     clientScenario('Scenario 4 - Erase stool', [
-        app => theInterfaceGatewayHasEntityInterfaceState(Gherkin.GIVEN, app, new Map([[stool1A.id, interfaceEntityState(stool1A.position, SpriteType.STOOL)]])),
+        app => theInterfaceGatewayHasEntityInterfaceState(Gherkin.GIVEN, app, new Map([[stool1A.id, interfaceEntityState(stool1A.position, SpriteType.STOOL, stool1A.size)]])),
         app => whenEventOccurs(app, new DrawEvent(stool1A.id, undefined)),
         app => theInterfaceGatewayHasEntityInterfaceState(Gherkin.THEN, app, new Map())
     ])

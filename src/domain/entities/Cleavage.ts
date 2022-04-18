@@ -1,17 +1,16 @@
 import { Choice } from './Choice'
-import { Player, PlayerDTO } from './Player'
 
 export interface CleavageDTO {
     title: string,
     leftChoice: {
         name: string,
-        players: PlayerDTO[]
+        players: string[]
     },
     rightChoice: {
         name: string,
-        players: PlayerDTO[]
+        players: string[]
     },
-    players: PlayerDTO[]
+    players: string[]
 }
 
 export class Cleavage {
@@ -19,7 +18,7 @@ export class Cleavage {
         this.title = cleavageDto.title
         this.leftChoice = new Choice(cleavageDto.leftChoice)
         this.rightChoice = new Choice(cleavageDto.rightChoice)
-        this.players = cleavageDto.players.map(player => new Player(player))
+        this.players = cleavageDto.players
     }
 
     toDto ():CleavageDTO {
@@ -27,12 +26,12 @@ export class Cleavage {
             title: this.title,
             leftChoice: this.leftChoice.toDTO(),
             rightChoice: this.rightChoice.toDTO(),
-            players: this.players.map(player => player.toDto())
+            players: this.players
         }
     }
 
     title: string
     leftChoice: Choice
     rightChoice: Choice
-    players: Player[]
+    players: string[]
 }

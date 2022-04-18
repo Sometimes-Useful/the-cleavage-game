@@ -18,7 +18,7 @@ export class SuggestCleavageUseCase extends UseCase {
     execute (event: PlayerSuggestCleavageEvent): Promise<void> {
         return this.applicationServices.cleavage.isPublicCleavageExist(event.cleavage)
             .then(isPublicCleavageExist => isPublicCleavageExist
-                ? this.applicationServices.chat.sendMessageToPlayer(new MessageForPlayer(event.player, cleavageAlreadySuggested))
+                ? this.applicationServices.chat.sendMessageToPlayer(new MessageForPlayer(event.username, cleavageAlreadySuggested))
                 : this.onPublicCleavageExist(event)
             )
             .catch(error => Promise.reject(error))
@@ -26,7 +26,7 @@ export class SuggestCleavageUseCase extends UseCase {
 
     onPublicCleavageExist (event: PlayerSuggestCleavageEvent): Promise<void> {
         return this.applicationServices.cleavage.addPublicCleavage(event.cleavage)
-            .then(() => this.applicationServices.chat.sendMessageToPlayer(new MessageForPlayer(event.player, cleavageSuggested(event.player, event.cleavage.title))))
+            .then(() => this.applicationServices.chat.sendMessageToPlayer(new MessageForPlayer(event.username, cleavageSuggested(event.username, event.cleavage.title))))
             .catch(error => Promise.reject(error))
     }
 }

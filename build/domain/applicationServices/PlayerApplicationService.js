@@ -1,9 +1,9 @@
 "use strict";
 exports.__esModule = true;
 exports.PlayerApplicationService = void 0;
+var SpriteType_1 = require("../entities/SpriteType");
 var DrawEvent_1 = require("../events/draw/DrawEvent");
 var PlayerJoinBarEvent_1 = require("../events/playerJoinBar/PlayerJoinBarEvent");
-var Sprite_1 = require("../events/playerMove/Sprite");
 var PlayerApplicationService = /** @class */ (function () {
     function PlayerApplicationService(playerRepository, eventGateway) {
         this.playerRepository = playerRepository;
@@ -16,7 +16,7 @@ var PlayerApplicationService = /** @class */ (function () {
             player.position = position;
             return _this.playerRepository.save(player);
         })
-            .then(function () { return _this.eventGateway.sendEvent(new DrawEvent_1.DrawEvent(username, { position: position, sprite: Sprite_1.Sprite.PLAYER })); })["catch"](function (error) { return Promise.reject(error); });
+            .then(function () { return _this.eventGateway.sendEvent(new DrawEvent_1.DrawEvent(username, { position: position, spriteType: SpriteType_1.SpriteType.PLAYER })); })["catch"](function (error) { return Promise.reject(error); });
     };
     PlayerApplicationService.prototype.players = function () {
         return this.playerRepository.loadAllPlayers();

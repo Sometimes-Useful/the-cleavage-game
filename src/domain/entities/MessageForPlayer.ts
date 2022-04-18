@@ -1,19 +1,17 @@
-import type { Player } from './Player'
-
 export class MessageForPlayer {
     constructor (
-        public player: Player,
+        public username: string,
         public message: string
     ) { }
 }
 
-export const noCleavagePleaseWait = (player:Player):MessageForPlayer => ({
-    player: player,
-    message: `Il n'y a pas de clivage en cours ${player.username}. Attends un peu.`
+export const noCleavagePleaseWait = (username:string):MessageForPlayer => ({
+    username: username,
+    message: `Il n'y a pas de clivage en cours ${username}. Attends un peu.`
 })
 
-export const welcomePlayerMessage = (player:Player):MessageForPlayer => ({
-    player,
-    message: welcomeMessage(player)
+export const welcomePlayerMessage = (username:string):MessageForPlayer => ({
+    username: username,
+    message: welcomeMessage(username)
 })
-const welcomeMessage = (player: Player): string => `Bienvenue ${player.username} au jeu du clivage! Tu peux tapper '!h' pour l'aide.`
+const welcomeMessage = (username: string): string => `Bienvenue ${username} au jeu du clivage! Tu peux tapper '!h' pour l'aide.`

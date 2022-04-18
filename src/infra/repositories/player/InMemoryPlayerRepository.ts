@@ -10,8 +10,8 @@ export class InMemoryPlayerRepository implements PlayerRepository {
             : Promise.reject(new Error(`Player with username '${username}' not found.`))
     }
 
-    hasPlayer (player:Player): Promise<boolean> {
-        return Promise.resolve(this.currentPlayers.has(player.username))
+    hasPlayer (username:string): Promise<boolean> {
+        return Promise.resolve(this.currentPlayers.has(username))
     }
 
     loadAllPlayers (): Promise<Player[]> {

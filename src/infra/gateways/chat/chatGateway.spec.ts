@@ -1,15 +1,14 @@
-import { describe, it } from 'mocha'
 import { expect } from 'chai'
 import { config } from 'dotenv'
+import { describe, it } from 'mocha'
 import { MessageForPlayer } from '../../../domain/entities/MessageForPlayer'
+import { PlayerMessageEvent } from '../../../domain/events/playerMessage/PlayerMessageEvent'
+import type { ChatGateway } from '../../../domain/ports/secondary/gateways/ChatGateway'
+import { channel, integrationTestMessage, player1, token, username } from '../../../domain/tests/testContexts'
+import { onMissingEnvVariable } from '../../EnvironmentVariable'
+import { FakeClientEventGateway } from '../event/FakeClientEventGateway'
 import { FakeChatGateway } from './FakeChatGateway'
 import { formatTwitchUserMessage, TwitchChatGateway } from './TwitchChatGateway'
-import { FakeClientEventGateway } from '../event/FakeClientEventGateway'
-import { channel, integrationTestMessage, player1, token, username } from '../../../domain/tests/testContexts'
-import { PlayerMessageEvent } from '../../../domain/events/playerMessage/PlayerMessageEvent'
-import { Player } from '../../../domain/entities/Player'
-import type { ChatGateway } from '../../../domain/ports/secondary/gateways/ChatGateway'
-import { onMissingEnvVariable } from '../../EnvironmentVariable'
 interface IntegrationEnvironnement {
     adapter: ChatGateway
     username:string
@@ -46,7 +45,7 @@ describe('Integration Test: Chat Gateway', () => {
                 it('Then the adapter is connected.', () => environnement.adapter.isConnected().then(isConnected => expect(isConnected).to.be.true))
             })
             describe('Send Message to player', () => {
-                const messageForPlayer = new MessageForPlayer(player1(), integrationTestMessage)
+                const messageForPlayer = new MessageForPlayer(player1().username, integrationTestMessage)
                 it('Given the adapter is connected.', () => environnement.adapter.isConnected().then(isConnected => { expect(isConnected).to.be.true }))
                 it('When sendMessageToPlayer occurs.', () => environnement.adapter.sendMessageToPlayer(messageForPlayer)).timeout(2000)
                 it('Then the chat has the message.', (done) => {
@@ -56,7 +55,7 @@ describe('Integration Test: Chat Gateway', () => {
                     }
                     if (environnement.adapter instanceof TwitchChatGateway)
                         setTimeout(() => {
-                            expect(inMemoryEventBus.events).deep.equal([new PlayerMessageEvent(new Player({ username: environnement.username }), formatTwitchUserMessage(messageForPlayer))])
+                            expect(inMemoryEventBus.events).deep.equal([new PlayerMessageEvent(environnement.username, formatTwitchUserMessage(messageForPlayer))])
                             done()
                         }, 20)
                 })

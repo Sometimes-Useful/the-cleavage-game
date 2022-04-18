@@ -6,8 +6,9 @@ import type { Size } from '../entities/Size'
 import type { Table } from './Table'
 import type { Stool } from '../entities/Stool'
 
-export const player1 = (position?:Position) => new Player({ username: 'Billy', position })
-export const player2 = (position?:Position) => new Player({ username: 'Bob', position })
+export const defaultPlayerSize:Size = { width: 0.6, height: 0.8 }
+export const player1 = (position?:Position) => new Player({ username: 'Billy', position, size: defaultPlayerSize })
+export const player2 = (position?:Position) => new Player({ username: 'Bob', position, size: defaultPlayerSize })
 export const cleavageTitle1 = 'Les mouchoirs en tissu'
 export const cleavageTitle2 = 'Les glaciers de l\'Ile d\'Oléron'
 export const integrationTestMessage = 'Integration Test Message'
@@ -18,8 +19,8 @@ export const positionBar:Position = { x: 0, y: 0 }
 export const barSize:Size = { height: 6.8, width: 8.2 }
 export const position1:Position = { x: 0, y: 0 }
 export const position2:Position = { x: 1, y: 1 }
-export const gocheChoice = (players:Player[] = []) => ({ name: 'Gôche', players })
-export const drouateChoice = (players:Player[] = []) => ({ name: 'Drouate', players })
+export const gocheChoice = (players:string[] = []) => ({ name: 'Gôche', players })
+export const drouateChoice = (players:string[] = []) => ({ name: 'Drouate', players })
 export const commonCleavage1 = () => new Cleavage({ title: cleavageTitle1, leftChoice: gocheChoice(), rightChoice: drouateChoice(), players: [] })
 export const commonCleavage2 = () => new Cleavage({ title: cleavageTitle2, leftChoice: gocheChoice(), rightChoice: drouateChoice(), players: [] })
 export const bar:Bar = { id: 'bar', position: positionBar, size: barSize }

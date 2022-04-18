@@ -2,5 +2,6 @@
 export enum SpriteType {
     PLAYER = 'PLAYER',
     BAR = 'BAR',
-    STOOL = 'STOOL'
+    STOOL = 'STOOL',
+    TABLE = 'TABLE'
 }

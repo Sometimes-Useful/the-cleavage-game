@@ -16,7 +16,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 exports.TableStoolAvailableUseCase = void 0;
-var unitTests_1 = require("../tests/unitTests/unitTests");
 var UseCase_1 = require("./UseCase");
 var TableStoolAvailableUseCase = /** @class */ (function (_super) {
     __extends(TableStoolAvailableUseCase, _super);
@@ -26,15 +25,26 @@ var TableStoolAvailableUseCase = /** @class */ (function (_super) {
         return _this;
     }
     TableStoolAvailableUseCase.prototype.execute = function (event) {
+        return this.onEvent();
+    };
+    TableStoolAvailableUseCase.prototype.onEvent = function () {
         var _this = this;
         return this.applicationServices.bar.nextOccupiedBarStool()
-            .then(function (occupiedBarStool) { return occupiedBarStool ? _this.onOccupiedBarStool(occupiedBarStool) : undefined; })["catch"](function (error) { return Promise.reject(error); });
+            .then(function (occupiedBarStool) { return occupiedBarStool
+            ? _this.onOccupiedBarStool(occupiedBarStool)
+            : Promise.resolve(); })["catch"](function (error) { return Promise.reject(error); });
     };
-    TableStoolAvailableUseCase.prototype.onOccupiedBarStool = function (occupiedStool) {
+    TableStoolAvailableUseCase.prototype.onOccupiedBarStool = function (occupiedBarStool) {
         var _this = this;
-        console.log((0, unitTests_1.stringifyWithDetailledSetAndMap)(occupiedStool));
         return this.applicationServices.bar.hasAvailableTableStool()
-            .then(function (isTableStoolAvailable) { return isTableStoolAvailable ? _this.applicationServices.bar.onOccupiedBarStool(occupiedStool) : _this.applicationServices.bar.askForNewTable(); })["catch"](function (error) { return Promise.reject(error); });
+            .then(function (isTableStoolAvailable) { return isTableStoolAvailable
+            ? _this.onTableStoolAvailable(occupiedBarStool)
+            : _this.applicationServices.bar.askForNewTable(); })["catch"](function (error) { return Promise.reject(error); });
+    };
+    TableStoolAvailableUseCase.prototype.onTableStoolAvailable = function (occupiedBarStool) {
+        var _this = this;
+        return this.applicationServices.bar.installPlayerFromBarStoolToTableStool(occupiedBarStool)
+            .then(function () { return _this.onEvent(); })["catch"](function (error) { return Promise.reject(error); });
     };
     return TableStoolAvailableUseCase;
 }(UseCase_1.UseCase));
