@@ -5,9 +5,11 @@ import { CleavageApplicationService } from '../../../domain/applicationServices/
 import { EventApplicationService } from '../../../domain/applicationServices/EventApplicationService'
 import { InterfaceApplicationService } from '../../../domain/applicationServices/InterfaceApplicationService'
 import { PlayerApplicationService } from '../../../domain/applicationServices/PlayerApplicationService'
+import { VideoExtractApplicationService } from '../../../domain/applicationServices/VideoExtractApplicationService'
 import type { Size } from '../../../domain/entities/Size'
 import { ApplicationStartEvent } from '../../../domain/events/applicationStart/ApplicationStartEvent'
 import { CheckAutoplayEvent } from '../../../domain/events/checkAutoplay/CheckAutoplayEvent'
+import type { ClientApplicationServices } from '../../../domain/ports/ApplicationServices'
 import { PrimaryClientController } from '../../../domain/ports/primary/PrimaryClientController'
 import type { ProductionClientApplicationGateways } from '../../../domain/ports/secondary/gateways/ApplicationGateways'
 import type { ProductionClientApplicationRepositories } from '../../../domain/ports/secondary/repositories/ApplicationRepositories'
@@ -23,7 +25,8 @@ export class ProductionClientApplication {
         console.log('Application starting...')
         return this.gateways.interface.load()
             .then(() => {
-                const applicationServices = {
+                const applicationServices:ClientApplicationServices = {
+                    videoExtract: new VideoExtractApplicationService(this.repositories.videoExtracts, this.gateways.interface, this.gateways.random),
                     chat: new ChatApplicationService(this.gateways.chat, this.gateways.interface),
                     event: new EventApplicationService(this.gateways.event),
                     cleavage: new CleavageApplicationService(this.repositories.publicCleavageDrawPile, this.gateways.globalCleavageDrawPile, this.repositories.currentCleavage, this.gateways.chat, this.repositories.gamePhase),

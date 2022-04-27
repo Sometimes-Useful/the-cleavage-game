@@ -30,10 +30,13 @@ import { InstallNewTableUseCase } from '../../usecases/InstallNewTableUseCase'
 import { InstallNewStoolsOnTableUseCase } from '../../usecases/InstallNewStoolsOnTableUseCase'
 import { TableStoolAvailableUseCase } from '../../usecases/TableStoolAvailableUseCase'
 import { CreateBarUseCase } from '../../usecases/CreateBarUseCase'
-import type { UseCase } from '../../usecases/UseCase'
 import { InstallNewStoolsOnBarUseCase } from '../../usecases/InstallNewStoolsOnBarUseCase'
 import { DrawUseCase } from '../../usecases/DrawUseCase'
 import { ChangeGamePhaseUseCase } from '../../usecases/ChangeGamePhaseUseCase'
+import { VideoExtractStartUseCase } from '../../usecases/VideoExtractStartUseCase'
+import { VideoExtractStopUseCase } from '../../usecases/VideoExtractStopUseCase'
+import type { UseCase } from '../../usecases/UseCase'
+import { ChangeVideoExtractVolumeUseCase } from '../../usecases/ChangeVideoExtractVolumeUseCase'
 
 export class PrimaryClientController {
     constructor (private applicationServices: ClientApplicationServices) {
@@ -68,6 +71,9 @@ export class PrimaryClientController {
         this.useCases.set(EventType.INSTALL_NEW_STOOLS_ON_BAR, new InstallNewStoolsOnBarUseCase(this.applicationServices))
         this.useCases.set(EventType.DRAW, new DrawUseCase(this.applicationServices))
         this.useCases.set(EventType.CHANGE_GAME_PHASE, new ChangeGamePhaseUseCase(this.applicationServices))
+        this.useCases.set(EventType.VIDEO_EXTRACT_START, new VideoExtractStartUseCase(this.applicationServices))
+        this.useCases.set(EventType.VIDEO_EXTRACT_STOP, new VideoExtractStopUseCase(this.applicationServices))
+        this.useCases.set(EventType.CHANGE_VIDEO_EXTRACT_VOLUME, new ChangeVideoExtractVolumeUseCase(this.applicationServices))
     }
 
     executeEvent (event: ApplicationEvent): Promise<void> {

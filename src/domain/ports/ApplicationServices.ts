@@ -6,8 +6,10 @@ import type { PlayerApplicationService } from '../applicationServices/PlayerAppl
 import type { AutoplayApplicationService } from '../applicationServices/AutoplayApplicationService'
 import type { GlobalCleavageDrawPileApplicationService } from '../applicationServices/GlobalCleavageDrawPileApplicationService'
 import type { BarApplicationService } from '../applicationServices/BarApplicationService'
+import type { VideoExtractApplicationService } from '../applicationServices/VideoExtractApplicationService'
 
 export interface ClientApplicationServices {
+    videoExtract:VideoExtractApplicationService
     player: PlayerApplicationService
     chat: ChatApplicationService;
     interface: InterfaceApplicationService;

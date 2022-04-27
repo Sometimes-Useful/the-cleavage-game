@@ -5,10 +5,18 @@ import type { Bar } from '../entities/Bar'
 import type { Size } from '../entities/Size'
 import type { Table } from './Table'
 import type { Stool } from '../entities/Stool'
+import { VideoExtract } from '../entities/VideoExtract'
 
+export const oui100VideoExtract = new VideoExtract('Oui', 100, 'pAy3-A_VWRY')
+export const non100VideoExtract = new VideoExtract('Non', 100, 'caXgpo5Ezo4')
+export const oui60VideoExtract = new VideoExtract('Oui', 60, 'f7FjTKBQutY')
+export const egalite50VideoExtract = new VideoExtract('equality', 50, 'f7FjTKBQutY')
+export const egalite50VideoExtract2 = new VideoExtract('equality', 50, 'RqJVa0fl01w')
 export const defaultPlayerSize:Size = { width: 0.6, height: 0.8 }
 export const player1 = (position?:Position) => new Player({ username: 'Billy', position, size: defaultPlayerSize })
 export const player2 = (position?:Position) => new Player({ username: 'Bob', position, size: defaultPlayerSize })
+export const player3 = (position?:Position) => new Player({ username: 'Henry', position, size: defaultPlayerSize })
+export const player4 = (position?:Position) => new Player({ username: 'Stéphanie', position, size: defaultPlayerSize })
 export const cleavageTitle1 = 'Les mouchoirs en tissu'
 export const cleavageTitle2 = 'Les glaciers de l\'Ile d\'Oléron'
 export const integrationTestMessage = 'Integration Test Message'

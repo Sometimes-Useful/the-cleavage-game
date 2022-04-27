@@ -14,6 +14,23 @@ export interface CleavageDTO {
 }
 
 export class Cleavage {
+    majorScore (): number {
+        const majorChoice = this.majorChoice()
+        return majorChoice
+            ? majorChoice === this.leftChoice.name
+                ? this.leftChoice.players.length / this.players.length * 100
+                : this.rightChoice.players.length / this.players.length * 100
+            : 50
+    }
+
+    majorChoice (): string|undefined {
+        return this.leftChoice.players.length > this.rightChoice.players.length
+            ? this.leftChoice.name
+            : this.leftChoice.players.length < this.rightChoice.players.length
+                ? this.rightChoice.name
+                : undefined
+    }
+
     constructor (cleavageDto:CleavageDTO) {
         this.title = cleavageDto.title
         this.leftChoice = new Choice(cleavageDto.leftChoice)

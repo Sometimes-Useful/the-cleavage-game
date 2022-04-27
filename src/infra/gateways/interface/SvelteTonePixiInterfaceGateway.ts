@@ -5,7 +5,7 @@ import type { Music } from '../../../domain/entities/music/Music'
 import type { SupportedMusic } from '../../../domain/entities/music/SupportedMusic'
 import { InterfaceView } from '../../../domain/entities/InterfaceView'
 import { defaultMusicVolumeLevel, defaultSoundVolumeLevel } from './defaultVolumeLevels'
-import { autoplayStore, currentCleavageStore, gamePhaseStore, interfaceViewStore, musicVolumeStore, soundVolumeStore } from '../../../ui/stores/stores'
+import { autoplayStore, currentCleavageStore, gamePhaseStore, interfaceViewStore, musicVolumeStore, soundVolumeStore, videoExtractStore, videoExtractVolumeStore } from '../../../ui/stores/stores'
 import * as Tone from 'tone'
 import { Application, Sprite } from 'pixi.js'
 import type { SupportedSound } from '../../../domain/entities/SoundType'
@@ -15,6 +15,7 @@ import type { Size } from '../../../domain/entities/Size'
 import { PixiApplicationCommon } from './PixiApplicationCommon'
 import { SpriteType } from '../../../domain/entities/SpriteType'
 import type { InterfaceEntityState } from '../../../domain/entities/InterfaceEntityState'
+import type { VideoExtract } from '../../../domain/entities/VideoExtract'
 
 interface PixiJsEntity extends InterfaceEntityState {
     pixiSprite:Sprite
@@ -29,6 +30,35 @@ export class SvelteTonePixiInterfaceGateway extends PixiApplicationCommon implem
         private pixiApplication: Application,
         private textureSources: Map<SpriteType, string>
     ) { super() }
+
+    changeVideoExtractVolumeLevel (volume: number): Promise<void> {
+        videoExtractVolumeStore.set(volume)
+        return Promise.resolve()
+    }
+
+    unMuteMusic (): Promise<void> {
+        const onMusicVolumeBeforeMute = (musicVolumeBeforeMute:number) => {
+            this.musicVolumeFader.volume.value = musicVolumeBeforeMute
+            this.musicVolumeBeforeMute = undefined
+            return Promise.resolve()
+        }
+        console.log('UNMUTE', this.musicVolumeBeforeMute)
+        return this.musicVolumeBeforeMute === undefined
+            ? Promise.reject(new Error('musicVolumeBeforeMute is undefined.'))
+            : onMusicVolumeBeforeMute(this.musicVolumeBeforeMute)
+    }
+
+    muteMusic (): Promise<void> {
+        this.musicVolumeBeforeMute = this.musicVolumeFader.volume.value
+        console.log('MUTE', this.musicVolumeBeforeMute)
+        this.musicVolumeFader.volume.value = Tone.gainToDb(0 / 100)
+        return Promise.resolve()
+    }
+
+    public changeVideoExtract (videoExtract: VideoExtract): Promise<void> {
+        videoExtractStore.set(videoExtract)
+        return Promise.resolve()
+    }
 
     public addingViewToDom (htmlElement:HTMLElement):Promise<void> {
         htmlElement.appendChild(this.pixiApplication.view)
@@ -234,6 +264,7 @@ export class SvelteTonePixiInterfaceGateway extends PixiApplicationCommon implem
     private soundVolumeFader: Tone.Volume = new Tone.Volume(Tone.gainToDb(defaultSoundVolumeLevel / 100)).toDestination()
     private currentView: InterfaceView = InterfaceView.NONE
     private toneReady: boolean = false
+    private musicVolumeBeforeMute: number | undefined
 }
 
 const toneIsNotReady = 'Tone is not ready'

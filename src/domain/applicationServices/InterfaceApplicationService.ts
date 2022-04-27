@@ -5,10 +5,20 @@ import type { InterfaceView } from '../entities/InterfaceView'
 import type { Music } from '../entities/music/Music'
 import type { ApplicationNotification } from '../entities/notification/Notification'
 import { noCleavageAvailableNotification } from '../entities/notification/notifications'
-import type { Sound } from '../entities/sound'
+import { Sound } from '../entities/sound'
+import { SupportedSound } from '../entities/SoundType'
 import type { InterfaceGateway } from '../ports/secondary/gateways/InterfaceGateway'
 
 export class InterfaceApplicationService {
+    changeVideoExtractVolumeLevel (volume: number): Promise<void> {
+        return Promise.all([
+            this.playSound(new Sound(SupportedSound.TICK)),
+            this.interfaceGateway.changeVideoExtractVolumeLevel(volume)
+        ])
+            .then(() => Promise.resolve())
+            .catch(error => Promise.reject(error))
+    }
+
     changeGamePhase (gamePhase: GamePhase):Promise<void> {
         return this.interfaceGateway.changeGamePhase(gamePhase)
     }

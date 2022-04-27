@@ -10,6 +10,7 @@ import { detailedComparisonMessage, isGiven, stringifyWithDetailledSetAndMap } f
 import type { Gherkin } from '../Gherkin'
 import type { GamePhase } from '../../entities/GamePhase'
 import type { InterfaceEntityState } from '../../entities/InterfaceEntityState'
+import type { VideoExtract } from '../../entities/VideoExtract'
 
 export const theInterfaceGatewayHasNotifications = (gherkinPrefix: Gherkin, application: FakeClientApplication, expectedNotifications: ApplicationNotification[] | ApplicationNotification) => {
     const notifications = Array.isArray(expectedNotifications) ? expectedNotifications : [expectedNotifications]
@@ -87,4 +88,32 @@ export const theInterfaceGatewayHasCurrentGamePhase = (gherkinPrefix:Gherkin, ap
     it(`${gherkinPrefix} the interface gateway has game phase ${gamePhase}`, () => {
         if (isGiven(gherkinPrefix)) application.gateways.interface.gamePhase = gamePhase
         expect(application.gateways.interface.gamePhase).deep.equal(gamePhase)
+    })
+
+export const theInterfaceGatewayHasCurrentVideo = (gherkinPrefix:Gherkin, application:FakeClientApplication, videoExtract:VideoExtract):Test =>
+    it(`${gherkinPrefix} the interface gateway has current video extract with choice ${videoExtract.choice} and percentage ${videoExtract.percentage}`, () => {
+        if (isGiven(gherkinPrefix)) application.gateways.interface.videoExtract = videoExtract
+        expect(application.gateways.interface.videoExtract).deep.equal(videoExtract)
+    })
+export const theInterfaceGatewayHasNoCurrentVideo = (gherkinPrefix:Gherkin, application:FakeClientApplication):Test =>
+    it(`${gherkinPrefix} the interface gateway has no current video extract`, () => {
+        if (isGiven(gherkinPrefix)) application.gateways.interface.videoExtract = undefined
+        expect(application.gateways.interface.videoExtract).deep.equal(undefined)
+    })
+
+export const theInterfaceGatewayHasCurrentMusicMuted = (gherkinPrefix:Gherkin, application:FakeClientApplication):Test =>
+    it(`${gherkinPrefix} the interface gateway has current music muted.`, () => {
+        if (isGiven(gherkinPrefix)) application.gateways.interface.musicMuted = true
+        expect(application.gateways.interface.musicMuted).deep.equal(true)
+    })
+export const theInterfaceGatewayHasCurrentMusicNotMuted = (gherkinPrefix:Gherkin, application:FakeClientApplication):Test =>
+    it(`${gherkinPrefix} the interface gateway has current music not muted.`, () => {
+        if (isGiven(gherkinPrefix)) application.gateways.interface.musicMuted = false
+        expect(application.gateways.interface.musicMuted).deep.equal(false)
+    })
+
+export const theInterfaceGatewayHasCurrentVideoExtractVolume = (gherkinPrefix:Gherkin, application:FakeClientApplication, expectedVolume:number):Test =>
+    it(`${gherkinPrefix} the interface gateway has current video extract volume set to ${expectedVolume}`, () => {
+        if (isGiven(gherkinPrefix)) application.gateways.interface.videoExtractVolume = expectedVolume
+        expect(application.gateways.interface.videoExtractVolume).deep.equal(expectedVolume)
     })

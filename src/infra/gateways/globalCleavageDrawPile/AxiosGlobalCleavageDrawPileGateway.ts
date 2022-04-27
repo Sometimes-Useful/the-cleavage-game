@@ -18,7 +18,6 @@ export class AxiosGlobalCleavageDrawPileGateway implements GlobalCleavageDrawPil
     drawGlobalCleavage (): Promise<Cleavage | undefined> {
         return this.backendApiInstance.get<CleavageDTO | ''>(BACKEND_API_URL.GLOBAL_CLEAVAGE_DRAWPILE_DRAW)
             .then(response => {
-                console.log(response.data)
                 return Promise.resolve(response.data ? new Cleavage(response.data) : undefined)
             })
             .catch(error => Promise.reject(error))

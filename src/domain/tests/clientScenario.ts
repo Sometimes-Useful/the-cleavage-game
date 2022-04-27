@@ -25,6 +25,8 @@ import { InMemoryBarRepository } from '../../infra/repositories/bar/InMemoryBarR
 import { BarApplicationService } from '../applicationServices/BarApplicationService'
 import { FakeUuidGateway } from '../../infra/gateways/uuid/FakeUuidGateway'
 import { InMemoryGamePhaseRepository } from '../../infra/repositories/gamePhase/InMemoryGamePhaseRepository'
+import { InMemoryVideoExtractRepository } from '../../infra/repositories/videoExtract/InMemoryVideoExtractRepository'
+import { VideoExtractApplicationService } from '../applicationServices/VideoExtractApplicationService'
 
 export function clientScenario (scenarioTitle: string, unitTests: ((application: FakeClientApplication) => Test)[], skip?: boolean) {
     const eventGateway = new FakeClientEventGateway()
@@ -38,6 +40,7 @@ export function clientScenario (scenarioTitle: string, unitTests: ((application:
         uuid: new FakeUuidGateway()
     }
     const applicationRepositories: FakeClientApplicationRepositories = {
+        videoExtracts: new InMemoryVideoExtractRepository(),
         publicCleavageDrawPile: new InMemoryPublicCleavageDrawPileRepository(),
         player: new InMemoryPlayerRepository(),
         currentCleavage: new InMemoryCurrentCleavageRepository(),
@@ -46,6 +49,7 @@ export function clientScenario (scenarioTitle: string, unitTests: ((application:
         gamePhase: new InMemoryGamePhaseRepository()
     }
     const applicationServices: ClientApplicationServices = {
+        videoExtract: new VideoExtractApplicationService(applicationRepositories.videoExtracts, applicationGateways.interface, applicationGateways.random),
         chat: new ChatApplicationService(applicationGateways.chat, applicationGateways.interface),
         event: new EventApplicationService(applicationGateways.event),
         cleavage: new CleavageApplicationService(applicationRepositories.publicCleavageDrawPile, applicationGateways.globalCleavageDrawPile, applicationRepositories.currentCleavage, applicationGateways.chat, applicationRepositories.gamePhase),

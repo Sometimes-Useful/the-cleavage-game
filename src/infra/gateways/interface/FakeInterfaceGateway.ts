@@ -6,8 +6,29 @@ import type { Music } from '../../../domain/entities/music/Music'
 import type { InterfaceGateway } from '../../../domain/ports/secondary/gateways/InterfaceGateway'
 import { GamePhase } from '../../../domain/entities/GamePhase'
 import type { InterfaceEntityState } from '../../../domain/entities/InterfaceEntityState'
+import type { VideoExtract } from '../../../domain/entities/VideoExtract'
 
 export class FakeInterfaceGateway implements InterfaceGateway {
+    changeVideoExtractVolumeLevel (volume: number): Promise<void> {
+        this.videoExtractVolume = volume
+        return Promise.resolve()
+    }
+
+    unMuteMusic (): Promise<void> {
+        this.musicMuted = false
+        return Promise.resolve()
+    }
+
+    muteMusic ():Promise<void> {
+        this.musicMuted = true
+        return Promise.resolve()
+    }
+
+    changeVideoExtract (videoExtract: VideoExtract): Promise<void> {
+        this.videoExtract = videoExtract
+        return Promise.resolve()
+    }
+
     changeGamePhase (gamePhase: GamePhase): Promise<void> {
         this.gamePhase = gamePhase
         return Promise.resolve()
@@ -72,14 +93,17 @@ export class FakeInterfaceGateway implements InterfaceGateway {
         return Promise.resolve()
     }
 
+    musicMuted: boolean = false
     gamePhase: GamePhase = GamePhase.NONE
     currentCleavage: Cleavage|undefined
     notifications: ApplicationNotification[] = [];
     playingSounds: Sound[] = []
     musicVolume: number = 0
     soundVolume: number = 0
+    videoExtractVolume: number = 0
     autoplayEnabled: boolean = false
     playingMusic: Music | undefined = undefined
     currentView: InterfaceView = InterfaceView.NONE;
     interfaceEntitiesState: Map<string, InterfaceEntityState> = new Map()
+    videoExtract: VideoExtract|undefined
 }

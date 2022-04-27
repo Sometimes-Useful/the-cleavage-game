@@ -8,8 +8,13 @@ import type { Position } from '../../../entities/Position'
 import type { Size } from '../../../entities/Size'
 import type { Sound } from '../../../entities/sound'
 import type { SpriteType } from '../../../entities/SpriteType'
+import type { VideoExtract } from '../../../entities/VideoExtract'
 
 export interface InterfaceGateway {
+    changeVideoExtractVolumeLevel(volume: number): Promise<void>
+    unMuteMusic(): Promise<void>
+    muteMusic(): Promise<void>
+    changeVideoExtract(videoExtract: VideoExtract|undefined): Promise<void>
     changeGamePhase(gamePhase: GamePhase):Promise<void>
     removeEntityInterfaceState(id: string): Promise<void>
     updateEntityInterfaceState(id:string, interfaceEntityState: InterfaceEntityState): Promise<void>
