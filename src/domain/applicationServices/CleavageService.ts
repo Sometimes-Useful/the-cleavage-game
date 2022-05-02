@@ -34,7 +34,7 @@ export class CleavageApplicationService {
     }
 
     removePlayerOnCleavage (player:Player):Promise<void> {
-        return this.loadCleavage()
+        return this.loadCurrentCleavage()
             .then(cleavage => {
                 cleavage.leftChoice.players = cleavage.leftChoice.players.filter(cleavePlayer => cleavePlayer !== player.username)
                 cleavage.rightChoice.players = cleavage.rightChoice.players.filter(cleavePlayer => cleavePlayer !== player.username)
@@ -45,7 +45,7 @@ export class CleavageApplicationService {
     }
 
     public addPlayerOnCleavage (player:Player): Promise<void> {
-        return this.loadCleavage()
+        return this.loadCurrentCleavage()
             .then(cleavage => {
                 cleavage.players.push(player.username)
                 return this.saveCleavage(cleavage)
@@ -61,11 +61,11 @@ export class CleavageApplicationService {
         return this.publicCleavageDrawPileRepository.addCleavage(cleavage)
     }
 
-    loadCleavage ():Promise<Cleavage> {
+    loadCurrentCleavage ():Promise<Cleavage> {
         return this.currentCleavageRepository.load()
     }
 
-    hasCleavage (): Promise<boolean> {
+    hasCurrentCleavage (): Promise<boolean> {
         return this.currentCleavageRepository.hasCleavage()
     }
 

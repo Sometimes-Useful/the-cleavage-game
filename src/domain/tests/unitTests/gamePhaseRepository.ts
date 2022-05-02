@@ -5,7 +5,7 @@ import type { GamePhase } from '../../entities/GamePhase'
 import type { Gherkin } from '../Gherkin'
 import { isGiven } from './unitTests'
 
-export const theGamePhaseRepositoryHasPhase = (gherkinPrefix:Gherkin, application:FakeClientApplication, gamePhase:GamePhase):Test =>
+export const theGamePhaseRepositoryHasPhase = (gherkinPrefix:Gherkin, gamePhase:GamePhase) => (application:FakeClientApplication):Test =>
     it(`${gherkinPrefix} the game phase repository has phase '${gamePhase}'`, () => {
         if (isGiven(gherkinPrefix)) application.repositories.gamePhase.currentGamePhase = gamePhase
         expect(application.repositories.gamePhase.currentGamePhase).deep.equal(gamePhase)

@@ -16,10 +16,11 @@ export interface CleavageDTO {
 export class Cleavage {
     majorScore (): number {
         const majorChoice = this.majorChoice()
+        const totalCleave = this.leftChoice.players.length + this.rightChoice.players.length
         return majorChoice
             ? majorChoice === this.leftChoice.name
-                ? this.leftChoice.players.length / this.players.length * 100
-                : this.rightChoice.players.length / this.players.length * 100
+                ? this.leftChoice.players.length / totalCleave * 100
+                : this.rightChoice.players.length / totalCleave * 100
             : 50
     }
 

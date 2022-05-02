@@ -30,7 +30,7 @@ export class PlayerQuitUseCase extends UseCase {
 
     private onPlayer (player:Player): Promise<void> {
         return this.applicationServices.player.removePlayer(player)
-            .then(() => this.applicationServices.cleavage.hasCleavage())
+            .then(() => this.applicationServices.cleavage.hasCurrentCleavage())
             .then(hasCleavage => hasCleavage
                 ? this.onCleavage(player)
                 : Promise.resolve()
@@ -40,7 +40,7 @@ export class PlayerQuitUseCase extends UseCase {
 
     private onCleavage (player: Player): Promise<void> {
         return this.applicationServices.cleavage.removePlayerOnCleavage(player)
-            .then(() => this.applicationServices.cleavage.loadCleavage())
+            .then(() => this.applicationServices.cleavage.loadCurrentCleavage())
             .then(cleavage => this.applicationServices.interface.updateCleavage(cleavage))
             .catch(error => Promise.reject(error))
     }

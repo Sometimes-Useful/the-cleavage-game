@@ -15,51 +15,51 @@ const playerPositionOnStool1B:Position = { x: 0.7, y: -2.9 }
 
 feature(EventType.TABLE_STOOL_AVAILABLE, [
     clientScenario('Scenario 1 - Install player on table stool when 1 table stool available', [
-        app => theBarRepositoryHasOccupiedBarStool(Gherkin.GIVEN, app, new Map([[player1().username, stoolBarA]])),
-        app => theBarRepositoryHasAvailableBarStool(Gherkin.AND_GIVEN, app, []),
-        app => theBarRepositoryHasAvailableTableStool(Gherkin.AND_GIVEN, app, [stool1A]),
-        app => whenEventOccurs(app, new TableStoolAvailableEvent()),
-        app => theBarRepositoryHasOccupiedBarStool(Gherkin.THEN, app, new Map()),
-        app => theBarRepositoryHasAvailableBarStool(Gherkin.AND_THEN, app, stoolBarA),
-        app => theBarRepositoryHasAvailableTableStool(Gherkin.AND_THEN, app, []),
-        app => theBarRepositoryHasOccupiedTableStool(Gherkin.AND_THEN, app, new Map([[player1().username, stool1A]])),
-        app => theEventIsSent(Gherkin.AND_THEN, app, new PlayerMoveEvent(player1().username, playerPositionOnStool1A))
+        theBarRepositoryHasOccupiedBarStool(Gherkin.GIVEN, new Map([[player1().username, stoolBarA]])),
+        theBarRepositoryHasAvailableBarStool(Gherkin.AND_GIVEN, []),
+        theBarRepositoryHasAvailableTableStool(Gherkin.AND_GIVEN, [stool1A]),
+        whenEventOccurs(new TableStoolAvailableEvent()),
+        theBarRepositoryHasOccupiedBarStool(Gherkin.THEN, new Map()),
+        theBarRepositoryHasAvailableBarStool(Gherkin.AND_THEN, stoolBarA),
+        theBarRepositoryHasAvailableTableStool(Gherkin.AND_THEN, []),
+        theBarRepositoryHasOccupiedTableStool(Gherkin.AND_THEN, new Map([[player1().username, stool1A]])),
+        theEventIsSent(Gherkin.AND_THEN, new PlayerMoveEvent(player1().username, playerPositionOnStool1A))
     ]),
     clientScenario('Scenario 2 - Keep player on bar stool when no table stool available', [
-        app => theBarRepositoryHasOccupiedBarStool(Gherkin.GIVEN, app, new Map([[player1().username, stoolBarA]])),
-        app => theBarRepositoryHasAvailableBarStool(Gherkin.AND_GIVEN, app, []),
-        app => theBarRepositoryHasAvailableTableStool(Gherkin.AND_GIVEN, app, []),
-        app => whenEventOccurs(app, new TableStoolAvailableEvent()),
-        app => theBarRepositoryHasOccupiedBarStool(Gherkin.THEN, app, new Map([[player1().username, stoolBarA]])),
-        app => theBarRepositoryHasAvailableBarStool(Gherkin.AND_THEN, app, []),
-        app => theBarRepositoryHasAvailableTableStool(Gherkin.AND_THEN, app, []),
-        app => theBarRepositoryHasOccupiedTableStool(Gherkin.AND_THEN, app, new Map()),
-        app => theEventIsSent(Gherkin.AND_THEN, app, new InstallNewTableEvent())
+        theBarRepositoryHasOccupiedBarStool(Gherkin.GIVEN, new Map([[player1().username, stoolBarA]])),
+        theBarRepositoryHasAvailableBarStool(Gherkin.AND_GIVEN, []),
+        theBarRepositoryHasAvailableTableStool(Gherkin.AND_GIVEN, []),
+        whenEventOccurs(new TableStoolAvailableEvent()),
+        theBarRepositoryHasOccupiedBarStool(Gherkin.THEN, new Map([[player1().username, stoolBarA]])),
+        theBarRepositoryHasAvailableBarStool(Gherkin.AND_THEN, []),
+        theBarRepositoryHasAvailableTableStool(Gherkin.AND_THEN, []),
+        theBarRepositoryHasOccupiedTableStool(Gherkin.AND_THEN, new Map()),
+        theEventIsSent(Gherkin.AND_THEN, new InstallNewTableEvent())
     ]),
     clientScenario('Scenario 3 - Install 2 players on table stools when 2 table stool available', [
-        app => theBarRepositoryHasOccupiedBarStool(Gherkin.GIVEN, app, new Map([[player1().username, stoolBarA], [player2().username, stoolBarB]])),
-        app => theBarRepositoryHasAvailableBarStool(Gherkin.AND_GIVEN, app, []),
-        app => theBarRepositoryHasAvailableTableStool(Gherkin.AND_GIVEN, app, [stool1A, stool1B]),
-        app => whenEventOccurs(app, new TableStoolAvailableEvent()),
-        app => theBarRepositoryHasOccupiedBarStool(Gherkin.THEN, app, new Map()),
-        app => theBarRepositoryHasAvailableBarStool(Gherkin.AND_THEN, app, [stoolBarA, stoolBarB]),
-        app => theBarRepositoryHasAvailableTableStool(Gherkin.AND_THEN, app, []),
-        app => theBarRepositoryHasOccupiedTableStool(Gherkin.AND_THEN, app, new Map([[player1().username, stool1A], [player2().username, stool1B]])),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasOccupiedBarStool(Gherkin.GIVEN, new Map([[player1().username, stoolBarA], [player2().username, stoolBarB]])),
+        theBarRepositoryHasAvailableBarStool(Gherkin.AND_GIVEN, []),
+        theBarRepositoryHasAvailableTableStool(Gherkin.AND_GIVEN, [stool1A, stool1B]),
+        whenEventOccurs(new TableStoolAvailableEvent()),
+        theBarRepositoryHasOccupiedBarStool(Gherkin.THEN, new Map()),
+        theBarRepositoryHasAvailableBarStool(Gherkin.AND_THEN, [stoolBarA, stoolBarB]),
+        theBarRepositoryHasAvailableTableStool(Gherkin.AND_THEN, []),
+        theBarRepositoryHasOccupiedTableStool(Gherkin.AND_THEN, new Map([[player1().username, stool1A], [player2().username, stool1B]])),
+        theEventIsSent(Gherkin.AND_THEN, [
             new PlayerMoveEvent(player1().username, playerPositionOnStool1A),
             new PlayerMoveEvent(player2().username, playerPositionOnStool1B)
         ])
     ]),
     clientScenario('Scenario 4 - Install 2 players on table stools when 1 table stool available', [
-        app => theBarRepositoryHasOccupiedBarStool(Gherkin.GIVEN, app, new Map([[player1().username, stoolBarA], [player2().username, stoolBarB]])),
-        app => theBarRepositoryHasAvailableBarStool(Gherkin.AND_GIVEN, app, []),
-        app => theBarRepositoryHasAvailableTableStool(Gherkin.AND_GIVEN, app, [stool1A]),
-        app => whenEventOccurs(app, new TableStoolAvailableEvent()),
-        app => theBarRepositoryHasOccupiedBarStool(Gherkin.THEN, app, new Map([[player2().username, stoolBarB]])),
-        app => theBarRepositoryHasAvailableBarStool(Gherkin.AND_THEN, app, [stoolBarA]),
-        app => theBarRepositoryHasAvailableTableStool(Gherkin.AND_THEN, app, []),
-        app => theBarRepositoryHasOccupiedTableStool(Gherkin.AND_THEN, app, new Map([[player1().username, stool1A]])),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasOccupiedBarStool(Gherkin.GIVEN, new Map([[player1().username, stoolBarA], [player2().username, stoolBarB]])),
+        theBarRepositoryHasAvailableBarStool(Gherkin.AND_GIVEN, []),
+        theBarRepositoryHasAvailableTableStool(Gherkin.AND_GIVEN, [stool1A]),
+        whenEventOccurs(new TableStoolAvailableEvent()),
+        theBarRepositoryHasOccupiedBarStool(Gherkin.THEN, new Map([[player2().username, stoolBarB]])),
+        theBarRepositoryHasAvailableBarStool(Gherkin.AND_THEN, [stoolBarA]),
+        theBarRepositoryHasAvailableTableStool(Gherkin.AND_THEN, []),
+        theBarRepositoryHasOccupiedTableStool(Gherkin.AND_THEN, new Map([[player1().username, stool1A]])),
+        theEventIsSent(Gherkin.AND_THEN, [
             new PlayerMoveEvent(player1().username, playerPositionOnStool1A),
             new InstallNewTableEvent()
         ])

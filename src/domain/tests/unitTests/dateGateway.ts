@@ -4,7 +4,7 @@ import type { FakeClientApplication } from '../../../infra/applications/client/F
 import type { Gherkin } from '../Gherkin'
 import { isGiven } from './unitTests'
 
-export const theDateGatewayHasCurrentDate = (gherkinPrefix:Gherkin, application:FakeClientApplication, expectedCurrentDate:Date):Test =>
+export const theDateGatewayHasCurrentDate = (gherkinPrefix:Gherkin, expectedCurrentDate:Date) => (application:FakeClientApplication):Test =>
     it(`${gherkinPrefix} the date gateway has the following current date : ${expectedCurrentDate.toISOString()}`, () => {
         if (isGiven(gherkinPrefix)) application.gateways.date.currentDate = expectedCurrentDate
         expect(application.gateways.date.currentDate).deep.equal(expectedCurrentDate)

@@ -12,14 +12,14 @@ import { whenEventOccurs } from '../../tests/unitTests/eventGateway'
 
 feature(EventType.DISCONNECT_CHAT, [
     clientScenario('Scenario 1 : Connect Chat on chat DISCONNECTED', [
-        app => theChatGatewayHasExpectedStatus(Gherkin.GIVEN, app, ChatStatus.CONNECTED),
-        app => whenEventOccurs(app, new DisconnectChatEvent()),
-        app => theChatGatewayHasExpectedStatus(Gherkin.THEN, app, ChatStatus.DISCONNECTED)
+        theChatGatewayHasExpectedStatus(Gherkin.GIVEN, ChatStatus.CONNECTED),
+        whenEventOccurs(new DisconnectChatEvent()),
+        theChatGatewayHasExpectedStatus(Gherkin.THEN, ChatStatus.DISCONNECTED)
     ]),
     clientScenario("Scenario 2 : Can't Connect Chat on chat already CONNECTED", [
-        app => theChatGatewayHasExpectedStatus(Gherkin.GIVEN, app, ChatStatus.DISCONNECTED),
-        app => whenEventOccurs(app, new DisconnectChatEvent()),
-        app => theChatGatewayHasExpectedStatus(Gherkin.THEN, app, ChatStatus.DISCONNECTED),
-        app => theInterfaceGatewayHasNotifications(Gherkin.AND_THEN, app, alreadyDisconnectedToChatNotification)
+        theChatGatewayHasExpectedStatus(Gherkin.GIVEN, ChatStatus.DISCONNECTED),
+        whenEventOccurs(new DisconnectChatEvent()),
+        theChatGatewayHasExpectedStatus(Gherkin.THEN, ChatStatus.DISCONNECTED),
+        theInterfaceGatewayHasNotifications(Gherkin.AND_THEN, alreadyDisconnectedToChatNotification)
     ])
 ])

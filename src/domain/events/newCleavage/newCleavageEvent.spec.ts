@@ -20,53 +20,53 @@ import { NewCleavageEvent } from './NewCleavageEvent'
 
 feature(EventType.NEW_CLEAVAGE, [
     clientScenario(`Scenario 1 : Navigate to ${InterfaceView.CONNECT_CHAT} when chat gateway is ${ChatStatus.DISCONNECTED}.`, [
-        app => theInterfaceGatewayHasCurrentView(Gherkin.GIVEN, app, InterfaceView.GAME),
-        app => theChatGatewayHasExpectedStatus(Gherkin.AND_GIVEN, app, ChatStatus.DISCONNECTED),
-        app => whenEventOccurs(app, new NewCleavageEvent()),
-        app => theEventIsSent(Gherkin.THEN, app, new NavigateEvent(InterfaceView.CONNECT_CHAT)),
-        app => theInterfaceGatewayHasCurrentView(Gherkin.AND_THEN, app, InterfaceView.GAME)
+        theInterfaceGatewayHasCurrentView(Gherkin.GIVEN, InterfaceView.GAME),
+        theChatGatewayHasExpectedStatus(Gherkin.AND_GIVEN, ChatStatus.DISCONNECTED),
+        whenEventOccurs(new NewCleavageEvent()),
+        theEventIsSent(Gherkin.THEN, new NavigateEvent(InterfaceView.CONNECT_CHAT)),
+        theInterfaceGatewayHasCurrentView(Gherkin.AND_THEN, InterfaceView.GAME)
     ]),
     clientScenario(`Scenario 2 : Change game phase to ${GamePhase.NEW_CLEAVAGE} when chat gateway is ${ChatStatus.CONNECTED}.`, [
-        app => theInterfaceGatewayHasCurrentView(Gherkin.GIVEN, app, InterfaceView.GAME),
-        app => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_GIVEN, app, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [] }, rightChoice: { name: 'Drouate', players: [] }, players: [] })),
-        app => theChatGatewayHasExpectedStatus(Gherkin.AND_GIVEN, app, ChatStatus.CONNECTED),
-        app => whenEventOccurs(app, new NewCleavageEvent()),
-        app => theEventIsSent(Gherkin.THEN, app, new VideoExtractStartEvent()),
-        app => theInterfaceGatewayHasCurrentView(Gherkin.AND_THEN, app, InterfaceView.GAME),
-        app => theInterfaceGatewayDontHaveCleavage(Gherkin.AND_THEN, app)
+        theInterfaceGatewayHasCurrentView(Gherkin.GIVEN, InterfaceView.GAME),
+        theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_GIVEN, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [] }, rightChoice: { name: 'Drouate', players: [] }, players: [] })),
+        theChatGatewayHasExpectedStatus(Gherkin.AND_GIVEN, ChatStatus.CONNECTED),
+        whenEventOccurs(new NewCleavageEvent()),
+        theEventIsSent(Gherkin.THEN, new VideoExtractStartEvent()),
+        theInterfaceGatewayHasCurrentView(Gherkin.AND_THEN, InterfaceView.GAME),
+        theInterfaceGatewayDontHaveCleavage(Gherkin.AND_THEN)
     ]),
     clientScenario('Scenario 3 : on autoplay enabled.', [
-        app => theChatGatewayHasExpectedStatus(Gherkin.GIVEN, app, ChatStatus.CONNECTED),
-        app => theInterfaceGatewayHasCurrentView(Gherkin.AND_GIVEN, app, InterfaceView.GAME),
-        app => theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_GIVEN, app, new Date()),
-        app => whenEventOccurs(app, new NewCleavageEvent()),
-        app => theEventIsSent(Gherkin.THEN, app, new VideoExtractStartEvent())
+        theChatGatewayHasExpectedStatus(Gherkin.GIVEN, ChatStatus.CONNECTED),
+        theInterfaceGatewayHasCurrentView(Gherkin.AND_GIVEN, InterfaceView.GAME),
+        theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_GIVEN, new Date()),
+        whenEventOccurs(new NewCleavageEvent()),
+        theEventIsSent(Gherkin.THEN, new VideoExtractStartEvent())
     ]),
     clientScenario('Scenario 4 : on autoplay disabled.', [
-        app => theChatGatewayHasExpectedStatus(Gherkin.GIVEN, app, ChatStatus.CONNECTED),
-        app => theInterfaceGatewayHasCurrentView(Gherkin.AND_GIVEN, app, InterfaceView.GAME),
-        app => theAutoPlayRepositoryDontHaveNextCleavageDate(Gherkin.AND_GIVEN, app),
-        app => whenEventOccurs(app, new NewCleavageEvent()),
-        app => theEventIsSent(Gherkin.THEN, app, new VideoExtractStartEvent())
+        theChatGatewayHasExpectedStatus(Gherkin.GIVEN, ChatStatus.CONNECTED),
+        theInterfaceGatewayHasCurrentView(Gherkin.AND_GIVEN, InterfaceView.GAME),
+        theAutoPlayRepositoryDontHaveNextCleavageDate(Gherkin.AND_GIVEN),
+        whenEventOccurs(new NewCleavageEvent()),
+        theEventIsSent(Gherkin.THEN, new VideoExtractStartEvent())
     ]),
     clientScenario('Scenario 5 : BUG no view change when main menu', [
-        app => theChatGatewayHasExpectedStatus(Gherkin.GIVEN, app, ChatStatus.CONNECTED),
-        app => theInterfaceGatewayHasCurrentView(Gherkin.AND_GIVEN, app, InterfaceView.MAIN_MENU),
-        app => whenEventOccurs(app, new NewCleavageEvent()),
-        app => theEventIsSent(Gherkin.THEN, app, [
+        theChatGatewayHasExpectedStatus(Gherkin.GIVEN, ChatStatus.CONNECTED),
+        theInterfaceGatewayHasCurrentView(Gherkin.AND_GIVEN, InterfaceView.MAIN_MENU),
+        whenEventOccurs(new NewCleavageEvent()),
+        theEventIsSent(Gherkin.THEN, [
             new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE),
             new NavigateEvent(InterfaceView.GAME)
         ]),
-        app => theInterfaceGatewayHasCurrentView(Gherkin.AND_THEN, app, InterfaceView.MAIN_MENU)
+        theInterfaceGatewayHasCurrentView(Gherkin.AND_THEN, InterfaceView.MAIN_MENU)
     ]),
     clientScenario(`Scenario 6 : No game phase change event to ${GamePhase.NEW_CLEAVAGE} when still ${GamePhase.NEW_CLEAVAGE}`, [
-        app => theChatGatewayHasExpectedStatus(Gherkin.GIVEN, app, ChatStatus.CONNECTED),
-        app => theInterfaceGatewayHasCurrentView(Gherkin.AND_GIVEN, app, InterfaceView.MAIN_MENU),
-        app => theGamePhaseRepositoryHasPhase(Gherkin.AND_GIVEN, app, GamePhase.NEW_CLEAVAGE),
-        app => whenEventOccurs(app, new NewCleavageEvent()),
-        app => theEventIsSent(Gherkin.THEN, app, [
+        theChatGatewayHasExpectedStatus(Gherkin.GIVEN, ChatStatus.CONNECTED),
+        theInterfaceGatewayHasCurrentView(Gherkin.AND_GIVEN, InterfaceView.MAIN_MENU),
+        theGamePhaseRepositoryHasPhase(Gherkin.AND_GIVEN, GamePhase.NEW_CLEAVAGE),
+        whenEventOccurs(new NewCleavageEvent()),
+        theEventIsSent(Gherkin.THEN, [
             new NavigateEvent(InterfaceView.GAME)
         ]),
-        app => theInterfaceGatewayHasCurrentView(Gherkin.AND_THEN, app, InterfaceView.MAIN_MENU)
+        theInterfaceGatewayHasCurrentView(Gherkin.AND_THEN, InterfaceView.MAIN_MENU)
     ])
 ])

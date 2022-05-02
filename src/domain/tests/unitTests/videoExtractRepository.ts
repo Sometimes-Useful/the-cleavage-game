@@ -5,14 +5,14 @@ import type { VideoExtract } from '../../entities/VideoExtract'
 import type { Gherkin } from '../Gherkin'
 import { isGiven } from './unitTests'
 
-export const theVideoExtractRepositoryHasExtracts = (gherkin:Gherkin, application:FakeClientApplication, expectedVideoExtracts:VideoExtract[]):Test => {
+export const theVideoExtractRepositoryHasExtracts = (gherkin:Gherkin, expectedVideoExtracts:VideoExtract[]) => (application:FakeClientApplication):Test => {
     return it(`${gherkin} the video extract repository has extracts: ${expectedVideoExtracts}`, () => {
         if (isGiven(gherkin)) application.repositories.videoExtracts.videoExtracts = expectedVideoExtracts
         expect(application.repositories.videoExtracts.videoExtracts).deep.equal(expectedVideoExtracts)
     })
 }
 
-export const theVideoExtractRepositoryHasNoExtracts = (gherkin:Gherkin, application:FakeClientApplication):Test => {
+export const theVideoExtractRepositoryHasNoExtracts = (gherkin:Gherkin) => (application:FakeClientApplication):Test => {
     return it(`${gherkin} the video extract repository has no extracts.`, () => {
         if (isGiven(gherkin)) application.repositories.videoExtracts.videoExtracts = []
         expect(application.repositories.videoExtracts.videoExtracts).deep.equal([])

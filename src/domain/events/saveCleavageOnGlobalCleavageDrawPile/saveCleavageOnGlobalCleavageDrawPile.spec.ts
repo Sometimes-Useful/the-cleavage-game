@@ -9,18 +9,18 @@ import { SaveCleavageOnGlobalCleavageDrawPileEvent } from './SaveCleavageOnGloba
 
 feature(EventType.SAVE_CLEAVAGE_ON_GLOBAL_CLEAVAGE_DRAWPILE, [
     serverScenario('Scenario 1 : With no cleavage on draw pile', [
-        app => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.GIVEN, app, []),
-        app => whenEventOccurs(app, new SaveCleavageOnGlobalCleavageDrawPileEvent(commonCleavage1())),
-        app => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.AND_THEN, app, [commonCleavage1()])
+        theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.GIVEN, []),
+        whenEventOccurs(new SaveCleavageOnGlobalCleavageDrawPileEvent(commonCleavage1())),
+        theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.AND_THEN, [commonCleavage1()])
     ]),
     serverScenario('Scenario 2 : With existing same cleavage on draw pile', [
-        app => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.GIVEN, app, [commonCleavage1()]),
-        app => whenEventOccurs(app, new SaveCleavageOnGlobalCleavageDrawPileEvent(commonCleavage1())),
-        app => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.AND_THEN, app, [commonCleavage1()])
+        theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.GIVEN, [commonCleavage1()]),
+        whenEventOccurs(new SaveCleavageOnGlobalCleavageDrawPileEvent(commonCleavage1())),
+        theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.AND_THEN, [commonCleavage1()])
     ]),
     serverScenario('Scenario 3 : With existing same cleavage on draw pile', [
-        app => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.GIVEN, app, [commonCleavage1()]),
-        app => whenEventOccurs(app, new SaveCleavageOnGlobalCleavageDrawPileEvent(commonCleavage2())),
-        app => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.AND_THEN, app, [commonCleavage1(), commonCleavage2()])
+        theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.GIVEN, [commonCleavage1()]),
+        whenEventOccurs(new SaveCleavageOnGlobalCleavageDrawPileEvent(commonCleavage2())),
+        theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.AND_THEN, [commonCleavage1(), commonCleavage2()])
     ])
 ])

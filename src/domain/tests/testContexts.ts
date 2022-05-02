@@ -31,6 +31,8 @@ export const gocheChoice = (players:string[] = []) => ({ name: 'Gôche', players
 export const drouateChoice = (players:string[] = []) => ({ name: 'Drouate', players })
 export const commonCleavage1 = () => new Cleavage({ title: cleavageTitle1, leftChoice: gocheChoice(), rightChoice: drouateChoice(), players: [] })
 export const commonCleavage2 = () => new Cleavage({ title: cleavageTitle2, leftChoice: gocheChoice(), rightChoice: drouateChoice(), players: [] })
+export const cleavage1 = new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [] }, rightChoice: { name: 'Drouate', players: [] }, players: [] })
+export const cleavage2 = new Cleavage({ title: cleavageTitle2, leftChoice: { name: 'Gôche', players: [] }, rightChoice: { name: 'Drouate', players: [] }, players: [] })
 export const bar:Bar = { id: 'bar', position: positionBar, size: barSize }
 const tableSize:Size = {
     width: 2.4,

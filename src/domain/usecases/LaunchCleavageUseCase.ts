@@ -29,7 +29,7 @@ export class LaunchCleavageUseCase extends UseCase {
                 rightChoice: { name: event.rightChoiceName, players: [] },
                 players: players.map(player => player.username)
             })))
-            .then(() => this.applicationServices.cleavage.loadCleavage())
+            .then(() => this.applicationServices.cleavage.loadCurrentCleavage())
             .then(cleavage => Promise.all([
                 this.applicationServices.interface.updateCleavage(cleavage),
                 this.applicationServices.cleavage.saveGlobalCleavage(cleavage)

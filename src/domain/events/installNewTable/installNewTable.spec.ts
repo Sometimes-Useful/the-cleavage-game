@@ -14,54 +14,54 @@ import { InstallNewTableEvent } from './InstallNewTableEvent'
 
 feature(EventType.INSTALL_NEW_TABLE, [
     clientScenario('Scenario 1 - First table', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.RIGHT),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, table1.id),
-        app => theBarRepositoryDontHaveTable(Gherkin.GIVEN, app),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table1]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.RIGHT),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, table1.id),
+        theBarRepositoryDontHaveTable(Gherkin.GIVEN),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table1]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table1.id),
             new DrawEvent(table1.id, { size: table1.size, position: table1.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.RIGHT)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.RIGHT)
     ]),
     clientScenario('Scenario 2 - 2 Tables', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.RIGHT),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, table2.id),
-        app => theBarRepositoryHasTable(Gherkin.AND_GIVEN, app, [table1]),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table1, table2]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.RIGHT),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, table2.id),
+        theBarRepositoryHasTable(Gherkin.AND_GIVEN, [table1]),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table1, table2]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table2.id),
             new DrawEvent(table2.id, { size: table2.size, position: table2.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.RIGHT)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.RIGHT)
     ]),
     clientScenario('Scenario 3 - 3 Tables', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.RIGHT),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, table3.id),
-        app => theBarRepositoryHasTable(Gherkin.AND_GIVEN, app, [table1, table2]),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table1, table2, table3]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.RIGHT),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, table3.id),
+        theBarRepositoryHasTable(Gherkin.AND_GIVEN, [table1, table2]),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table1, table2, table3]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table3.id),
             new DrawEvent(table3.id, { size: table3.size, position: table3.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.RIGHT)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.RIGHT)
     ]),
     clientScenario('Scenario 4 - First Upper Side', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.RIGHT),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, [table2.id, table3.id, table4.id]),
-        app => theBarRepositoryHasTable(Gherkin.AND_GIVEN, app, [table1]),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table1, table2, table3, table4]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.RIGHT),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, [table2.id, table3.id, table4.id]),
+        theBarRepositoryHasTable(Gherkin.AND_GIVEN, [table1]),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table1, table2, table3, table4]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table2.id),
             new DrawEvent(table2.id, { size: table2.size, position: table2.position, spriteType: SpriteType.TABLE }),
             new InstallNewStoolsOnTableEvent(table3.id),
@@ -69,34 +69,34 @@ feature(EventType.INSTALL_NEW_TABLE, [
             new InstallNewStoolsOnTableEvent(table4.id),
             new DrawEvent(table4.id, { size: table4.size, position: table4.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.RIGHT)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.RIGHT)
     ]),
     clientScenario('Scenario 5 - First Upper Right Corner', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.RIGHT),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, table5.id),
-        app => theBarRepositoryHasTable(Gherkin.AND_GIVEN, app, [table3, table4]),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table3, table4, table5]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.RIGHT),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, table5.id),
+        theBarRepositoryHasTable(Gherkin.AND_GIVEN, [table3, table4]),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table3, table4, table5]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table5.id),
             new DrawEvent(table5.id, { size: table5.size, position: table5.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.DOWN)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.DOWN)
     ]),
     clientScenario('Scenario 6 - First Left Side', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.RIGHT),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, [table4.id, table5.id, table6.id, table7.id, table8.id, table9.id]),
-        app => theBarRepositoryHasTable(Gherkin.AND_GIVEN, app, [table3]),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table3, table4, table5, table6, table7, table8, table9]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.RIGHT),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, [table4.id, table5.id, table6.id, table7.id, table8.id, table9.id]),
+        theBarRepositoryHasTable(Gherkin.AND_GIVEN, [table3]),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table3, table4, table5, table6, table7, table8, table9]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table4.id),
             new DrawEvent(table4.id, { size: table4.size, position: table4.position, spriteType: SpriteType.TABLE }),
             new InstallNewStoolsOnTableEvent(table5.id),
@@ -110,33 +110,33 @@ feature(EventType.INSTALL_NEW_TABLE, [
             new InstallNewStoolsOnTableEvent(table9.id),
             new DrawEvent(table9.id, { size: table9.size, position: table9.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.DOWN)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.DOWN)
     ]),
     clientScenario('Scenario 7 - First Bottom Right Corner', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.DOWN),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, table10.id),
-        app => theBarRepositoryHasTable(Gherkin.AND_GIVEN, app, [table8, table9]),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table8, table9, table10]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.DOWN),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, table10.id),
+        theBarRepositoryHasTable(Gherkin.AND_GIVEN, [table8, table9]),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table8, table9, table10]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table10.id),
             new DrawEvent(table10.id, { size: table10.size, position: table10.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.LEFT)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.LEFT)
     ]),
     clientScenario('Scenario 8 - First Bottom Side', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.DOWN),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, [table9.id, table10.id, table11.id, table12.id, table13.id]),
-        app => theBarRepositoryHasTable(Gherkin.AND_GIVEN, app, [table8]),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table8, table9, table10, table11, table12, table13]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.DOWN),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, [table9.id, table10.id, table11.id, table12.id, table13.id]),
+        theBarRepositoryHasTable(Gherkin.AND_GIVEN, [table8]),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table8, table9, table10, table11, table12, table13]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table9.id),
             new DrawEvent(table9.id, { size: table9.size, position: table9.position, spriteType: SpriteType.TABLE }),
             new InstallNewStoolsOnTableEvent(table10.id),
@@ -148,35 +148,35 @@ feature(EventType.INSTALL_NEW_TABLE, [
             new InstallNewStoolsOnTableEvent(table13.id),
             new DrawEvent(table13.id, { size: table13.size, position: table13.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.LEFT)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.LEFT)
     ]),
     clientScenario('Scenario 9 - First Bottom Left Corner', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.LEFT),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, table14.id),
-        app => theBarRepositoryHasTable(Gherkin.AND_GIVEN, app, [table12, table13]),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table12, table13, table14]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.LEFT),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, table14.id),
+        theBarRepositoryHasTable(Gherkin.AND_GIVEN, [table12, table13]),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table12, table13, table14]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table14.id),
             new DrawEvent(table14.id, { size: table14.size, position: table14.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.UP)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.UP)
     ]),
     clientScenario('Scenario 10 - First Left Side', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.LEFT),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, [table13.id, table14.id, table15.id, table16.id, table17.id, table18.id, table19.id]),
-        app => theBarRepositoryHasTable(Gherkin.AND_GIVEN, app, [table1, table12]),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table1, table12, table13, table14, table15, table16, table17, table18, table19]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.LEFT),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, [table13.id, table14.id, table15.id, table16.id, table17.id, table18.id, table19.id]),
+        theBarRepositoryHasTable(Gherkin.AND_GIVEN, [table1, table12]),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table1, table12, table13, table14, table15, table16, table17, table18, table19]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table13.id),
             new DrawEvent(table13.id, { size: table13.size, position: table13.position, spriteType: SpriteType.TABLE }),
             new InstallNewStoolsOnTableEvent(table14.id),
@@ -192,47 +192,47 @@ feature(EventType.INSTALL_NEW_TABLE, [
             new InstallNewStoolsOnTableEvent(table19.id),
             new DrawEvent(table19.id, { size: table19.size, position: table19.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.UP)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.UP)
     ]),
     clientScenario('Scenario 11 - Table 19', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.UP),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, table19.id),
-        app => theBarRepositoryHasTable(Gherkin.AND_GIVEN, app, [table1, table17, table18]),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table1, table17, table18, table19]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.UP),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, table19.id),
+        theBarRepositoryHasTable(Gherkin.AND_GIVEN, [table1, table17, table18]),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table1, table17, table18, table19]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table19.id),
             new DrawEvent(table19.id, { size: table19.size, position: table19.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.UP)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.UP)
     ]),
     clientScenario('Scenario 12 - First Bottom Left Corner', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.UP),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, table20.id),
-        app => theBarRepositoryHasTable(Gherkin.AND_GIVEN, app, [table1, table18, table19]),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table1, table18, table19, table20]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.UP),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, table20.id),
+        theBarRepositoryHasTable(Gherkin.AND_GIVEN, [table1, table18, table19]),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table1, table18, table19, table20]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table20.id),
             new DrawEvent(table20.id, { size: table20.size, position: table20.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.RIGHT)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.RIGHT)
     ]),
     clientScenario('Scenario 13 - Second Upper Side', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.UP),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, [table19.id, table20.id, table21.id, table22.id, table23.id, table24.id]),
-        app => theBarRepositoryHasTable(Gherkin.AND_GIVEN, app, [table1, table2, table3, table4, table18]),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table1, table2, table3, table4, table18, table19, table20, table21, table22, table23, table24]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.UP),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, [table19.id, table20.id, table21.id, table22.id, table23.id, table24.id]),
+        theBarRepositoryHasTable(Gherkin.AND_GIVEN, [table1, table2, table3, table4, table18]),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table1, table2, table3, table4, table18, table19, table20, table21, table22, table23, table24]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table19.id),
             new DrawEvent(table19.id, { size: table19.size, position: table19.position, spriteType: SpriteType.TABLE }),
             new InstallNewStoolsOnTableEvent(table20.id),
@@ -246,36 +246,36 @@ feature(EventType.INSTALL_NEW_TABLE, [
             new InstallNewStoolsOnTableEvent(table24.id),
             new DrawEvent(table24.id, { size: table24.size, position: table24.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.RIGHT)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.RIGHT)
     ]),
     clientScenario('Scenario 14 - Second Upper Right Corner', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.RIGHT),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, table25.id),
-        app => theBarRepositoryHasTable(Gherkin.AND_GIVEN, app, [table4, table23, table24]),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table4, table23, table24, table25]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.RIGHT),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, table25.id),
+        theBarRepositoryHasTable(Gherkin.AND_GIVEN, [table4, table23, table24]),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table4, table23, table24, table25]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table25.id),
             new DrawEvent(table25.id, { size: table25.size, position: table25.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.DOWN)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.DOWN)
     ]),
     clientScenario('Scenario 15 - Second Right Side', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.RIGHT),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, [table24.id, table25.id, table26.id, table27.id, table28.id, table29.id, table30.id, table31.id]),
-        app => theBarRepositoryHasTable(Gherkin.AND_GIVEN, app, [table4, table5, table6, table7, table8, table9, table23]),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table4, table5, table6, table7, table8, table9, table23, table24, table25, table26, table27, table28, table29, table30, table31]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.RIGHT),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, [table24.id, table25.id, table26.id, table27.id, table28.id, table29.id, table30.id, table31.id]),
+        theBarRepositoryHasTable(Gherkin.AND_GIVEN, [table4, table5, table6, table7, table8, table9, table23]),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table4, table5, table6, table7, table8, table9, table23, table24, table25, table26, table27, table28, table29, table30, table31]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table24.id),
             new DrawEvent(table24.id, { size: table24.size, position: table24.position, spriteType: SpriteType.TABLE }),
             new InstallNewStoolsOnTableEvent(table25.id),
@@ -293,35 +293,35 @@ feature(EventType.INSTALL_NEW_TABLE, [
             new InstallNewStoolsOnTableEvent(table31.id),
             new DrawEvent(table31.id, { size: table31.size, position: table31.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.DOWN)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.DOWN)
     ]),
     clientScenario('Scenario 16 - Second Bottom Right Corner', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.DOWN),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, table32.id),
-        app => theBarRepositoryHasTable(Gherkin.AND_GIVEN, app, [table9, table30, table31]),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table9, table30, table31, table32]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.DOWN),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, table32.id),
+        theBarRepositoryHasTable(Gherkin.AND_GIVEN, [table9, table30, table31]),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table9, table30, table31, table32]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table32.id),
             new DrawEvent(table32.id, { size: table32.size, position: table32.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.LEFT)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.LEFT)
     ]),
     clientScenario('Scenario 17 - Second Bottom Side', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.DOWN),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, [table31.id, table32.id, table33.id, table34.id, table35.id, table36.id, table37.id]),
-        app => theBarRepositoryHasTable(Gherkin.AND_GIVEN, app, [table9, table10, table11, table12, table13, table30]),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table9, table10, table11, table12, table13, table30, table31, table32, table33, table34, table35, table36, table37]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.DOWN),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, [table31.id, table32.id, table33.id, table34.id, table35.id, table36.id, table37.id]),
+        theBarRepositoryHasTable(Gherkin.AND_GIVEN, [table9, table10, table11, table12, table13, table30]),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table9, table10, table11, table12, table13, table30, table31, table32, table33, table34, table35, table36, table37]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table31.id),
             new DrawEvent(table31.id, { size: table31.size, position: table31.position, spriteType: SpriteType.TABLE }),
             new InstallNewStoolsOnTableEvent(table32.id),
@@ -337,37 +337,37 @@ feature(EventType.INSTALL_NEW_TABLE, [
             new InstallNewStoolsOnTableEvent(table37.id),
             new DrawEvent(table37.id, { size: table37.size, position: table37.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.LEFT)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.LEFT)
     ]),
     clientScenario('Scenario 18 - Second Bottom Left Corner', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.LEFT),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, table38.id),
-        app => theBarRepositoryHasTable(Gherkin.AND_GIVEN, app, [table13, table36, table37]),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table13, table36, table37, table38]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.LEFT),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, table38.id),
+        theBarRepositoryHasTable(Gherkin.AND_GIVEN, [table13, table36, table37]),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table13, table36, table37, table38]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table38.id),
             new DrawEvent(table38.id, { size: table38.size, position: table38.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.UP)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.UP)
     ]),
     clientScenario('Scenario 19 - Second Left Side', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.LEFT),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, [table37.id, table38.id, table39.id, table40.id, table41.id, table42.id, table43.id, table44.id, table45.id]),
-        app => theBarRepositoryHasTable(Gherkin.AND_GIVEN, app, [table13, table14, table15, table16, table17, table18, table19, table36]),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table13, table14, table15, table16, table17, table18, table19, table36, table37, table38, table39, table40, table41, table42, table43, table44, table45]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.LEFT),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, [table37.id, table38.id, table39.id, table40.id, table41.id, table42.id, table43.id, table44.id, table45.id]),
+        theBarRepositoryHasTable(Gherkin.AND_GIVEN, [table13, table14, table15, table16, table17, table18, table19, table36]),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table13, table14, table15, table16, table17, table18, table19, table36, table37, table38, table39, table40, table41, table42, table43, table44, table45]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table37.id),
             new DrawEvent(table37.id, { size: table37.size, position: table37.position, spriteType: SpriteType.TABLE }),
             new InstallNewStoolsOnTableEvent(table38.id),
@@ -387,19 +387,19 @@ feature(EventType.INSTALL_NEW_TABLE, [
             new InstallNewStoolsOnTableEvent(table45.id),
             new DrawEvent(table45.id, { size: table45.size, position: table45.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.UP)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.UP)
     ]),
     clientScenario('Scenario 20 - Second Top Left Corner', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, app, Direction.UP),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, table46.id),
-        app => theBarRepositoryHasTable(Gherkin.AND_GIVEN, app, [table19, table44, table45]),
-        app => whenEventOccurs(app, new InstallNewTableEvent()),
-        app => theBarRepositoryHasTable(Gherkin.THEN, app, [table19, table44, table45, table46]),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryHasTableDirection(Gherkin.AND_GIVEN, Direction.UP),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, table46.id),
+        theBarRepositoryHasTable(Gherkin.AND_GIVEN, [table19, table44, table45]),
+        whenEventOccurs(new InstallNewTableEvent()),
+        theBarRepositoryHasTable(Gherkin.THEN, [table19, table44, table45, table46]),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnTableEvent(table46.id),
             new DrawEvent(table46.id, { size: table46.size, position: table46.position, spriteType: SpriteType.TABLE })
         ]),
-        app => theBarRepositoryHasTableDirection(Gherkin.AND_THEN, app, Direction.RIGHT)
+        theBarRepositoryHasTableDirection(Gherkin.AND_THEN, Direction.RIGHT)
     ])
 ])

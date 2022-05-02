@@ -11,9 +11,9 @@ import { Gherkin } from '../../tests/Gherkin'
 
 feature(EventType.NAVIGATE, [
     clientScenario(`Scenario 1 : ${JSON.stringify(new NavigateEvent(InterfaceView.MAIN_MENU))}`, [
-        app => theInterfaceGatewayHasCurrentView(Gherkin.GIVEN, app, InterfaceView.GAME),
-        app => whenEventOccurs(app, new NavigateEvent(InterfaceView.MAIN_MENU)),
-        app => theInterfaceGatewayHasCurrentView(Gherkin.THEN, app, InterfaceView.MAIN_MENU),
-        app => theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, app, new Sound(SupportedSound.POUFFF))
+        theInterfaceGatewayHasCurrentView(Gherkin.GIVEN, InterfaceView.GAME),
+        whenEventOccurs(new NavigateEvent(InterfaceView.MAIN_MENU)),
+        theInterfaceGatewayHasCurrentView(Gherkin.THEN, InterfaceView.MAIN_MENU),
+        theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, new Sound(SupportedSound.POUFFF))
     ])
 ])

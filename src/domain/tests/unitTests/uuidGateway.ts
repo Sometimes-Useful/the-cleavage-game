@@ -4,7 +4,7 @@ import type { FakeClientApplication } from '../../../infra/applications/client/F
 import type { Gherkin } from '../Gherkin'
 import { stringifyWithDetailledSetAndMap, isGiven, detailedComparisonMessage } from './unitTests'
 
-export const theUuidGatewayHasUuids = (gherkinPrefix: Gherkin, application: FakeClientApplication, uuid: string|string[]): Test => {
+export const theUuidGatewayHasUuids = (gherkinPrefix: Gherkin, uuid: string|string[]) => (application: FakeClientApplication): Test => {
     const expectedUuids : string[] = Array.isArray(uuid) ? uuid : [uuid]
     return it(`${gherkinPrefix} the Uuid gateway has following uuids '${stringifyWithDetailledSetAndMap(expectedUuids)}'.`, () => {
         if (isGiven(gherkinPrefix)) application.gateways.uuid.uuids = expectedUuids

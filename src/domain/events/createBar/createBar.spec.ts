@@ -16,11 +16,11 @@ import { GamePhase } from '../../entities/GamePhase'
 import { SpriteType } from '../../entities/SpriteType'
 feature(EventType.CREATE_BAR, [
     clientScenario('Scenario 1', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, { id: '0', position: { x: 99999, y: 99999 }, size: { width: 99999, height: 99999 } }),
-        app => theUuidGatewayHasUuids(Gherkin.GIVEN, app, bar.id),
-        app => whenEventOccurs(app, new CreateBarEvent()),
-        app => theBarRepositoryHasBar(Gherkin.THEN, app, bar),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theBarRepositoryHasBar(Gherkin.GIVEN, { id: '0', position: { x: 99999, y: 99999 }, size: { width: 99999, height: 99999 } }),
+        theUuidGatewayHasUuids(Gherkin.GIVEN, bar.id),
+        whenEventOccurs(new CreateBarEvent()),
+        theBarRepositoryHasBar(Gherkin.THEN, bar),
+        theEventIsSent(Gherkin.AND_THEN, [
             new InstallNewStoolsOnBarEvent(),
             new DrawEvent(bar.id, { position: bar.position, spriteType: SpriteType.BAR, size: bar.size }),
             new NavigateEvent(InterfaceView.GAME),

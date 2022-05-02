@@ -15,18 +15,18 @@ import { whenEventOccurs, theEventIsSent } from '../../tests/unitTests/eventGate
 import { CreateBarEvent } from '../createBar/CreateBarEvent'
 feature(EventType.CONNECT_CHAT, [
     clientScenario('Scenario 1 : Connect Chat on chat DISCONNECTED', [
-        app => theInterfaceGatewayDontPlayMusic(Gherkin.GIVEN, app),
-        app => theChatGatewayHasExpectedStatus(Gherkin.AND_GIVEN, app, ChatStatus.DISCONNECTED),
-        app => whenEventOccurs(app, new ConnectChatEvent(username, token, channel)),
-        app => theChatGatewayHasExpectedStatus(Gherkin.THEN, app, ChatStatus.CONNECTED),
-        app => theEventIsSent(Gherkin.AND_THEN, app, new CreateBarEvent()),
-        app => theChatGatewaySendMessage(Gherkin.THEN, app, new WelcomeMessage()),
-        app => theInterfaceGatewayHasPlayingMusic(Gherkin.AND_THEN, app, mainMusic)
+        theInterfaceGatewayDontPlayMusic(Gherkin.GIVEN),
+        theChatGatewayHasExpectedStatus(Gherkin.AND_GIVEN, ChatStatus.DISCONNECTED),
+        whenEventOccurs(new ConnectChatEvent(username, token, channel)),
+        theChatGatewayHasExpectedStatus(Gherkin.THEN, ChatStatus.CONNECTED),
+        theEventIsSent(Gherkin.AND_THEN, new CreateBarEvent()),
+        theChatGatewaySendMessage(Gherkin.THEN, new WelcomeMessage()),
+        theInterfaceGatewayHasPlayingMusic(Gherkin.AND_THEN, mainMusic)
     ]),
     clientScenario("Scenario 2 : Can't Connect Chat on chat already CONNECTED", [
-        app => theChatGatewayHasExpectedStatus(Gherkin.AND_GIVEN, app, ChatStatus.CONNECTED),
-        app => whenEventOccurs(app, new ConnectChatEvent(username, token, channel)),
-        app => theChatGatewayHasExpectedStatus(Gherkin.THEN, app, ChatStatus.CONNECTED),
-        app => theInterfaceGatewayHasNotifications(Gherkin.AND_THEN, app, alreadyConnectedToChatNotification)
+        theChatGatewayHasExpectedStatus(Gherkin.AND_GIVEN, ChatStatus.CONNECTED),
+        whenEventOccurs(new ConnectChatEvent(username, token, channel)),
+        theChatGatewayHasExpectedStatus(Gherkin.THEN, ChatStatus.CONNECTED),
+        theInterfaceGatewayHasNotifications(Gherkin.AND_THEN, alreadyConnectedToChatNotification)
     ])
 ])

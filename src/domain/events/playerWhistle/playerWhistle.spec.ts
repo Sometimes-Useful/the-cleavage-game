@@ -12,7 +12,7 @@ import { PlayerWhistleEvent } from './PlayerWhistleEvent'
 
 feature(EventType.PLAYER_SHOOT, [
     clientScenario('Scenario 1 : Player whistle', [
-        app => whenEventOccurs(app, new PlayerWhistleEvent()),
-        app => theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, app, new Sound(SupportedSound.WHISTLE))
+        whenEventOccurs(new PlayerWhistleEvent()),
+        theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, new Sound(SupportedSound.WHISTLE))
     ])
 ])

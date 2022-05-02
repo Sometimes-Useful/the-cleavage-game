@@ -7,18 +7,18 @@ import { isGiven } from './unitTests'
 import type { FakeServerApplication } from '../../../infra/applications/server/FakeServerApplication'
 import type { Cleavage } from '../../entities/Cleavage'
 
-export const whenEventOccurs = (application: FakeClientApplication|FakeServerApplication, event: ApplicationEvent|ApplicationEvent[]): Test =>
+export const whenEventOccurs = (event: ApplicationEvent|ApplicationEvent[]) => (application:FakeClientApplication|FakeServerApplication): Test =>
     Array.isArray(event)
         ? it(`When events '${event.map(event => event.eventType)}' occurs.`, () => application.gateways.event.onEvents(event))
         : it(`When the event '${event.eventType}' occurs.`, () => application.gateways.event.onEvent(event))
 
-export const whenQueryOccursThenHasResult = (application: FakeServerApplication, expectedResult:Cleavage|undefined): Test =>
+export const whenQueryOccursThenHasResult = (expectedResult:Cleavage|undefined) => (application:FakeServerApplication): Test =>
     it(whenDrawGlobalCleavageDrawPileOccursMessage(expectedResult), () => application.queryController.drawGlobalCleavageDrawPile()
         .then(result => expect(result).deep.equal(expectedResult))
         .catch(error => { throw error })
     )
 
-export const theEventIsSent = (gherkinPrefix:Gherkin, application:FakeClientApplication, expectedEvents: ApplicationEvent | ApplicationEvent[]):Test => {
+export const theEventIsSent = (gherkinPrefix:Gherkin, expectedEvents: ApplicationEvent | ApplicationEvent[]) => (application:FakeClientApplication):Test => {
     const events : ApplicationEvent[] = Array.isArray(expectedEvents) ? expectedEvents : [expectedEvents]
     return it(`${gherkinPrefix} the event gateway has events '${JSON.stringify(events)}'.`, () => {
         if (isGiven(gherkinPrefix)) application.gateways.event.events = events

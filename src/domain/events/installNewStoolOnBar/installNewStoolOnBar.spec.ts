@@ -12,11 +12,11 @@ import { SpriteType } from '../../entities/SpriteType'
 
 feature(EventType.INSTALL_NEW_STOOLS_ON_BAR, [
     clientScenario('Scenario 1', [
-        app => theBarRepositoryHasBar(Gherkin.GIVEN, app, bar),
-        app => theBarRepositoryDontHaveAvailableStoolBar(Gherkin.AND_GIVEN, app),
-        app => theUuidGatewayHasUuids(Gherkin.AND_GIVEN, app, barStools.map(stool => stool.id)),
-        app => whenEventOccurs(app, new InstallNewStoolsOnBarEvent()),
-        app => theBarRepositoryHasAvailableStoolBars(Gherkin.THEN, app, barStools),
-        app => theEventIsSent(Gherkin.AND_THEN, app, barStools.map(stool => new DrawEvent(stool.id, { position: stool.position, spriteType: SpriteType.STOOL, size: stool.size })))
+        theBarRepositoryHasBar(Gherkin.GIVEN, bar),
+        theBarRepositoryDontHaveAvailableStoolBar(Gherkin.AND_GIVEN),
+        theUuidGatewayHasUuids(Gherkin.AND_GIVEN, barStools.map(stool => stool.id)),
+        whenEventOccurs(new InstallNewStoolsOnBarEvent()),
+        theBarRepositoryHasAvailableStoolBars(Gherkin.THEN, barStools),
+        theEventIsSent(Gherkin.AND_THEN, barStools.map(stool => new DrawEvent(stool.id, { position: stool.position, spriteType: SpriteType.STOOL, size: stool.size })))
     ])
 ])

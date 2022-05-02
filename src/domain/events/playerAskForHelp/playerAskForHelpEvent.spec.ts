@@ -12,7 +12,7 @@ import { whenEventOccurs } from '../../tests/unitTests/eventGateway'
 
 feature(EventType.PLAYER_ASK_FOR_HELP, [
     clientScenario('Scenario 1 : player ask for help', [
-        app => whenEventOccurs(app, new PlayerAskForHelpEvent(player1().username)),
-        app => theChatGatewaySendMessageToPlayer(Gherkin.THEN, app, new MessageForPlayer(player1().username, helpMessage))
+        whenEventOccurs(new PlayerAskForHelpEvent(player1().username)),
+        theChatGatewaySendMessageToPlayer(Gherkin.THEN, new MessageForPlayer(player1().username, helpMessage))
     ])
 ])

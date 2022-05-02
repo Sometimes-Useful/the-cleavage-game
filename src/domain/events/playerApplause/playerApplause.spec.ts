@@ -12,7 +12,7 @@ import { PlayerApplauseEvent } from './PlayerApplauseEvent'
 
 feature(EventType.PLAYER_APPLAUSE, [
     clientScenario('Scenario 1 : Player applause', [
-        app => whenEventOccurs(app, new PlayerApplauseEvent()),
-        app => theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, app, new Sound(SupportedSound.APPLAUSE))
+        whenEventOccurs(new PlayerApplauseEvent()),
+        theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, new Sound(SupportedSound.APPLAUSE))
     ])
 ])

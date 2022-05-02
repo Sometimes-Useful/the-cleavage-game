@@ -8,18 +8,18 @@ import { theGlobalCleavageDrawPileRepositoryHasCleavage } from '../../tests/unit
 
 feature(EventType.DRAW_GLOBAL_CLEAVAGE_DRAWPILE, [
     serverScenario('Scenario 1 : With on cleavage on draw pile', [
-        app => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.GIVEN, app, commonCleavage1()),
-        app => whenQueryOccursThenHasResult(app, commonCleavage1()),
-        app => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.AND_THEN, app, commonCleavage1())
+        theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.GIVEN, commonCleavage1()),
+        whenQueryOccursThenHasResult(commonCleavage1()),
+        theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.AND_THEN, commonCleavage1())
     ]),
     serverScenario('Scenario 2 : With 2 cleavages on draw pile', [
-        app => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.GIVEN, app, [commonCleavage1(), commonCleavage2()]),
-        app => whenQueryOccursThenHasResult(app, commonCleavage1()),
-        app => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.AND_THEN, app, [commonCleavage1(), commonCleavage2()])
+        theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.GIVEN, [commonCleavage1(), commonCleavage2()]),
+        whenQueryOccursThenHasResult(commonCleavage1()),
+        theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.AND_THEN, [commonCleavage1(), commonCleavage2()])
     ]),
     serverScenario('Scenario 3 : With 0 cleavages on draw pile', [
-        app => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.GIVEN, app, []),
-        app => whenQueryOccursThenHasResult(app, undefined),
-        app => theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.AND_THEN, app, [])
+        theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.GIVEN, []),
+        whenQueryOccursThenHasResult(undefined),
+        theGlobalCleavageDrawPileRepositoryHasCleavage(Gherkin.AND_THEN, [])
     ])
 ])

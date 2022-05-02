@@ -10,15 +10,15 @@ import { ChangeSoundVolumeEvent } from './ChangeSoundVolumeEvent'
 
 feature(EventType.CHANGE_SOUND_VOLUME, [
     clientScenario('Scenario 1 : Increase Sound Volume', [
-        app => theInterfaceGatewayHasCurrentSoundVolume(Gherkin.GIVEN, app, 0),
-        app => whenEventOccurs(app, new ChangeSoundVolumeEvent(100)),
-        app => theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, app, new Sound(SupportedSound.TICK)),
-        app => theInterfaceGatewayHasCurrentSoundVolume(Gherkin.AND_THEN, app, 100)
+        theInterfaceGatewayHasCurrentSoundVolume(Gherkin.GIVEN, 0),
+        whenEventOccurs(new ChangeSoundVolumeEvent(100)),
+        theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, new Sound(SupportedSound.TICK)),
+        theInterfaceGatewayHasCurrentSoundVolume(Gherkin.AND_THEN, 100)
     ]),
     clientScenario('Scenario 2 : Reduce Sound Volume', [
-        app => theInterfaceGatewayHasCurrentSoundVolume(Gherkin.GIVEN, app, 100),
-        app => whenEventOccurs(app, new ChangeSoundVolumeEvent(22)),
-        app => theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, app, new Sound(SupportedSound.TICK)),
-        app => theInterfaceGatewayHasCurrentSoundVolume(Gherkin.AND_THEN, app, 22)
+        theInterfaceGatewayHasCurrentSoundVolume(Gherkin.GIVEN, 100),
+        whenEventOccurs(new ChangeSoundVolumeEvent(22)),
+        theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, new Sound(SupportedSound.TICK)),
+        theInterfaceGatewayHasCurrentSoundVolume(Gherkin.AND_THEN, 22)
     ])
 ])

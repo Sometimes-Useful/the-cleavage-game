@@ -9,12 +9,12 @@ import { StopAutoplayEvent } from './StopAutoplayEvent'
 
 feature(EventType.STOP_AUTOPLAY, [
     clientScenario('Scenario 1 : Stop autoplay', [
-        app => theAutoPlayRepositoryHasAutoPlayInterval(Gherkin.GIVEN, app, 5),
-        app => theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_GIVEN, app, new Date()),
-        app => theInterfaceGatewayHasAutoplayOptionEnabled(Gherkin.AND_GIVEN, app),
-        app => whenEventOccurs(app, new StopAutoplayEvent()),
-        app => theAutoPlayRepositoryHasAutoPlayInterval(Gherkin.THEN, app, 0),
-        app => theAutoPlayRepositoryDontHaveNextCleavageDate(Gherkin.AND_THEN, app),
-        app => theInterfaceGatewayHasAutoplayOptionDisabled(Gherkin.AND_THEN, app)
+        theAutoPlayRepositoryHasAutoPlayInterval(Gherkin.GIVEN, 5),
+        theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_GIVEN, new Date()),
+        theInterfaceGatewayHasAutoplayOptionEnabled(Gherkin.AND_GIVEN),
+        whenEventOccurs(new StopAutoplayEvent()),
+        theAutoPlayRepositoryHasAutoPlayInterval(Gherkin.THEN, 0),
+        theAutoPlayRepositoryDontHaveNextCleavageDate(Gherkin.AND_THEN),
+        theInterfaceGatewayHasAutoplayOptionDisabled(Gherkin.AND_THEN)
     ])
 ])

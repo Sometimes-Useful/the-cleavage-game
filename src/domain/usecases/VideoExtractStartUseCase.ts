@@ -19,12 +19,12 @@ interface VideoExtractStartUseCaseApplicationServices {
 export class VideoExtractStartUseCase extends UseCase {
     constructor (private applicationServices:VideoExtractStartUseCaseApplicationServices) { super() }
     execute (event: VideoExtractStartEvent): Promise<void> {
-        return this.applicationServices.cleavage.hasCleavage()
+        return this.applicationServices.cleavage.hasCurrentCleavage()
             .then(hasCleavage => hasCleavage ? this.onCleavage() : this.withoutCleavage())
     }
 
     private onCleavage (): Promise<void> {
-        return this.applicationServices.cleavage.loadCleavage()
+        return this.applicationServices.cleavage.loadCurrentCleavage()
             .then(cleavage => Promise.all([
                 this.applicationServices.autoplay.hasAutoplay(),
                 this.applicationServices.videoExtract.hasVideoExtractForChoice(cleavage.majorChoice()),

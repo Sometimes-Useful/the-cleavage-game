@@ -10,30 +10,30 @@ import { NewCleavageEvent } from '../newCleavage/NewCleavageEvent'
 
 feature(EventType.CHECK_AUTOPLAY, [
     clientScenario('Scenario 1 : new cleavage when current date is after next Cleavage date', [
-        app => theDateGatewayHasCurrentDate(Gherkin.GIVEN, app, new Date(Date.UTC(2022, 2, 4, 14, 20, 0))),
-        app => theAutoPlayRepositoryHasAutoPlayInterval(Gherkin.AND_GIVEN, app, 1),
-        app => theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_GIVEN, app, new Date(Date.UTC(2022, 2, 4, 14, 20, 0))),
-        app => whenEventOccurs(app, new CheckAutoplayEvent()),
-        app => theEventIsSent(Gherkin.THEN, app, new NewCleavageEvent()),
-        app => theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_THEN, app, new Date(Date.UTC(2022, 2, 4, 14, 21, 0)))
+        theDateGatewayHasCurrentDate(Gherkin.GIVEN, new Date(Date.UTC(2022, 2, 4, 14, 20, 0))),
+        theAutoPlayRepositoryHasAutoPlayInterval(Gherkin.AND_GIVEN, 1),
+        theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_GIVEN, new Date(Date.UTC(2022, 2, 4, 14, 20, 0))),
+        whenEventOccurs(new CheckAutoplayEvent()),
+        theEventIsSent(Gherkin.THEN, new NewCleavageEvent()),
+        theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_THEN, new Date(Date.UTC(2022, 2, 4, 14, 21, 0)))
     ]),
     clientScenario('Scenario 2 : new cleavage when current date is after next Cleavage date', [
-        app => theDateGatewayHasCurrentDate(Gherkin.GIVEN, app, new Date(Date.UTC(2022, 2, 4, 14, 19, 59))),
-        app => theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_GIVEN, app, new Date(Date.UTC(2022, 2, 4, 14, 20, 0))),
-        app => whenEventOccurs(app, new CheckAutoplayEvent()),
-        app => theEventIsSent(Gherkin.THEN, app, [])
+        theDateGatewayHasCurrentDate(Gherkin.GIVEN, new Date(Date.UTC(2022, 2, 4, 14, 19, 59))),
+        theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_GIVEN, new Date(Date.UTC(2022, 2, 4, 14, 20, 0))),
+        whenEventOccurs(new CheckAutoplayEvent()),
+        theEventIsSent(Gherkin.THEN, [])
     ]),
     clientScenario('Scenario 3 : on autoplay disabled', [
-        app => theAutoPlayRepositoryDontHaveNextCleavageDate(Gherkin.AND_GIVEN, app),
-        app => whenEventOccurs(app, new CheckAutoplayEvent()),
-        app => theEventIsSent(Gherkin.THEN, app, [])
+        theAutoPlayRepositoryDontHaveNextCleavageDate(Gherkin.AND_GIVEN),
+        whenEventOccurs(new CheckAutoplayEvent()),
+        theEventIsSent(Gherkin.THEN, [])
     ]),
     clientScenario('Scenario 4 : new cleavage when current date is equal next Cleavage date', [
-        app => theDateGatewayHasCurrentDate(Gherkin.GIVEN, app, new Date(Date.UTC(2022, 2, 4, 14, 20, 0))),
-        app => theAutoPlayRepositoryHasAutoPlayInterval(Gherkin.AND_GIVEN, app, 5),
-        app => theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_GIVEN, app, new Date(Date.UTC(2022, 2, 4, 14, 20, 0))),
-        app => whenEventOccurs(app, new CheckAutoplayEvent()),
-        app => theEventIsSent(Gherkin.THEN, app, new NewCleavageEvent()),
-        app => theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_THEN, app, new Date(Date.UTC(2022, 2, 4, 14, 25, 0)))
+        theDateGatewayHasCurrentDate(Gherkin.GIVEN, new Date(Date.UTC(2022, 2, 4, 14, 20, 0))),
+        theAutoPlayRepositoryHasAutoPlayInterval(Gherkin.AND_GIVEN, 5),
+        theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_GIVEN, new Date(Date.UTC(2022, 2, 4, 14, 20, 0))),
+        whenEventOccurs(new CheckAutoplayEvent()),
+        theEventIsSent(Gherkin.THEN, new NewCleavageEvent()),
+        theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_THEN, new Date(Date.UTC(2022, 2, 4, 14, 25, 0)))
     ])
 ])

@@ -9,27 +9,31 @@ import { theCurrentCleavageRepositoryDontHaveCleavage, theCurrentCleavageReposit
 import { theInterfaceGatewayHasCurrentCleavage } from '../../tests/unitTests/interfaceGateway'
 import { thePlayerRepositoryHasPlayers, thePlayerRepositoryDontHavePlayers } from '../../tests/unitTests/playerRepository'
 import { theEventIsSent, whenEventOccurs } from '../../tests/unitTests/eventGateway'
+import { skip } from '../../tests/serverScenario'
 
 feature(EventType.PLAYER_QUIT, [
     clientScenario(`Scenario 1 : ${JSON.stringify(player1())} quit when there is no current cleavage`, [
-        app => thePlayerRepositoryHasPlayers(Gherkin.GIVEN, app, [player1()]),
-        app => theCurrentCleavageRepositoryDontHaveCleavage(Gherkin.AND_GIVEN, app),
-        app => whenEventOccurs(app, new PlayerQuitEvent(player1().username)),
-        app => thePlayerRepositoryDontHavePlayers(Gherkin.THEN, app)
+        thePlayerRepositoryHasPlayers(Gherkin.GIVEN, [player1()]),
+        theCurrentCleavageRepositoryDontHaveCleavage(Gherkin.AND_GIVEN),
+        whenEventOccurs(new PlayerQuitEvent(player1().username)),
+        thePlayerRepositoryDontHavePlayers(Gherkin.THEN)
     ]),
     clientScenario(`Scenario 2 : ${JSON.stringify(player1())} quit when there is current cleavage`, [
-        app => thePlayerRepositoryHasPlayers(Gherkin.GIVEN, app, [player1()]),
-        app => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, app, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [player1().username] }, rightChoice: { name: 'Drouate', players: [] }, players: [player1().username] })),
-        app => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_GIVEN, app, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [player1().username] }, rightChoice: { name: 'Drouate', players: [] }, players: [player1().username] })),
-        app => whenEventOccurs(app, new PlayerQuitEvent(player1().username)),
-        app => thePlayerRepositoryDontHavePlayers(Gherkin.AND_THEN, app),
-        app => theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_THEN, app, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [] }, rightChoice: { name: 'Drouate', players: [] }, players: [] })),
-        app => theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_THEN, app, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [] }, rightChoice: { name: 'Drouate', players: [] }, players: [] }))
+        thePlayerRepositoryHasPlayers(Gherkin.GIVEN, [player1()]),
+        theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [player1().username] }, rightChoice: { name: 'Drouate', players: [] }, players: [player1().username] })),
+        theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_GIVEN, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [player1().username] }, rightChoice: { name: 'Drouate', players: [] }, players: [player1().username] })),
+        whenEventOccurs(new PlayerQuitEvent(player1().username)),
+        thePlayerRepositoryDontHavePlayers(Gherkin.AND_THEN),
+        theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_THEN, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [] }, rightChoice: { name: 'Drouate', players: [] }, players: [] })),
+        theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_THEN, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [] }, rightChoice: { name: 'Drouate', players: [] }, players: [] }))
     ]),
     clientScenario(`Scenario 3 : ${JSON.stringify(player1())} quit when he is not a player`, [
-        app => thePlayerRepositoryDontHavePlayers(Gherkin.GIVEN, app),
-        app => whenEventOccurs(app, new PlayerQuitEvent(player1().username)),
-        app => thePlayerRepositoryDontHavePlayers(Gherkin.THEN, app),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [])
-    ])
+        thePlayerRepositoryDontHavePlayers(Gherkin.GIVEN),
+        whenEventOccurs(new PlayerQuitEvent(player1().username)),
+        thePlayerRepositoryDontHavePlayers(Gherkin.THEN),
+        theEventIsSent(Gherkin.AND_THEN, [])
+    ]),
+    clientScenario(`Scenario 4 : ${JSON.stringify(player1())} quit bar, free table stool and eraseEvent`, [
+        whenEventOccurs(new PlayerQuitEvent(player1().username))
+    ], skip)
 ])

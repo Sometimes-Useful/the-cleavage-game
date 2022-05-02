@@ -12,24 +12,24 @@ import { SupportedSound } from '../../entities/SoundType'
 
 feature(EventType.CHANGE_GAME_PHASE, [
     clientScenario(`Scenario 1 : ${GamePhase.NONE} > ${GamePhase.CLEAVING}`, [
-        app => theGamePhaseRepositoryHasPhase(Gherkin.GIVEN, app, GamePhase.NONE),
-        app => whenEventOccurs(app, new ChangeGamePhaseEvent(GamePhase.CLEAVING)),
-        app => theGamePhaseRepositoryHasPhase(Gherkin.THEN, app, GamePhase.CLEAVING),
-        app => theInterfaceGatewayHasPlayingSounds(Gherkin.AND_THEN, app, []),
-        app => theInterfaceGatewayHasCurrentGamePhase(Gherkin.AND_THEN, app, GamePhase.CLEAVING)
+        theGamePhaseRepositoryHasPhase(Gherkin.GIVEN, GamePhase.NONE),
+        whenEventOccurs(new ChangeGamePhaseEvent(GamePhase.CLEAVING)),
+        theGamePhaseRepositoryHasPhase(Gherkin.THEN, GamePhase.CLEAVING),
+        theInterfaceGatewayHasPlayingSounds(Gherkin.AND_THEN, []),
+        theInterfaceGatewayHasCurrentGamePhase(Gherkin.AND_THEN, GamePhase.CLEAVING)
     ]),
     clientScenario(`Scenario 2 : ${GamePhase.CLEAVING} > ${GamePhase.NEW_CLEAVAGE}`, [
-        app => theGamePhaseRepositoryHasPhase(Gherkin.GIVEN, app, GamePhase.CLEAVING),
-        app => whenEventOccurs(app, new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE)),
-        app => theGamePhaseRepositoryHasPhase(Gherkin.THEN, app, GamePhase.NEW_CLEAVAGE),
-        app => theInterfaceGatewayHasPlayingSounds(Gherkin.AND_THEN, app, new Sound(SupportedSound.POUFFF)),
-        app => theInterfaceGatewayHasCurrentGamePhase(Gherkin.AND_THEN, app, GamePhase.NEW_CLEAVAGE)
+        theGamePhaseRepositoryHasPhase(Gherkin.GIVEN, GamePhase.CLEAVING),
+        whenEventOccurs(new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE)),
+        theGamePhaseRepositoryHasPhase(Gherkin.THEN, GamePhase.NEW_CLEAVAGE),
+        theInterfaceGatewayHasPlayingSounds(Gherkin.AND_THEN, new Sound(SupportedSound.POUFFF)),
+        theInterfaceGatewayHasCurrentGamePhase(Gherkin.AND_THEN, GamePhase.NEW_CLEAVAGE)
     ]),
     clientScenario(`Scenario 3 : ${GamePhase.NEW_CLEAVAGE} > ${GamePhase.CLEAVING}`, [
-        app => theGamePhaseRepositoryHasPhase(Gherkin.GIVEN, app, GamePhase.NEW_CLEAVAGE),
-        app => whenEventOccurs(app, new ChangeGamePhaseEvent(GamePhase.CLEAVING)),
-        app => theGamePhaseRepositoryHasPhase(Gherkin.THEN, app, GamePhase.CLEAVING),
-        app => theInterfaceGatewayHasPlayingSounds(Gherkin.AND_THEN, app, new Sound(SupportedSound.POUFFF)),
-        app => theInterfaceGatewayHasCurrentGamePhase(Gherkin.AND_THEN, app, GamePhase.CLEAVING)
+        theGamePhaseRepositoryHasPhase(Gherkin.GIVEN, GamePhase.NEW_CLEAVAGE),
+        whenEventOccurs(new ChangeGamePhaseEvent(GamePhase.CLEAVING)),
+        theGamePhaseRepositoryHasPhase(Gherkin.THEN, GamePhase.CLEAVING),
+        theInterfaceGatewayHasPlayingSounds(Gherkin.AND_THEN, new Sound(SupportedSound.POUFFF)),
+        theInterfaceGatewayHasCurrentGamePhase(Gherkin.AND_THEN, GamePhase.CLEAVING)
     ])
 ])

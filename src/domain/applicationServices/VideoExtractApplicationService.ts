@@ -24,14 +24,16 @@ export class VideoExtractApplicationService {
     applyVideoExtractOnInterface (cleavage:Cleavage):Promise<void> {
         const majorChoice = cleavage.majorChoice()
         return majorChoice
-            ? this.onMajorChoice(majorChoice, cleavage.majorScore())
+            ? this.onMajorChoice(majorChoice, cleavage)
             : this.onNoMajorChoice()
     }
 
-    private onMajorChoice (majorChoice: string, score:number): Promise<void> {
+    private onMajorChoice (majorChoice: string, cleavage:Cleavage): Promise<void> {
         return this.videoExtractRepository.retreiveVideoExtractsByChoice(majorChoice)
             .then(videoExtracts => {
-                const videoExtract = videoExtracts.reduce((a, b) => Math.abs(b.percentage - score) < Math.abs(a.percentage - score) ? b : a)
+                const videoExtract = videoExtracts.reduce((a, b) => Math.abs(b.percentage - cleavage.majorScore()) < Math.abs(a.percentage - cleavage.majorScore()) ? b : a)
+                console.log(JSON.stringify(cleavage))
+                console.log(JSON.stringify(videoExtract))
                 return this.playVideo(videoExtract)
             })
     }

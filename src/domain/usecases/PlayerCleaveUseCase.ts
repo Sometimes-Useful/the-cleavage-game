@@ -33,7 +33,7 @@ export class PlayerCleaveUseCase extends UseCase {
     }
 
     private onCleavingPhase (event: PlayerCleaveEvent): Promise<void> {
-        return this.applicationServices.cleavage.hasCleavage()
+        return this.applicationServices.cleavage.hasCurrentCleavage()
             .then(hasCleavage => hasCleavage
                 ? this.onCleavage(event)
                 : this.applicationServices.chat.sendMessageToPlayer(noCleavagePleaseWait(event.username))
@@ -48,7 +48,7 @@ export class PlayerCleaveUseCase extends UseCase {
     }
 
     private updateCleavageOnInterface (): void | PromiseLike<void> {
-        return this.applicationServices.cleavage.loadCleavage()
+        return this.applicationServices.cleavage.loadCurrentCleavage()
             .then(cleavage => this.applicationServices.interface.updateCleavage(cleavage))
             .catch(error => Promise.reject(error))
     }

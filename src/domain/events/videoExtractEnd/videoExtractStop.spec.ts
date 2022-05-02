@@ -14,28 +14,28 @@ import { VideoExtractStopEvent } from './VideoExtractStopEvent'
 
 feature(EventType.VIDEO_EXTRACT_STOP, [
     clientScenario('Scenario 1 : No auto play', [
-        app => theInterfaceGatewayHasCurrentVideo(Gherkin.GIVEN, app, oui100VideoExtract),
-        app => theAutoPlayRepositoryDontHaveNextCleavageDate(Gherkin.AND_GIVEN, app),
-        app => whenEventOccurs(app, new VideoExtractStopEvent()),
-        app => theInterfaceGatewayHasNoCurrentVideo(Gherkin.THEN, app),
-        app => theEventIsSent(Gherkin.AND_THEN, app, new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE))
+        theInterfaceGatewayHasCurrentVideo(Gherkin.GIVEN, oui100VideoExtract),
+        theAutoPlayRepositoryDontHaveNextCleavageDate(Gherkin.AND_GIVEN),
+        whenEventOccurs(new VideoExtractStopEvent()),
+        theInterfaceGatewayHasNoCurrentVideo(Gherkin.THEN),
+        theEventIsSent(Gherkin.AND_THEN, new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE))
     ]),
     clientScenario('Scenario 2 : auto play.', [
-        app => theInterfaceGatewayHasCurrentVideo(Gherkin.GIVEN, app, oui100VideoExtract),
-        app => theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_GIVEN, app, new Date()),
-        app => whenEventOccurs(app, new VideoExtractStopEvent()),
-        app => theInterfaceGatewayHasNoCurrentVideo(Gherkin.THEN, app),
-        app => theEventIsSent(Gherkin.AND_THEN, app, [
+        theInterfaceGatewayHasCurrentVideo(Gherkin.GIVEN, oui100VideoExtract),
+        theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_GIVEN, new Date()),
+        whenEventOccurs(new VideoExtractStopEvent()),
+        theInterfaceGatewayHasNoCurrentVideo(Gherkin.THEN),
+        theEventIsSent(Gherkin.AND_THEN, [
             new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE),
             new DrawCleavageEvent()
         ])
     ]),
     clientScenario('Scenario 3 :Unmute music', [
-        app => theInterfaceGatewayHasCurrentVideo(Gherkin.GIVEN, app, oui100VideoExtract),
-        app => theInterfaceGatewayHasCurrentMusicMuted(Gherkin.AND_GIVEN, app),
-        app => whenEventOccurs(app, new VideoExtractStopEvent()),
-        app => theInterfaceGatewayHasNoCurrentVideo(Gherkin.THEN, app),
-        app => theInterfaceGatewayHasCurrentMusicNotMuted(Gherkin.AND_THEN, app),
-        app => theEventIsSent(Gherkin.AND_THEN, app, new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE))
+        theInterfaceGatewayHasCurrentVideo(Gherkin.GIVEN, oui100VideoExtract),
+        theInterfaceGatewayHasCurrentMusicMuted(Gherkin.AND_GIVEN),
+        whenEventOccurs(new VideoExtractStopEvent()),
+        theInterfaceGatewayHasNoCurrentVideo(Gherkin.THEN),
+        theInterfaceGatewayHasCurrentMusicNotMuted(Gherkin.AND_THEN),
+        theEventIsSent(Gherkin.AND_THEN, new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE))
     ])
 ])
