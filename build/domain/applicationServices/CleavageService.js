@@ -12,6 +12,9 @@ var CleavageApplicationService = /** @class */ (function () {
         this.chatGateway = chatGateway;
         this.gamePhaseRepository = gamePhaseRepository;
     }
+    CleavageApplicationService.prototype.retrieveCleavageDrawpileQuantity = function () {
+        return this.globalCleavageDrawPileGateway.retrieveCleavageDrawpileQuantity();
+    };
     CleavageApplicationService.prototype.changeGamePhase = function (gamePhase) {
         return this.gamePhaseRepository.changeGamePhase(gamePhase);
     };
@@ -25,19 +28,19 @@ var CleavageApplicationService = /** @class */ (function () {
     };
     CleavageApplicationService.prototype.removePlayerOnCleavage = function (player) {
         var _this = this;
-        return this.loadCleavage()
+        return this.loadCurrentCleavage()
             .then(function (cleavage) {
-            cleavage.leftChoice.players = cleavage.leftChoice.players.filter(function (cleavePlayer) { return cleavePlayer.username !== player.username; });
-            cleavage.rightChoice.players = cleavage.rightChoice.players.filter(function (cleavePlayer) { return cleavePlayer.username !== player.username; });
-            cleavage.players = cleavage.players.filter(function (cleavePlayer) { return cleavePlayer.username !== player.username; });
+            cleavage.leftChoice.players = cleavage.leftChoice.players.filter(function (cleavePlayer) { return cleavePlayer !== player.username; });
+            cleavage.rightChoice.players = cleavage.rightChoice.players.filter(function (cleavePlayer) { return cleavePlayer !== player.username; });
+            cleavage.players = cleavage.players.filter(function (cleavePlayer) { return cleavePlayer !== player.username; });
             return _this.saveCleavage(cleavage);
         })["catch"](function (error) { return Promise.reject(error); });
     };
     CleavageApplicationService.prototype.addPlayerOnCleavage = function (player) {
         var _this = this;
-        return this.loadCleavage()
+        return this.loadCurrentCleavage()
             .then(function (cleavage) {
-            cleavage.players.push(player);
+            cleavage.players.push(player.username);
             return _this.saveCleavage(cleavage);
         })["catch"](function (error) { return Promise.reject(error); });
     };
@@ -47,10 +50,10 @@ var CleavageApplicationService = /** @class */ (function () {
     CleavageApplicationService.prototype.addPublicCleavage = function (cleavage) {
         return this.publicCleavageDrawPileRepository.addCleavage(cleavage);
     };
-    CleavageApplicationService.prototype.loadCleavage = function () {
+    CleavageApplicationService.prototype.loadCurrentCleavage = function () {
         return this.currentCleavageRepository.load();
     };
-    CleavageApplicationService.prototype.hasCleavage = function () {
+    CleavageApplicationService.prototype.hasCurrentCleavage = function () {
         return this.currentCleavageRepository.hasCleavage();
     };
     CleavageApplicationService.prototype.playerCleave = function (event) {
@@ -62,39 +65,39 @@ var CleavageApplicationService = /** @class */ (function () {
         return this.currentCleavageRepository.save(cleavage);
     };
     CleavageApplicationService.prototype.onCleave = function (cleavage, event) {
-        if (!cleavage.players.some(function (player) { return player.username === event.player.username; }))
-            cleavage.players.push(event.player);
+        if (!cleavage.players.some(function (player) { return player === event.username; }))
+            cleavage.players.push(event.username);
         var playerPreviousCleave = this.previousPlayerCleave(cleavage, event);
         return playerPreviousCleave !== PlayerCleave_1.PlayerCleave.NOTHING
             ? this.onPlayerAlreadyCleave(event, playerPreviousCleave, cleavage)
             : this.cleave(event, cleavage);
     };
     CleavageApplicationService.prototype.previousPlayerCleave = function (cleavage, event) {
-        return cleavage.leftChoice.players.some(function (player) { return player.username === event.player.username; })
+        return cleavage.leftChoice.players.some(function (player) { return player === event.username; })
             ? PlayerCleave_1.PlayerCleave.LEFT
-            : cleavage.rightChoice.players.some(function (player) { return player.username === event.player.username; })
+            : cleavage.rightChoice.players.some(function (player) { return player === event.username; })
                 ? PlayerCleave_1.PlayerCleave.RIGHT
                 : PlayerCleave_1.PlayerCleave.NOTHING;
     };
     CleavageApplicationService.prototype.cleave = function (event, cleavage) {
         if (event.playerCleave === PlayerCleave_1.PlayerCleave.LEFT)
-            cleavage.leftChoice.players.push(event.player);
+            cleavage.leftChoice.players.push(event.username);
         if (event.playerCleave === PlayerCleave_1.PlayerCleave.RIGHT)
-            cleavage.rightChoice.players.push(event.player);
+            cleavage.rightChoice.players.push(event.username);
         return this.saveCleavage(cleavage);
     };
     CleavageApplicationService.prototype.onPlayerAlreadyCleave = function (event, previousPlayerCleave, cleavage) {
         var _this = this;
         return event.playerCleave === previousPlayerCleave
-            ? this.chatGateway.sendMessageToPlayer(new MessageForPlayer_1.MessageForPlayer(event.player, "You have still cleave ".concat(previousPlayerCleave)))
+            ? this.chatGateway.sendMessageToPlayer(new MessageForPlayer_1.MessageForPlayer(event.username, "You have still cleave ".concat(previousPlayerCleave)))
             : this.uncleave(event, previousPlayerCleave, cleavage)
                 .then(function (cleavage) { return _this.cleave(event, cleavage); })["catch"](function (error) { return Promise.reject(error); });
     };
     CleavageApplicationService.prototype.uncleave = function (event, previousPlayerCleave, cleavage) {
         if (previousPlayerCleave === PlayerCleave_1.PlayerCleave.LEFT)
-            cleavage.leftChoice.players = cleavage.leftChoice.players.filter(function (player) { return player.username !== event.player.username; });
+            cleavage.leftChoice.players = cleavage.leftChoice.players.filter(function (player) { return player !== event.username; });
         if (previousPlayerCleave === PlayerCleave_1.PlayerCleave.RIGHT)
-            cleavage.rightChoice.players = cleavage.rightChoice.players.filter(function (player) { return player.username !== event.player.username; });
+            cleavage.rightChoice.players = cleavage.rightChoice.players.filter(function (player) { return player !== event.username; });
         return Promise.resolve(cleavage);
     };
     CleavageApplicationService.prototype.nextPublicCleavage = function () {

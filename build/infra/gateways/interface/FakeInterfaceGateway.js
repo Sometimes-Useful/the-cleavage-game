@@ -5,16 +5,49 @@ var InterfaceView_1 = require("../../../domain/entities/InterfaceView");
 var GamePhase_1 = require("../../../domain/entities/GamePhase");
 var FakeInterfaceGateway = /** @class */ (function () {
     function FakeInterfaceGateway() {
+        this.musicMuted = false;
         this.gamePhase = GamePhase_1.GamePhase.NONE;
         this.notifications = [];
         this.playingSounds = [];
         this.musicVolume = 0;
         this.soundVolume = 0;
+        this.videoExtractVolume = 0;
         this.autoplayEnabled = false;
         this.playingMusic = undefined;
         this.currentView = InterfaceView_1.InterfaceView.NONE;
         this.interfaceEntitiesState = new Map();
+        this.cleavageDrawpileQuantity = 0;
+        this.registeredStreamers = [];
+        this.isStreamerRegistered = false;
     }
+    FakeInterfaceGateway.prototype.updateStreamerRegistered = function (isRegistered) {
+        this.isStreamerRegistered = isRegistered;
+        return Promise.resolve();
+    };
+    FakeInterfaceGateway.prototype.updateListOfRegisteredStreamers = function (streamers) {
+        this.registeredStreamers = streamers;
+        return Promise.resolve();
+    };
+    FakeInterfaceGateway.prototype.updateCleavageDrawpileQuantity = function (cleavageDrawpileQuantity) {
+        this.cleavageDrawpileQuantity = cleavageDrawpileQuantity;
+        return Promise.resolve();
+    };
+    FakeInterfaceGateway.prototype.changeVideoExtractVolumeLevel = function (volume) {
+        this.videoExtractVolume = volume;
+        return Promise.resolve();
+    };
+    FakeInterfaceGateway.prototype.unMuteMusic = function () {
+        this.musicMuted = false;
+        return Promise.resolve();
+    };
+    FakeInterfaceGateway.prototype.muteMusic = function () {
+        this.musicMuted = true;
+        return Promise.resolve();
+    };
+    FakeInterfaceGateway.prototype.changeVideoExtract = function (videoExtract) {
+        this.videoExtract = videoExtract;
+        return Promise.resolve();
+    };
     FakeInterfaceGateway.prototype.changeGamePhase = function (gamePhase) {
         this.gamePhase = gamePhase;
         return Promise.resolve();

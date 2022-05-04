@@ -3,21 +3,21 @@ exports.__esModule = true;
 exports.PixiApplicationCommon = void 0;
 var PixiApplicationCommon = /** @class */ (function () {
     function PixiApplicationCommon() {
-        this.drawingZone = { width: 24, height: 24 };
-        this.offset = 0;
+        this.drawingZone = { width: 18, height: 18 };
+        this.offset = { width: 6, height: 6 };
     }
-    PixiApplicationCommon.prototype.relativePositionToAbsolutePosition = function (entityRelativePosition, offset, resolution) {
+    PixiApplicationCommon.prototype.relativePositionToAbsolutePosition = function (entityRelativePosition, resolution) {
         var scaleRatio = this.retrieveScaleRatio(resolution);
         return {
-            x: entityRelativePosition.x * scaleRatio.width + offset * scaleRatio.width,
-            y: entityRelativePosition.y * scaleRatio.height + offset * scaleRatio.height
+            x: entityRelativePosition.x * scaleRatio.width + this.offset.width * scaleRatio.width,
+            y: entityRelativePosition.y * scaleRatio.height + this.offset.height * scaleRatio.height
         };
     };
     PixiApplicationCommon.prototype.absolutePositionToRelativePosition = function (entityRelativePosition, resolution) {
         var scaleRatio = this.retrieveScaleRatio(resolution);
         var relativePosition = {
-            width: entityRelativePosition.x / scaleRatio.width - this.offset / scaleRatio.width,
-            height: entityRelativePosition.y / scaleRatio.height - this.offset / scaleRatio.height
+            width: entityRelativePosition.x / scaleRatio.width - this.offset.width / scaleRatio.width,
+            height: entityRelativePosition.y / scaleRatio.height - this.offset.height / scaleRatio.height
         };
         return relativePosition;
     };

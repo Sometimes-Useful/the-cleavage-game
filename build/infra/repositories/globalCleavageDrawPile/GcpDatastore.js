@@ -1,4 +1,29 @@
 "use strict";
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 exports.__esModule = true;
 exports.GcpDatastore = void 0;
 var datastore_1 = require("@google-cloud/datastore");
@@ -35,17 +60,15 @@ var GcpDatastore = /** @class */ (function () {
         })["catch"](function (error) { return Promise.reject(error); });
     };
     GcpDatastore.prototype.retreiveRecordQuantity = function (kind) {
-        var query = this.gcpDatastore.createQuery(this.kindPrefix.concat(kind));
-        query.select('__key__');
+        var query = this.gcpDatastore.createQuery(this.kindPrefix.concat(kind)).select('__key__');
         return this.gcpDatastore.runQuery(query)
             .then(function (queryResponse) { return Promise.resolve(queryResponse[0].length); })["catch"](function (error) { return Promise.reject(error); });
     };
     GcpDatastore.prototype.queryRecordsOnGoogleDatastore = function (kind, filters) {
         kind = this.kindPrefix.concat(kind);
-        console.log((0, infra_1.queryRecordsStart)(kind));
+        console.log.apply(console, __spreadArray([(0, infra_1.queryRecordsStart)(kind)], __read(filters.map(function (filter) { return (0, infra_1.queryRecordsFilter)(filter); })), false));
         var query = this.gcpDatastore.createQuery(kind);
         filters.forEach(function (filter) {
-            console.log((0, infra_1.queryRecordsFilter)(filter));
             query.filter(filter.property, filter.operator, filter.value);
         });
         return query.run()

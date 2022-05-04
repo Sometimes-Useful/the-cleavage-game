@@ -66,10 +66,17 @@ export const theBarRepositoryHasTableDirection = (gherkinPrefix: Gherkin, direct
     })
 }
 
-export const theBarRepositoryDontHaveAvailableStoolBar = (gherkinPrefix: Gherkin) => (application:FakeClientApplication): Test => {
+export const theBarRepositoryDontHaveAvailableBarStool = (gherkinPrefix: Gherkin) => (application:FakeClientApplication): Test => {
     return it(`${gherkinPrefix} the Bar repository don't has available bar stools`, () => {
         if (isGiven(gherkinPrefix)) application.repositories.bar.availableBarStools = []
         expect(application.repositories.bar.availableBarStools).deep.equal([])
+    })
+}
+
+export const theBarRepositoryDontHaveAvailableTableStool = (gherkinPrefix: Gherkin) => (application:FakeClientApplication): Test => {
+    return it(`${gherkinPrefix} the Bar repository don't has available bar stools`, () => {
+        if (isGiven(gherkinPrefix)) application.repositories.bar.availableBarStools = []
+        expect(application.repositories.bar.availableTableStools).deep.equal([])
     })
 }
 

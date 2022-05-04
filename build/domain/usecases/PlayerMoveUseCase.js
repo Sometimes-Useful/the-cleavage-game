@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 exports.PlayerMoveUseCase = void 0;
+var testContexts_1 = require("../tests/testContexts");
 var UseCase_1 = require("./UseCase");
 var PlayerMoveUseCase = /** @class */ (function (_super) {
     __extends(PlayerMoveUseCase, _super);
@@ -25,7 +26,7 @@ var PlayerMoveUseCase = /** @class */ (function (_super) {
         return _this;
     }
     PlayerMoveUseCase.prototype.execute = function (event) {
-        return this.applicationServices.player.updatePosition(event.username, event.position);
+        return this.applicationServices.player.updatePosition(event.username, event.position, testContexts_1.defaultPlayerSize);
     };
     return PlayerMoveUseCase;
 }(UseCase_1.UseCase));

@@ -19,6 +19,10 @@ export class CleavageApplicationService {
         private gamePhaseRepository: GamePhaseRepository
     ) { }
 
+    retrieveCleavageDrawpileQuantity ():Promise<number> {
+        return this.globalCleavageDrawPileGateway.retrieveCleavageDrawpileQuantity()
+    }
+
     changeGamePhase (gamePhase: GamePhase): Promise<void> {
         return this.gamePhaseRepository.changeGamePhase(gamePhase)
     }

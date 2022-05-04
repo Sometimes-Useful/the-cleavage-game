@@ -9,7 +9,6 @@
     "build:client": "rollup -c",
     "build:server": "tsc src/webServer/main.ts --esModuleInterop --downlevelIteration --outDir build",
     "dev": "rollup -c -w",
-    "start": "sirv public --no-clear",
     "start:server": "node build/webServer/main.js",
     "gcpCloudRun": "npm install && npm run start:server",
     "check": "svelte-check --tsconfig ./tsconfig.json"

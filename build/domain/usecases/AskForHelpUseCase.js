@@ -27,7 +27,7 @@ var AskForHelpUseCase = /** @class */ (function (_super) {
         return _this;
     }
     AskForHelpUseCase.prototype.execute = function (event) {
-        return this.applicationServices.chat.sendMessageToPlayer(new MessageForPlayer_1.MessageForPlayer(event.player, playerMessages_1.helpMessage));
+        return this.applicationServices.chat.sendMessageToPlayer(new MessageForPlayer_1.MessageForPlayer(event.username, playerMessages_1.helpMessage));
     };
     return AskForHelpUseCase;
 }(UseCase_1.UseCase));

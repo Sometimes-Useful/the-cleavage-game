@@ -7,8 +7,11 @@ import type { AutoplayApplicationService } from '../applicationServices/Autoplay
 import type { GlobalCleavageDrawPileApplicationService } from '../applicationServices/GlobalCleavageDrawPileApplicationService'
 import type { BarApplicationService } from '../applicationServices/BarApplicationService'
 import type { VideoExtractApplicationService } from '../applicationServices/VideoExtractApplicationService'
+import type { StreamersApplicationService } from '../applicationServices/StreamerApplicationService'
+import type { GlobalStreamersApplicationService } from '../applicationServices/GlobalStreamersApplicationService'
 
 export interface ClientApplicationServices {
+    streamers:StreamersApplicationService
     videoExtract:VideoExtractApplicationService
     player: PlayerApplicationService
     chat: ChatApplicationService;
@@ -20,5 +23,6 @@ export interface ClientApplicationServices {
 }
 
 export interface ServerApplicationServices {
+    globalStreamers:GlobalStreamersApplicationService,
     globalCleavageDrawPile:GlobalCleavageDrawPileApplicationService
 }

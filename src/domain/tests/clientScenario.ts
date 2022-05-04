@@ -27,10 +27,13 @@ import { FakeUuidGateway } from '../../infra/gateways/uuid/FakeUuidGateway'
 import { InMemoryGamePhaseRepository } from '../../infra/repositories/gamePhase/InMemoryGamePhaseRepository'
 import { InMemoryVideoExtractRepository } from '../../infra/repositories/videoExtract/InMemoryVideoExtractRepository'
 import { VideoExtractApplicationService } from '../applicationServices/VideoExtractApplicationService'
+import { FakeStreamersGateway } from '../../infra/gateways/streamers/FakeStreamersGateway'
+import { StreamersApplicationService } from '../applicationServices/StreamerApplicationService'
 
 export function clientScenario (scenarioTitle: string, unitTests: ((application: FakeClientApplication) => Test)[], skip?: boolean) {
     const eventGateway = new FakeClientEventGateway()
     const applicationGateways: FakeClientApplicationGateways = {
+        streamers: new FakeStreamersGateway(),
         chat: new FakeChatGateway(),
         event: eventGateway,
         interface: new FakeInterfaceGateway(),
@@ -49,6 +52,7 @@ export function clientScenario (scenarioTitle: string, unitTests: ((application:
         gamePhase: new InMemoryGamePhaseRepository()
     }
     const applicationServices: ClientApplicationServices = {
+        streamers: new StreamersApplicationService(applicationGateways.streamers),
         videoExtract: new VideoExtractApplicationService(applicationRepositories.videoExtracts, applicationGateways.interface, applicationGateways.random),
         chat: new ChatApplicationService(applicationGateways.chat, applicationGateways.interface),
         event: new EventApplicationService(applicationGateways.event),

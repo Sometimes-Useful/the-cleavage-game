@@ -3,7 +3,7 @@ import { feature } from '../../tests/feature'
 import { EventType } from '../EventType'
 import { theEventIsSent, whenEventOccurs } from '../../tests/unitTests/eventGateway'
 import { InstallNewStoolsOnBarEvent } from './InstallNewStoolsOnBarEvent'
-import { theBarRepositoryDontHaveAvailableStoolBar, theBarRepositoryHasAvailableStoolBars, theBarRepositoryHasBar } from '../../tests/unitTests/barRepository'
+import { theBarRepositoryDontHaveAvailableBarStool, theBarRepositoryHasAvailableStoolBars, theBarRepositoryHasBar } from '../../tests/unitTests/barRepository'
 import { Gherkin } from '../../tests/Gherkin'
 import { bar, barStools } from '../../tests/testContexts'
 import { DrawEvent } from '../draw/DrawEvent'
@@ -13,7 +13,7 @@ import { SpriteType } from '../../entities/SpriteType'
 feature(EventType.INSTALL_NEW_STOOLS_ON_BAR, [
     clientScenario('Scenario 1', [
         theBarRepositoryHasBar(Gherkin.GIVEN, bar),
-        theBarRepositoryDontHaveAvailableStoolBar(Gherkin.AND_GIVEN),
+        theBarRepositoryDontHaveAvailableBarStool(Gherkin.AND_GIVEN),
         theUuidGatewayHasUuids(Gherkin.AND_GIVEN, barStools.map(stool => stool.id)),
         whenEventOccurs(new InstallNewStoolsOnBarEvent()),
         theBarRepositoryHasAvailableStoolBars(Gherkin.THEN, barStools),

@@ -6,6 +6,22 @@ import type { Stool } from '../../../domain/entities/Stool'
 import type { OccupiedStool } from '../../../domain/applicationServices/BarApplicationService'
 
 export class InMemoryBarRepository implements BarRepository {
+    isPlayerInstalledOnBarStool (username: string): Promise<boolean> {
+        return Promise.resolve(!!this.occupiedBarStools.get(username))
+    }
+
+    freeTableStool (username: string): Promise<void> {
+        const tableStool = this.occupiedTableStools.get(username)
+        if (!tableStool) return Promise.reject(new Error(`Occupied bar stool with user ${username} not found.`))
+        this.occupiedTableStools.delete(username)
+        this.availableTableStools.push(tableStool)
+        return Promise.resolve()
+    }
+
+    isPlayerInstalledOnTableStool (username: string): Promise<boolean> {
+        return Promise.resolve(!!this.occupiedTableStools.get(username))
+    }
+
     addAvailableBarStool (stool: Stool): Promise<void> {
         this.availableBarStools.push(stool)
         return Promise.resolve()
@@ -66,7 +82,7 @@ export class InMemoryBarRepository implements BarRepository {
         return Promise.resolve()
     }
 
-    setOccupiedBarStool (username: any, stool: Stool) {
+    setOccupiedBarStool (username: string, stool: Stool) {
         this.occupiedBarStools.set(username, stool)
         return Promise.resolve()
     }

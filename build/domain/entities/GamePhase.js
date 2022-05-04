@@ -7,4 +7,5 @@ var GamePhase;
     GamePhase["CLEAVING"] = "CLEAVING";
     GamePhase["NEW_CLEAVAGE"] = "NEW_CLEAVAGE";
     GamePhase["NONE"] = "NONE";
+    GamePhase["PLAY_VIDEO"] = "PLAY_VIDEO";
 })(GamePhase = exports.GamePhase || (exports.GamePhase = {}));

@@ -33,17 +33,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __values = (this && this.__values) || function(o) {
-    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
-    if (m) return m.call(o);
-    if (o && typeof o.length === "number") return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-};
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -60,16 +49,26 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 exports.__esModule = true;
 exports.SvelteTonePixiInterfaceGateway = void 0;
-var InterfaceView_1 = require("../../../domain/entities/InterfaceView");
-var defaultVolumeLevels_1 = require("./defaultVolumeLevels");
-var stores_1 = require("../../../ui/stores/stores");
-var Tone = __importStar(require("tone"));
 var pixi_js_1 = require("pixi.js");
+var Tone = __importStar(require("tone"));
+var InterfaceView_1 = require("../../../domain/entities/InterfaceView");
+var SpriteType_1 = require("../../../domain/entities/SpriteType");
+var stores_1 = require("../../../ui/stores/stores");
+var defaultVolumeLevels_1 = require("./defaultVolumeLevels");
 var PixiApplicationCommon_1 = require("./PixiApplicationCommon");
 var entityIdMissingOnPixiEntities = function (entityId) { return "Entity id '".concat(entityId, " missing on pixiEntities'"); };
-var missingSpriteType = function (spriteType) { return "Missing shape type '".concat(spriteType, "''"); };
+var missingSpriteType = function (spriteType) { return "Missing texture for sprite type '".concat(spriteType, "''"); };
 var SvelteTonePixiInterfaceGateway = /** @class */ (function (_super) {
     __extends(SvelteTonePixiInterfaceGateway, _super);
     function SvelteTonePixiInterfaceGateway(supportedSounds, supportedMusics, pixiApplication, textureSources) {
@@ -85,35 +84,61 @@ var SvelteTonePixiInterfaceGateway = /** @class */ (function (_super) {
         _this.toneReady = false;
         return _this;
     }
+    SvelteTonePixiInterfaceGateway.prototype.updateStreamerRegistered = function (isRegistered) {
+        stores_1.isStreamerRegisteredStore.set(isRegistered);
+        return Promise.resolve();
+    };
+    SvelteTonePixiInterfaceGateway.prototype.updateListOfRegisteredStreamers = function (streamers) {
+        stores_1.listOfRegisteredStreamersStore.set(streamers);
+        return Promise.resolve();
+    };
+    SvelteTonePixiInterfaceGateway.prototype.updateCleavageDrawpileQuantity = function (cleavageDrawpileQuantity) {
+        stores_1.cleavageDrawPileQuantityStore.set(cleavageDrawpileQuantity);
+        return Promise.resolve();
+    };
+    SvelteTonePixiInterfaceGateway.prototype.changeVideoExtractVolumeLevel = function (volume) {
+        stores_1.videoExtractVolumeStore.set(volume);
+        return Promise.resolve();
+    };
+    SvelteTonePixiInterfaceGateway.prototype.unMuteMusic = function () {
+        var _this = this;
+        var onMusicVolumeBeforeMute = function (musicVolumeBeforeMute) {
+            _this.musicVolumeFader.volume.value = musicVolumeBeforeMute;
+            _this.musicVolumeBeforeMute = undefined;
+            return Promise.resolve();
+        };
+        console.log('UNMUTE', this.musicVolumeBeforeMute);
+        return this.musicVolumeBeforeMute === undefined
+            ? Promise.reject(new Error('musicVolumeBeforeMute is undefined.'))
+            : onMusicVolumeBeforeMute(this.musicVolumeBeforeMute);
+    };
+    SvelteTonePixiInterfaceGateway.prototype.muteMusic = function () {
+        this.musicVolumeBeforeMute = this.musicVolumeFader.volume.value;
+        console.log('MUTE', this.musicVolumeBeforeMute);
+        this.musicVolumeFader.volume.value = Tone.gainToDb(0 / 100);
+        return Promise.resolve();
+    };
+    SvelteTonePixiInterfaceGateway.prototype.changeVideoExtract = function (videoExtract) {
+        stores_1.videoExtractStore.set(videoExtract);
+        return Promise.resolve();
+    };
     SvelteTonePixiInterfaceGateway.prototype.addingViewToDom = function (htmlElement) {
         htmlElement.appendChild(this.pixiApplication.view);
-        console.log("Adding pixi view to HTML element id ".concat(htmlElement.id));
         return Promise.resolve();
     };
     SvelteTonePixiInterfaceGateway.prototype.changeResolution = function (resolution) {
-        this.updateInterfaceStates();
-        this.resizePixiAppRenderer(this.conserveAspectRatio(resolution));
-        console.log("Resolution changed to ".concat(JSON.stringify(resolution)));
-        return Promise.resolve();
+        var _this = this;
+        return this.resizePixiAppRenderer(this.conserveAspectRatio(resolution))
+            .then(function () { return _this.updateInterfaceStates(); })["catch"](function (error) { return Promise.reject(error); });
     };
     SvelteTonePixiInterfaceGateway.prototype.resizePixiAppRenderer = function (resolution) {
         this.pixiApplication.renderer.resize(resolution.width, resolution.height);
+        return Promise.resolve();
     };
     SvelteTonePixiInterfaceGateway.prototype.updateInterfaceStates = function () {
-        var e_1, _a;
-        try {
-            for (var _b = __values(this.pixiEntities), _c = _b.next(); !_c.done; _c = _b.next()) {
-                var _d = __read(_c.value, 2), pixiEntity = _d[1];
-                this.updatePixiEntityGraphically(pixiEntity);
-            }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
-            }
-            finally { if (e_1) throw e_1.error; }
-        }
+        var _this = this;
+        return Promise.all(__spreadArray([], __read(this.pixiEntities.values()), false).map(function (pixiEntity) { return _this.updatePixiEntityGraphically(pixiEntity); }))
+            .then(function () { return _this.pixiApplication.stage.sortChildren(); })["catch"](function (error) { return Promise.reject(error); });
     };
     SvelteTonePixiInterfaceGateway.prototype.updatePixiEntityGraphically = function (pixiEntity) {
         return Promise.all([
@@ -124,16 +149,19 @@ var SvelteTonePixiInterfaceGateway = /** @class */ (function (_super) {
     };
     SvelteTonePixiInterfaceGateway.prototype.updatePixiEntitySize = function (pixiEntity) {
         var resolution = this.retrieveResolution();
-        pixiEntity.pixiSprite.width = resolution.width / this.drawingZone.width;
-        pixiEntity.pixiSprite.height = resolution.height / this.drawingZone.height;
+        pixiEntity.pixiSprite.width = resolution.width / this.drawingZone.width * pixiEntity.size.width;
+        pixiEntity.pixiSprite.height = resolution.height / this.drawingZone.height * pixiEntity.size.height;
     };
     SvelteTonePixiInterfaceGateway.prototype.retrieveResolution = function () {
         return { width: this.pixiApplication.renderer.view.width, height: this.pixiApplication.renderer.view.height };
     };
     SvelteTonePixiInterfaceGateway.prototype.updatePixiEntityAbsolutePosition = function (pixiEntity) {
-        var absolutePosition = this.relativePositionToAbsolutePosition(pixiEntity.position, this.offset, this.retrieveResolution());
+        var absolutePosition = this.relativePositionToAbsolutePosition(pixiEntity.position, this.retrieveResolution());
         pixiEntity.pixiSprite.x = absolutePosition.x;
         pixiEntity.pixiSprite.y = absolutePosition.y;
+        pixiEntity.pixiSprite.zIndex = pixiEntity.spriteType === SpriteType_1.SpriteType.PLAYER ? 1 : 0;
+        if (pixiEntity.spriteType === SpriteType_1.SpriteType.PLAYER)
+            console.log(pixiEntity.position);
         return Promise.resolve();
     };
     SvelteTonePixiInterfaceGateway.prototype.conserveAspectRatio = function (resolution) {
@@ -149,14 +177,20 @@ var SvelteTonePixiInterfaceGateway = /** @class */ (function (_super) {
         return Promise.resolve();
     };
     SvelteTonePixiInterfaceGateway.prototype.removeEntityInterfaceState = function (id) {
-        this.pixiEntities["delete"](id);
+        var pixiEntity = this.pixiEntities.get(id);
+        if (pixiEntity) {
+            pixiEntity.pixiSprite.destroy(false);
+            this.pixiEntities["delete"](id);
+        }
         return Promise.resolve();
     };
     SvelteTonePixiInterfaceGateway.prototype.updateEntityInterfaceState = function (id, interfaceEntityState) {
+        var _this = this;
         var pixiEntity = this.pixiEntities.get(id);
-        return pixiEntity
+        return (pixiEntity
             ? this.updatePixiEntity(pixiEntity, interfaceEntityState)
-            : this.createPixiEntity(id, interfaceEntityState);
+            : this.createPixiEntity(id, interfaceEntityState))
+            .then(function () { return _this.pixiApplication.stage.sortChildren(); })["catch"](function (error) { return Promise.reject(error); });
     };
     SvelteTonePixiInterfaceGateway.prototype.createPixiEntity = function (entityId, interfaceEntityState) {
         var textureSourceUrl = this.textureSources.get(interfaceEntityState.spriteType);
@@ -165,6 +199,7 @@ var SvelteTonePixiInterfaceGateway = /** @class */ (function (_super) {
         var sprite = this.pixiApplication.stage.addChild(pixi_js_1.Sprite.from(textureSourceUrl));
         this.pixiEntities.set(entityId, {
             position: interfaceEntityState.position,
+            size: interfaceEntityState.size,
             spriteType: interfaceEntityState.spriteType,
             pixiSprite: sprite
         });

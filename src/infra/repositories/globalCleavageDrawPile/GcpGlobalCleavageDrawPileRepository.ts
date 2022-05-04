@@ -1,6 +1,6 @@
 import { Cleavage, CleavageDTO } from '../../../domain/entities/Cleavage'
 import type { GlobalCleavageDrawPileRepository } from '../../../domain/ports/secondary/repositories/GlobalCleavageDrawPileRepository'
-import type { GcpDatastore, GcpQueryFilter } from './GcpDatastore'
+import type { GcpDatastore, GcpQueryFilter } from '../../tech/GcpDatastore'
 
 export class GcpGlobalCleavageDrawPileRepository implements GlobalCleavageDrawPileRepository {
     constructor (private gcpDatastore:GcpDatastore) {}

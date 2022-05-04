@@ -43,9 +43,9 @@ var LaunchCleavageUseCase = /** @class */ (function (_super) {
             title: event.cleavageTitle,
             leftChoice: { name: event.leftChoiceName, players: [] },
             rightChoice: { name: event.rightChoiceName, players: [] },
-            players: players
+            players: players.map(function (player) { return player.username; })
         })); })
-            .then(function () { return _this.applicationServices.cleavage.loadCleavage(); })
+            .then(function () { return _this.applicationServices.cleavage.loadCurrentCleavage(); })
             .then(function (cleavage) { return Promise.all([
             _this.applicationServices.interface.updateCleavage(cleavage),
             _this.applicationServices.cleavage.saveGlobalCleavage(cleavage)

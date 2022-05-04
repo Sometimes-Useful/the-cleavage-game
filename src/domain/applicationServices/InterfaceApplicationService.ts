@@ -7,9 +7,23 @@ import type { ApplicationNotification } from '../entities/notification/Notificat
 import { noCleavageAvailableNotification } from '../entities/notification/notifications'
 import { Sound } from '../entities/sound'
 import { SupportedSound } from '../entities/SoundType'
+import type { StreamerDto } from '../entities/StreamerDto'
 import type { InterfaceGateway } from '../ports/secondary/gateways/InterfaceGateway'
 
 export class InterfaceApplicationService {
+    constructor (private interfaceGateway:InterfaceGateway) {}
+    updateStreamerRegistered (isStreamerRegistered: boolean): any {
+        return this.interfaceGateway.updateStreamerRegistered(isStreamerRegistered)
+    }
+
+    updateRegisteredStreamers (streamers: StreamerDto[]): Promise<void> {
+        return this.interfaceGateway.updateListOfRegisteredStreamers(streamers)
+    }
+
+    updateCleavageDrawpileQuantity (cleavageDrawpileQuantity: number): Promise<void> {
+        return this.interfaceGateway.updateCleavageDrawpileQuantity(cleavageDrawpileQuantity)
+    }
+
     changeVideoExtractVolumeLevel (volume: number): Promise<void> {
         return Promise.all([
             this.playSound(new Sound(SupportedSound.TICK)),
@@ -39,7 +53,6 @@ export class InterfaceApplicationService {
         return this.interfaceGateway.enableAutoplay()
     }
 
-    constructor (private interfaceGateway:InterfaceGateway) {}
     changeMusicVolumeLevel (volume: number) {
         return this.interfaceGateway.changeMusicVolumeLevel(volume)
     }

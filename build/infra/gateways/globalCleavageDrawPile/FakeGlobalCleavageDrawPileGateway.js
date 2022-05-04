@@ -5,6 +5,9 @@ var FakeGlobalCleavageDrawPileGateway = /** @class */ (function () {
     function FakeGlobalCleavageDrawPileGateway() {
         this.globalCleavageDrawPile = [];
     }
+    FakeGlobalCleavageDrawPileGateway.prototype.retrieveCleavageDrawpileQuantity = function () {
+        return Promise.resolve(this.globalCleavageDrawPile.length);
+    };
     FakeGlobalCleavageDrawPileGateway.prototype.drawGlobalCleavage = function () {
         return Promise.resolve(this.globalCleavageDrawPile[0]);
     };

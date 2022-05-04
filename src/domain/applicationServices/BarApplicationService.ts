@@ -20,6 +20,7 @@ import { GamePhase } from '../entities/GamePhase'
 import { ChangeGamePhaseEvent } from '../events/changeGamePhase/ChangeGamePhaseEvent'
 import { InstallNewStoolsOnTableEvent } from '../events/installNewStoolsOnTable/InstallNewStoolsOnTableEvent'
 import { SpriteType } from '../entities/SpriteType'
+import { EraseEvent } from '../events/erase/EraseEvent'
 
 interface PostionAndDirection {
     position:Position,
@@ -31,6 +32,26 @@ export interface OccupiedStool {
 }
 
 export class BarApplicationService {
+    removePlayerFromBarStool (username: string): Promise<void> {
+        return this.barRepository.freeBarStool(username)
+            .then(() => this.eventGateway.sendEvent(new EraseEvent(username)))
+            .catch(error => Promise.reject(error))
+    }
+
+    isPlayerInstalledOnBarStool (username: string): Promise<boolean> {
+        return this.barRepository.isPlayerInstalledOnBarStool(username)
+    }
+
+    removePlayerFromTableStool (username: string): Promise<void> {
+        return this.barRepository.freeTableStool(username)
+            .then(() => this.eventGateway.sendEvent(new EraseEvent(username)))
+            .catch(error => Promise.reject(error))
+    }
+
+    isPlayerInstalledOnTableStool (username:string): Promise<boolean> {
+        return this.barRepository.isPlayerInstalledOnTableStool(username)
+    }
+
     installStoolForBar (): Promise<void> {
         const stools = this.makeBarStools()
         return Promise.all(stools.map(stool => this.uuidGateway.nextId()))

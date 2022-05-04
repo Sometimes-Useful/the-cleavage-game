@@ -36,8 +36,8 @@ var InMemoryPlayerRepository = /** @class */ (function () {
             ? Promise.resolve(player)
             : Promise.reject(new Error("Player with username '".concat(username, "' not found.")));
     };
-    InMemoryPlayerRepository.prototype.hasPlayer = function (player) {
-        return Promise.resolve(this.currentPlayers.has(player.username));
+    InMemoryPlayerRepository.prototype.hasPlayer = function (username) {
+        return Promise.resolve(this.currentPlayers.has(username));
     };
     InMemoryPlayerRepository.prototype.loadAllPlayers = function () {
         return Promise.resolve(__spreadArray([], __read(this.currentPlayers.values()), false));

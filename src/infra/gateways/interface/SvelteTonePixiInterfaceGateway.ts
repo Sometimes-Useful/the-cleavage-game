@@ -1,21 +1,22 @@
+import { Application, Sprite } from 'pixi.js'
+import * as Tone from 'tone'
 import type { Cleavage } from '../../../domain/entities/Cleavage'
-import type { ApplicationNotification } from '../../../domain/entities/notification/Notification'
-import type { Sound } from '../../../domain/entities/sound'
+import type { GamePhase } from '../../../domain/entities/GamePhase'
+import type { InterfaceEntityState } from '../../../domain/entities/InterfaceEntityState'
+import { InterfaceView } from '../../../domain/entities/InterfaceView'
 import type { Music } from '../../../domain/entities/music/Music'
 import type { SupportedMusic } from '../../../domain/entities/music/SupportedMusic'
-import { InterfaceView } from '../../../domain/entities/InterfaceView'
-import { defaultMusicVolumeLevel, defaultSoundVolumeLevel } from './defaultVolumeLevels'
-import { autoplayStore, currentCleavageStore, gamePhaseStore, interfaceViewStore, musicVolumeStore, soundVolumeStore, videoExtractStore, videoExtractVolumeStore } from '../../../ui/stores/stores'
-import * as Tone from 'tone'
-import { Application, Sprite } from 'pixi.js'
-import type { SupportedSound } from '../../../domain/entities/SoundType'
-import type { InterfaceGateway } from '../../../domain/ports/secondary/gateways/InterfaceGateway'
-import type { GamePhase } from '../../../domain/entities/GamePhase'
+import type { ApplicationNotification } from '../../../domain/entities/notification/Notification'
 import type { Size } from '../../../domain/entities/Size'
-import { PixiApplicationCommon } from './PixiApplicationCommon'
+import type { Sound } from '../../../domain/entities/sound'
+import type { SupportedSound } from '../../../domain/entities/SoundType'
 import { SpriteType } from '../../../domain/entities/SpriteType'
-import type { InterfaceEntityState } from '../../../domain/entities/InterfaceEntityState'
+import type { StreamerDto } from '../../../domain/entities/StreamerDto'
 import type { VideoExtract } from '../../../domain/entities/VideoExtract'
+import type { InterfaceGateway } from '../../../domain/ports/secondary/gateways/InterfaceGateway'
+import { autoplayStore, cleavageDrawPileQuantityStore, currentCleavageStore, gamePhaseStore, interfaceViewStore, musicVolumeStore, listOfRegisteredStreamersStore, soundVolumeStore, videoExtractStore, videoExtractVolumeStore, isStreamerRegisteredStore } from '../../../ui/stores/stores'
+import { defaultMusicVolumeLevel, defaultSoundVolumeLevel } from './defaultVolumeLevels'
+import { PixiApplicationCommon } from './PixiApplicationCommon'
 
 interface PixiJsEntity extends InterfaceEntityState {
     pixiSprite:Sprite
@@ -30,6 +31,21 @@ export class SvelteTonePixiInterfaceGateway extends PixiApplicationCommon implem
         private pixiApplication: Application,
         private textureSources: Map<SpriteType, string>
     ) { super() }
+
+    updateStreamerRegistered (isRegistered: boolean): Promise<void> {
+        isStreamerRegisteredStore.set(isRegistered)
+        return Promise.resolve()
+    }
+
+    updateListOfRegisteredStreamers (streamers: StreamerDto[]): Promise<void> {
+        listOfRegisteredStreamersStore.set(streamers)
+        return Promise.resolve()
+    }
+
+    updateCleavageDrawpileQuantity (cleavageDrawpileQuantity: number): Promise<void> {
+        cleavageDrawPileQuantityStore.set(cleavageDrawpileQuantity)
+        return Promise.resolve()
+    }
 
     changeVideoExtractVolumeLevel (volume: number): Promise<void> {
         videoExtractVolumeStore.set(volume)
@@ -123,7 +139,11 @@ export class SvelteTonePixiInterfaceGateway extends PixiApplicationCommon implem
     }
 
     removeEntityInterfaceState (id: string): Promise<void> {
-        this.pixiEntities.delete(id)
+        const pixiEntity = this.pixiEntities.get(id)
+        if (pixiEntity) {
+            pixiEntity.pixiSprite.destroy(false)
+            this.pixiEntities.delete(id)
+        }
         return Promise.resolve()
     }
 

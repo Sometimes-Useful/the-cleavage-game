@@ -30,13 +30,13 @@ var SuggestCleavageUseCase = /** @class */ (function (_super) {
         var _this = this;
         return this.applicationServices.cleavage.isPublicCleavageExist(event.cleavage)
             .then(function (isPublicCleavageExist) { return isPublicCleavageExist
-            ? _this.applicationServices.chat.sendMessageToPlayer(new MessageForPlayer_1.MessageForPlayer(event.player, playerMessages_1.cleavageAlreadySuggested))
+            ? _this.applicationServices.chat.sendMessageToPlayer(new MessageForPlayer_1.MessageForPlayer(event.username, playerMessages_1.cleavageAlreadySuggested))
             : _this.onPublicCleavageExist(event); })["catch"](function (error) { return Promise.reject(error); });
     };
     SuggestCleavageUseCase.prototype.onPublicCleavageExist = function (event) {
         var _this = this;
         return this.applicationServices.cleavage.addPublicCleavage(event.cleavage)
-            .then(function () { return _this.applicationServices.chat.sendMessageToPlayer(new MessageForPlayer_1.MessageForPlayer(event.player, (0, playerMessages_1.cleavageSuggested)(event.player, event.cleavage.title))); })["catch"](function (error) { return Promise.reject(error); });
+            .then(function () { return _this.applicationServices.chat.sendMessageToPlayer(new MessageForPlayer_1.MessageForPlayer(event.username, (0, playerMessages_1.cleavageSuggested)(event.username, event.cleavage.title))); })["catch"](function (error) { return Promise.reject(error); });
     };
     return SuggestCleavageUseCase;
 }(UseCase_1.UseCase));

@@ -6,6 +6,9 @@ var GlobalCleavageDrawPileApplicationService = /** @class */ (function () {
         this.globalCleavageDrawPileRepository = globalCleavageDrawPileRepository;
         this.randomGateway = randomGateway;
     }
+    GlobalCleavageDrawPileApplicationService.prototype.retrieveCleavageDrawPileQuantity = function () {
+        return this.globalCleavageDrawPileRepository.globalCleavageQuantity();
+    };
     GlobalCleavageDrawPileApplicationService.prototype.save = function (cleavage) {
         var _this = this;
         return this.globalCleavageDrawPileRepository.hasCleavage(cleavage)

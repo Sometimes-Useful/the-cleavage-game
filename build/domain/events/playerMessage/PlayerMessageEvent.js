@@ -20,9 +20,9 @@ var GameEvent_1 = require("../GameEvent");
 var EventType_1 = require("../EventType");
 var PlayerMessageEvent = /** @class */ (function (_super) {
     __extends(PlayerMessageEvent, _super);
-    function PlayerMessageEvent(player, message) {
+    function PlayerMessageEvent(username, message) {
         var _this = _super.call(this) || this;
-        _this.player = player;
+        _this.username = username;
         _this.message = message;
         _this.eventType = EventType_1.EventType.PLAYER_MESSAGE;
         return _this;

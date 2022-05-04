@@ -20,9 +20,9 @@ var EventType_1 = require("../EventType");
 var GameEvent_1 = require("../GameEvent");
 var PlayerSuggestCleavageEvent = /** @class */ (function (_super) {
     __extends(PlayerSuggestCleavageEvent, _super);
-    function PlayerSuggestCleavageEvent(player, cleavage) {
+    function PlayerSuggestCleavageEvent(username, cleavage) {
         var _this = _super.call(this) || this;
-        _this.player = player;
+        _this.username = username;
         _this.cleavage = cleavage;
         _this.eventType = EventType_1.EventType.PLAYER_SUGGEST_CLEAVAGE;
         return _this;

@@ -29,18 +29,18 @@ var PlayerCleaveUseCase = /** @class */ (function (_super) {
     }
     PlayerCleaveUseCase.prototype.execute = function (event) {
         var _this = this;
-        return this.applicationServices.player.addPlayer(event.player)
+        return this.applicationServices.player.addPlayer(event.username)
             .then(function () { return _this.applicationServices.cleavage.retrieveCurrentGamePhase(); })
             .then(function (currentGamePhase) { return currentGamePhase !== GamePhase_1.GamePhase.CLEAVING
-            ? _this.applicationServices.chat.sendMessageToPlayer(new MessageForPlayer_1.MessageForPlayer(event.player, playerMessages_1.waitForCleavageLaunchMessage))
+            ? _this.applicationServices.chat.sendMessageToPlayer(new MessageForPlayer_1.MessageForPlayer(event.username, playerMessages_1.waitForCleavageLaunchMessage))
             : _this.onCleavingPhase(event); })["catch"](function (error) { return Promise.reject(error); });
     };
     PlayerCleaveUseCase.prototype.onCleavingPhase = function (event) {
         var _this = this;
-        return this.applicationServices.cleavage.hasCleavage()
+        return this.applicationServices.cleavage.hasCurrentCleavage()
             .then(function (hasCleavage) { return hasCleavage
             ? _this.onCleavage(event)
-            : _this.applicationServices.chat.sendMessageToPlayer((0, MessageForPlayer_1.noCleavagePleaseWait)(event.player)); })["catch"](function (error) { return Promise.reject(error); });
+            : _this.applicationServices.chat.sendMessageToPlayer((0, MessageForPlayer_1.noCleavagePleaseWait)(event.username)); })["catch"](function (error) { return Promise.reject(error); });
     };
     PlayerCleaveUseCase.prototype.onCleavage = function (event) {
         var _this = this;
@@ -49,7 +49,7 @@ var PlayerCleaveUseCase = /** @class */ (function (_super) {
     };
     PlayerCleaveUseCase.prototype.updateCleavageOnInterface = function () {
         var _this = this;
-        return this.applicationServices.cleavage.loadCleavage()
+        return this.applicationServices.cleavage.loadCurrentCleavage()
             .then(function (cleavage) { return _this.applicationServices.interface.updateCleavage(cleavage); })["catch"](function (error) { return Promise.reject(error); });
     };
     return PlayerCleaveUseCase;

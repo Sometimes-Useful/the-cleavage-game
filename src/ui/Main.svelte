@@ -9,7 +9,8 @@
     import Settings from "./views/Settings.svelte";
     import Intro from "./views/Intro.svelte";
     import Credits from "./views/Credits.svelte";
-import Game from "./views/Game.svelte";
+    import Game from "./views/Game.svelte";
+    import Streamers from "./views/Streamers.svelte"
     let forceView:InterfaceView|undefined = undefined
     interfaceViewStore.set(InterfaceView.INTRO)
     onDestroy(()=>$applicationEventStore = new DisconnectChatEvent())
@@ -36,6 +37,8 @@ import Game from "./views/Game.svelte";
             <Intro/>
         {:else if  $interfaceViewStore === InterfaceView.SETTINGS}
             <Settings/>
+        {:else if  $interfaceViewStore === InterfaceView.STREAMERS}
+            <Streamers/>
         {:else if  $interfaceViewStore === InterfaceView.CREDITS}
             <Credits/>
         {:else if  $interfaceViewStore === InterfaceView.ABOUT}

@@ -5,11 +5,13 @@ var Player = /** @class */ (function () {
     function Player(playerDTO) {
         this.username = playerDTO.username;
         this.position = playerDTO.position;
+        this.size = playerDTO.size;
     }
     Player.prototype.toDto = function () {
         return {
             username: this.username,
-            position: this.position
+            position: this.position,
+            size: this.size
         };
     };
     return Player;

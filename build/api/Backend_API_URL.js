@@ -6,4 +6,6 @@ var BACKEND_API_URL;
 (function (BACKEND_API_URL) {
     BACKEND_API_URL["GLOBAL_CLEAVAGE_DRAWPILE_DRAW"] = "/globalCleavageDrawPile/draw";
     BACKEND_API_URL["GLOBAL_CLEAVAGE_DRAWPILE_SAVE"] = "/globalCleavageDrawPile/save";
+    BACKEND_API_URL["GLOBAL_CLEAVAGE_DRAWPILE_QUANTITY"] = "/globalCleavageDrawPile/quantity";
+    BACKEND_API_URL["STREAMERS"] = "/streamers";
 })(BACKEND_API_URL = exports.BACKEND_API_URL || (exports.BACKEND_API_URL = {}));

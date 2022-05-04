@@ -37,6 +37,20 @@ var InMemoryBarRepository = /** @class */ (function () {
         this.tableDirection = Direction_1.Direction.RIGHT;
         this.bar = { id: '0', position: { x: 0, y: 0 }, size: { height: 0, width: 0 } };
     }
+    InMemoryBarRepository.prototype.isPlayerInstalledOnBarStool = function (username) {
+        return Promise.resolve(!!this.occupiedBarStools.get(username));
+    };
+    InMemoryBarRepository.prototype.freeTableStool = function (username) {
+        var tableStool = this.occupiedTableStools.get(username);
+        if (!tableStool)
+            return Promise.reject(new Error("Occupied bar stool with user ".concat(username, " not found.")));
+        this.occupiedTableStools["delete"](username);
+        this.availableTableStools.push(tableStool);
+        return Promise.resolve();
+    };
+    InMemoryBarRepository.prototype.isPlayerInstalledOnTableStool = function (username) {
+        return Promise.resolve(!!this.occupiedTableStools.get(username));
+    };
     InMemoryBarRepository.prototype.addAvailableBarStool = function (stool) {
         this.availableBarStools.push(stool);
         return Promise.resolve();

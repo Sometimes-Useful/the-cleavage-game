@@ -4,11 +4,13 @@ import type { CleavageApplicationService } from '../applicationServices/Cleavage
 import type { InterfaceApplicationService } from '../applicationServices/InterfaceApplicationService'
 import type { PlayerQuitEvent } from '../events/playerQuit/PlayerQuitEvent'
 import type { Player } from '../entities/Player'
+import type { BarApplicationService } from '../applicationServices/BarApplicationService'
 
 interface PlayerQuitUseCaseApplicationServices {
     player:PlayerApplicationService
     cleavage:CleavageApplicationService
     interface:InterfaceApplicationService
+    bar:BarApplicationService
 }
 
 export class PlayerQuitUseCase extends UseCase {
@@ -33,8 +35,24 @@ export class PlayerQuitUseCase extends UseCase {
             .then(() => this.applicationServices.cleavage.hasCurrentCleavage())
             .then(hasCleavage => hasCleavage
                 ? this.onCleavage(player)
-                : Promise.resolve()
+                : this.quitBar(player)
             )
+            .catch(error => Promise.reject(error))
+    }
+
+    private quitBar (player: Player): Promise<void> {
+        return this.applicationServices.bar.isPlayerInstalledOnTableStool(player.username)
+            .then(isPlayerInstalledOnStool => isPlayerInstalledOnStool
+                ? this.applicationServices.bar.removePlayerFromTableStool(player.username)
+                : this.onPlayerMaybeInstalledOnBarStool(player))
+            .catch(error => Promise.reject(error))
+    }
+
+    private onPlayerMaybeInstalledOnBarStool (player:Player): Promise<void> {
+        return this.applicationServices.bar.isPlayerInstalledOnBarStool(player.username)
+            .then(isPlayerInstalledOnBarStool => isPlayerInstalledOnBarStool
+                ? this.applicationServices.bar.removePlayerFromBarStool(player.username)
+                : Promise.resolve())
             .catch(error => Promise.reject(error))
     }
 
@@ -42,6 +60,7 @@ export class PlayerQuitUseCase extends UseCase {
         return this.applicationServices.cleavage.removePlayerOnCleavage(player)
             .then(() => this.applicationServices.cleavage.loadCurrentCleavage())
             .then(cleavage => this.applicationServices.interface.updateCleavage(cleavage))
+            .then(() => this.quitBar(player))
             .catch(error => Promise.reject(error))
     }
 }

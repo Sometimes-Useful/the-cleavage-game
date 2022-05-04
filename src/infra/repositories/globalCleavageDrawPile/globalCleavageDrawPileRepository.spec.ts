@@ -4,7 +4,7 @@ import { commonCleavage1 } from '../../../domain/tests/testContexts'
 import type { GlobalCleavageDrawPileRepository } from '../../../domain/ports/secondary/repositories/GlobalCleavageDrawPileRepository'
 import { InMemoryGlobalCleavageDrawPileRepository } from './InMemoryGlobalCleavageRepository'
 import { GcpGlobalCleavageDrawPileRepository } from './GcpGlobalCleavageDrawPileRepository'
-import { GcpDatastore } from './GcpDatastore'
+import { GcpDatastore } from '../../tech/GcpDatastore'
 import { gcpClientEmail, gcpPrivateKey, gcpProjectId } from '../../../env/serverEnvironnementVariables'
 
 interface IntegrationEnvironnement {

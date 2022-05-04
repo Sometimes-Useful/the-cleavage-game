@@ -12,4 +12,5 @@ var InterfaceView;
     InterfaceView["ABOUT"] = "ABOUT";
     InterfaceView["CREDITS"] = "CREDITS";
     InterfaceView["GAME"] = "GAME";
+    InterfaceView["STREAMERS"] = "STREAMERS";
 })(InterfaceView = exports.InterfaceView || (exports.InterfaceView = {}));

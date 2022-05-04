@@ -29,28 +29,35 @@ var DrawCleavageUseCase = /** @class */ (function (_super) {
     }
     DrawCleavageUseCase.prototype.execute = function (event) {
         var _this = this;
+        return this.applicationServices.autoplay.hasAutoplay()
+            .then(function (isAutoPlay) { return isAutoPlay ? _this.onAutoPlay(isAutoPlay) : _this.onNotAutoPlay(isAutoPlay); });
+    };
+    DrawCleavageUseCase.prototype.onAutoPlay = function (isAutoPlay) {
+        return this.onNoPublicCleavage(isAutoPlay);
+    };
+    DrawCleavageUseCase.prototype.onNotAutoPlay = function (isAutoPlay) {
+        var _this = this;
         return this.applicationServices.cleavage.nextPublicCleavage()
             .then(function (cleavage) { return cleavage
-            ? _this.onCleavage(cleavage)
-            : _this.onNoPublicCleavage(); })["catch"](function (error) { return Promise.reject(error); });
+            ? _this.onCleavage(cleavage, isAutoPlay)
+            : _this.onNoPublicCleavage(isAutoPlay); })["catch"](function (error) { return Promise.reject(error); });
     };
-    DrawCleavageUseCase.prototype.onCleavage = function (cleavage) {
+    DrawCleavageUseCase.prototype.onCleavage = function (cleavage, isAutoPlay) {
         var _this = this;
         return Promise.all([
             this.applicationServices.cleavage.saveCleavage(cleavage),
             this.applicationServices.interface.updateCleavage(cleavage),
             this.applicationServices.interface.playSound(new sound_1.Sound(SoundType_1.SupportedSound.DICE_ROLL))
         ])
-            .then(function (results) { return _this.applicationServices.autoplay.hasAutoplay(); })
-            .then(function (hasAutoplay) { return hasAutoplay
+            .then(function (results) { return isAutoPlay
             ? _this.applicationServices.event.sentEvent(new LaunchCleavageEvent_1.LaunchCleavageEvent(cleavage.title, cleavage.leftChoice.name, cleavage.rightChoice.name))
             : Promise.resolve(); })["catch"](function (error) { return Promise.reject(error); });
     };
-    DrawCleavageUseCase.prototype.onNoPublicCleavage = function () {
+    DrawCleavageUseCase.prototype.onNoPublicCleavage = function (isAutoPlay) {
         var _this = this;
         return this.applicationServices.cleavage.randomGlobalCleavage()
             .then(function (cleavage) { return cleavage
-            ? _this.onCleavage(cleavage)
+            ? _this.onCleavage(cleavage, isAutoPlay)
             : _this.onNoGlobalCleavage(); })["catch"](function (error) { return Promise.reject(error); });
     };
     DrawCleavageUseCase.prototype.onNoGlobalCleavage = function () {

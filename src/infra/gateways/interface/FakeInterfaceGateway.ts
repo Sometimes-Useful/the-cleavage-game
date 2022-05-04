@@ -7,8 +7,24 @@ import type { InterfaceGateway } from '../../../domain/ports/secondary/gateways/
 import { GamePhase } from '../../../domain/entities/GamePhase'
 import type { InterfaceEntityState } from '../../../domain/entities/InterfaceEntityState'
 import type { VideoExtract } from '../../../domain/entities/VideoExtract'
+import type { StreamerDto } from '../../../domain/entities/StreamerDto'
 
 export class FakeInterfaceGateway implements InterfaceGateway {
+    updateStreamerRegistered (isRegistered: boolean): Promise<void> {
+        this.isStreamerRegistered = isRegistered
+        return Promise.resolve()
+    }
+
+    updateListOfRegisteredStreamers (streamers: StreamerDto[]): Promise<void> {
+        this.registeredStreamers = streamers
+        return Promise.resolve()
+    }
+
+    updateCleavageDrawpileQuantity (cleavageDrawpileQuantity: number): Promise<void> {
+        this.cleavageDrawpileQuantity = cleavageDrawpileQuantity
+        return Promise.resolve()
+    }
+
     changeVideoExtractVolumeLevel (volume: number): Promise<void> {
         this.videoExtractVolume = volume
         return Promise.resolve()
@@ -106,4 +122,7 @@ export class FakeInterfaceGateway implements InterfaceGateway {
     currentView: InterfaceView = InterfaceView.NONE;
     interfaceEntitiesState: Map<string, InterfaceEntityState> = new Map()
     videoExtract: VideoExtract|undefined
+    cleavageDrawpileQuantity: number = 0
+    registeredStreamers: StreamerDto[] = []
+    isStreamerRegistered: boolean = false
 }

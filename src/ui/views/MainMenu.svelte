@@ -4,8 +4,14 @@
     import { NewCleavageEvent } from "../../domain/events/newCleavage/NewCleavageEvent";
     import Button from "../components/button/button.svelte";
     import Subtitle from "../components/text/subtitle.svelte";
+    import {cleavageDrawPileQuantityStore} from "../stores/stores"
     import Title from "../components/text/title.svelte"
     import { applicationEventStore } from "../stores/stores";
+    import { afterUpdate } from "svelte";
+import { RefreshCleavageDrawpileQuantityEvent } from "../../domain/events/refreshCleavageDrawpileQuantity/RefreshCleavageDrawpileQuantityEvent";
+    afterUpdate(()=> {
+        applicationEventStore.set(new RefreshCleavageDrawpileQuantityEvent())
+    })
 </script>
 <main class="bg-dark-background h-full w-full flex flex-col justify-evenly">
     <div class="flex flex-col items-center">
@@ -19,9 +25,13 @@
         94.99$ seulement! Wouah!"/>
     </div>
     <div class="flex flex-col items-center">
+        <Subtitle subtitle={`Déjà ${$cleavageDrawPileQuantityStore} clivages de dispo!`}/>
+    </div>
+    <div class="flex flex-col items-center">
         <Button text="Jouer !" size="large" onClick={()=>applicationEventStore.set(new NewCleavageEvent())}/>
         <Button text="Options !" size="large" onClick={()=>applicationEventStore.set(new NavigateEvent(InterfaceView.SETTINGS))}/>
         <Button text="Credits !" size="large" onClick={()=>applicationEventStore.set(new NavigateEvent(InterfaceView.CREDITS))}/>
+        <Button text="Ils ont déjà joué!" size="large" onClick={()=>applicationEventStore.set(new NavigateEvent(InterfaceView.STREAMERS))}/>
         <Button text="A propos !" size="large" onClick={()=>applicationEventStore.set(new NavigateEvent(InterfaceView.ABOUT))}/>
     </div>
 </main>

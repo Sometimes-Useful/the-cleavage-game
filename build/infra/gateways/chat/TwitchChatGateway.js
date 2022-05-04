@@ -21,7 +21,6 @@ var tmi_js_1 = require("tmi.js");
 var PlayerMessageEvent_1 = require("../../../domain/events/playerMessage/PlayerMessageEvent");
 var MessageForPlayer_1 = require("../../../domain/entities/MessageForPlayer");
 var PlayerQuitEvent_1 = require("../../../domain/events/playerQuit/PlayerQuitEvent");
-var Player_1 = require("../../../domain/entities/Player");
 var noTwitchClientSet = 'No Twitch Client Set';
 var TwitchChatGateway = /** @class */ (function () {
     function TwitchChatGateway(eventBus, twitchClientDebug) {
@@ -75,7 +74,7 @@ var TwitchChatGateway = /** @class */ (function () {
     TwitchChatGateway.prototype.sendTmiMessage = function (tmiClient, channel, message) {
         var messages = message.message.split('\n');
         if (message instanceof MessageForPlayer_1.MessageForPlayer)
-            messages[0] = (0, exports.formatTwitchUserMessage)(new MessageForPlayer_1.MessageForPlayer(message.player, messages[0]));
+            messages[0] = (0, exports.formatTwitchUserMessage)(new MessageForPlayer_1.MessageForPlayer(message.username, messages[0]));
         return Promise.all(messages.map(function (message) { return tmiClient.say(channel, message); }))
             .then(function (results) { return Promise.resolve(); })["catch"](function (error) { return Promise.reject(error); });
     };
@@ -129,7 +128,7 @@ var TwitchChatGateway = /** @class */ (function () {
         this.tmiClient.on('message', function (channel, userstate, message, self) {
             console.log(twitchClientMessage, { channel: channel, userstate: userstate, message: message });
             if (userstate.username)
-                _this.sendPlayerMessageEventOnEventBus(new PlayerMessageEvent_1.PlayerMessageEvent(new Player_1.Player({ username: userstate.username }), message));
+                _this.sendPlayerMessageEventOnEventBus(new PlayerMessageEvent_1.PlayerMessageEvent(userstate.username, message));
         });
     };
     TwitchChatGateway.prototype.sendPlayerMessageEventOnEventBus = function (playerMessageEvent) {
@@ -145,7 +144,7 @@ var twitchClientConnected = function (host, port) { return "Twitch client connec
 var twitchClientMessage = 'Twitch client message';
 var twitchClientDisconnecting = 'Twitch client disconnecting ...';
 var twitchClientDisconnect = 'Twitch client disconnected.';
-var formatTwitchUserMessage = function (messageForPlayer) { return "@".concat(messageForPlayer.player.username, " >>> ").concat(messageForPlayer.message); };
+var formatTwitchUserMessage = function (messageForPlayer) { return "@".concat(messageForPlayer.username, " >>> ").concat(messageForPlayer.message); };
 exports.formatTwitchUserMessage = formatTwitchUserMessage;
 var twitchClientJoinChannelAsUser = function (channel, username) { return "".concat(username, " joint channel '").concat(channel, "'."); };
 var twitchClientLeaveChannelAsUser = function (channel, username) { return "".concat(username, " leave channel '").concat(channel, "'."); };

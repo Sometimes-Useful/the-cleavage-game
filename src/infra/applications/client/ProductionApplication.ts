@@ -5,6 +5,7 @@ import { CleavageApplicationService } from '../../../domain/applicationServices/
 import { EventApplicationService } from '../../../domain/applicationServices/EventApplicationService'
 import { InterfaceApplicationService } from '../../../domain/applicationServices/InterfaceApplicationService'
 import { PlayerApplicationService } from '../../../domain/applicationServices/PlayerApplicationService'
+import { StreamersApplicationService } from '../../../domain/applicationServices/StreamerApplicationService'
 import { VideoExtractApplicationService } from '../../../domain/applicationServices/VideoExtractApplicationService'
 import type { Size } from '../../../domain/entities/Size'
 import { ApplicationStartEvent } from '../../../domain/events/applicationStart/ApplicationStartEvent'
@@ -26,6 +27,7 @@ export class ProductionClientApplication {
         return this.gateways.interface.load()
             .then(() => {
                 const applicationServices:ClientApplicationServices = {
+                    streamers: new StreamersApplicationService(this.gateways.streamers),
                     videoExtract: new VideoExtractApplicationService(this.repositories.videoExtracts, this.gateways.interface, this.gateways.random),
                     chat: new ChatApplicationService(this.gateways.chat, this.gateways.interface),
                     event: new EventApplicationService(this.gateways.event),

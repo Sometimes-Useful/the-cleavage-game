@@ -20,9 +20,9 @@ var EventType_1 = require("../EventType");
 var GameEvent_1 = require("../GameEvent");
 var PlayerCleaveEvent = /** @class */ (function (_super) {
     __extends(PlayerCleaveEvent, _super);
-    function PlayerCleaveEvent(player, playerCleave) {
+    function PlayerCleaveEvent(username, playerCleave) {
         var _this = _super.call(this) || this;
-        _this.player = player;
+        _this.username = username;
         _this.playerCleave = playerCleave;
         _this.eventType = EventType_1.EventType.PLAYER_CLEAVE;
         return _this;

@@ -1,5 +1,5 @@
 "use strict";
 exports.__esModule = true;
 exports.interfaceEntityState = void 0;
-var interfaceEntityState = function (position, sprite) { return ({ position: position, spriteType: sprite }); };
+var interfaceEntityState = function (position, spriteType, size) { return ({ position: position, spriteType: spriteType, size: size }); };
 exports.interfaceEntityState = interfaceEntityState;

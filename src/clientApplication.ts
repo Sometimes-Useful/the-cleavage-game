@@ -1,27 +1,29 @@
+import { Application } from 'pixi.js'
 import * as Tone from 'tone'
 import { SupportedMusic } from './domain/entities/music/SupportedMusic'
-import { ProductionClientApplication } from './infra/applications/client/ProductionApplication'
-import { TwitchChatGateway } from './infra/gateways/chat/TwitchChatGateway'
-import { InMemoryPlayerRepository } from './infra/repositories/player/InMemoryPlayerRepository'
-import { InMemoryCurrentCleavageRepository } from './infra/repositories/currentCleavage/InMemoryCurrentCleavageRepository'
 import { SupportedSound } from './domain/entities/SoundType'
+import { SpriteType } from './domain/entities/SpriteType'
+import type { VideoExtract } from './domain/entities/VideoExtract'
 import type { ProductionClientApplicationGateways } from './domain/ports/secondary/gateways/ApplicationGateways'
 import type { ProductionClientApplicationRepositories } from './domain/ports/secondary/repositories/ApplicationRepositories'
-import { InMemoryPublicCleavageDrawPileRepository } from './infra/repositories/publicCleavageDrawPile/InMemoryPublicCleavageDrawPileRepository'
-import { ProductionRandomGateway } from './infra/gateways/random/ProductionRandomGateway'
-import { InMemoryAutoplayRepository } from './infra/repositories/autoplay/InMemoryAutoplayRepository'
+import { clientBackendFqdn, clientBackendPort, clientBackendSheme } from './env/clientEnvironnementVariables'
+import { ProductionClientApplication } from './infra/applications/client/ProductionApplication'
+import { TwitchChatGateway } from './infra/gateways/chat/TwitchChatGateway'
 import { ProductionDateGateway } from './infra/gateways/date/ProductionDateGateway'
 import { InMemoryProductionClientEventGateway } from './infra/gateways/event/InMemoryProductionClientEventGateway'
 import { AxiosGlobalCleavageDrawPileGateway } from './infra/gateways/globalCleavageDrawPile/AxiosGlobalCleavageDrawPileGateway'
-import { clientBackendFqdn, clientBackendPort, clientBackendSheme } from './env/clientEnvironnementVariables'
-import { InMemoryBarRepository } from './infra/repositories/bar/InMemoryBarRepository'
-import { InMemoryGamePhaseRepository } from './infra/repositories/gamePhase/InMemoryGamePhaseRepository'
-import { ProductionUuidGateway } from './infra/gateways/uuid/ProductionUuidGateway'
 import { SvelteTonePixiInterfaceGateway } from './infra/gateways/interface/SvelteTonePixiInterfaceGateway'
-import { Application } from 'pixi.js'
-import { SpriteType } from './domain/entities/SpriteType'
+import { ProductionRandomGateway } from './infra/gateways/random/ProductionRandomGateway'
+import { AxiosStreamersGateway } from './infra/gateways/streamers/AxiosStreamersGateway'
+import { ProductionUuidGateway } from './infra/gateways/uuid/ProductionUuidGateway'
+import { InMemoryAutoplayRepository } from './infra/repositories/autoplay/InMemoryAutoplayRepository'
+import { InMemoryBarRepository } from './infra/repositories/bar/InMemoryBarRepository'
+import { InMemoryCurrentCleavageRepository } from './infra/repositories/currentCleavage/InMemoryCurrentCleavageRepository'
+import { InMemoryGamePhaseRepository } from './infra/repositories/gamePhase/InMemoryGamePhaseRepository'
+import { InMemoryPlayerRepository } from './infra/repositories/player/InMemoryPlayerRepository'
+import { InMemoryPublicCleavageDrawPileRepository } from './infra/repositories/publicCleavageDrawPile/InMemoryPublicCleavageDrawPileRepository'
 import { InMemoryVideoExtractRepository } from './infra/repositories/videoExtract/InMemoryVideoExtractRepository'
-import type { VideoExtract } from './domain/entities/VideoExtract'
+import { AxiosBackendInstance } from './infra/tech/AxiosBackendInstance'
 
 const supportedSounds = new Map([
     [SupportedSound.QUACK, new Tone.ToneAudioBuffer('/sounds/quack.mp3')],
@@ -52,10 +54,13 @@ const eventGateway = new InMemoryProductionClientEventGateway()
 const chatGateway = new TwitchChatGateway(eventGateway)
 const randomGateway = new ProductionRandomGateway()
 const dateGateway = new ProductionDateGateway()
-const globalCleavageDrawPileGateway = new AxiosGlobalCleavageDrawPileGateway(clientBackendSheme, clientBackendFqdn, clientBackendPort)
 const uuidGateway = new ProductionUuidGateway()
+const axiosBackendInstance = new AxiosBackendInstance(clientBackendSheme, clientBackendFqdn, clientBackendPort)
+const globalCleavageDrawPileGateway = new AxiosGlobalCleavageDrawPileGateway(axiosBackendInstance)
+const streamersGateway = new AxiosStreamersGateway(axiosBackendInstance)
 
 const applicationGateways:ProductionClientApplicationGateways = {
+    streamers: streamersGateway,
     chat: chatGateway,
     event: eventGateway,
     interface: interfaceGateway,
@@ -94,7 +99,16 @@ const videoExtracts:VideoExtract[] = [
     { choice: 'equality', percentage: 50, youtubeVideoId: 'FpAisqJ6IZc' },
     { choice: 'equality', percentage: 50, youtubeVideoId: 'Wgwp0waFRxA' },
     { choice: 'equality', percentage: 50, youtubeVideoId: 'cYcRAeRHPdw', startExtractSeconds: 7.95, endExtractSeconds: 12.1 },
-    { choice: 'Non', percentage: 80, youtubeVideoId: 'aEgL1yNlxRw', startExtractSeconds: 103.4, endExtractSeconds: 108.1 },
+    { choice: 'Non', percentage: 100, youtubeVideoId: 'aEgL1yNlxRw', startExtractSeconds: 103.4, endExtractSeconds: 108.1 },
+    { choice: 'Oui', percentage: 60, youtubeVideoId: 'mEZR-BvCDWI', startExtractSeconds: 32.2, endExtractSeconds: 34 },
+    { choice: 'Oui', percentage: 65, youtubeVideoId: 'EzgmZ3shjKk' },
+    { choice: 'Oui', percentage: 70, youtubeVideoId: 'cyQtMZBZJlk', startExtractSeconds: 419.2, endExtractSeconds: 421.3 },
+    { choice: 'Macron', percentage: 100, youtubeVideoId: '5m_flTU0OpA' },
+    { choice: 'Méluch', percentage: 100, youtubeVideoId: '71MJihqN6ww' },
+    { choice: 'Gentille', percentage: 100, youtubeVideoId: 'ehohes_3sOQ', startExtractSeconds: 127.2, endExtractSeconds: 134.5 },
+    { choice: 'Babacool', percentage: 100, youtubeVideoId: 'nQAdYNB8nXU', startExtractSeconds: 18.6, endExtractSeconds: 24.3 },
+    { choice: 'Reptilien', percentage: 100, youtubeVideoId: 'sWSxzADSvQ0', startExtractSeconds: 1084.6, endExtractSeconds: 1102.2 },
+    { choice: 'Tellement bon!', percentage: 100, youtubeVideoId: 'xchGAzcDNlw', startExtractSeconds: 14.6, endExtractSeconds: 19.5 },
     { choice: 'Oh que non!', percentage: 80, youtubeVideoId: 'aEgL1yNlxRw', startExtractSeconds: 103.4, endExtractSeconds: 108.1 }
     /* { choice: 'Macron', percentage: 100, youtubeVideoId: 'dfgdfgg' },
     { choice: 'Méluch', percentage: 100, youtubeVideoId: 'dfgdfg' },

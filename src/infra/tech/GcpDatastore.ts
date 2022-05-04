@@ -1,7 +1,7 @@
 import { Datastore } from '@google-cloud/datastore'
-import type { Entities, Entity } from '@google-cloud/datastore/build/src/entity'
+import type { Entity } from '@google-cloud/datastore/build/src/entity'
 import type { Operator, RunQueryResponse } from '@google-cloud/datastore/build/src/query'
-import { deleteRecordError, deleteRecordStart, deleteRecordSuccess, entityRetreivedAtOffset, gcpBadConfiguration, gcpQueryOffsetStart as gcpQueryOffSetStart, queryRecordsError, queryRecordsFilter, queryRecordsStart, queryRecordsSuccess, retreiveRecordByOffsetErrorMultipleEntities, retreiveRecordByOffsetErrorNoEntity, retreiveRecordError, retreiveRecordStart, retreiveRecordSuccess, saveRecordError, saveRecordStart, saveRecordSuccess } from '../../../messages/infra'
+import { deleteRecordError, deleteRecordStart, deleteRecordSuccess, entityRetreivedAtOffset, gcpBadConfiguration, gcpQueryOffsetStart as gcpQueryOffSetStart, queryAllRecordsStart, queryAllRecordsSuccess, queryRecordsError, queryRecordsFilter, queryRecordsStart, queryRecordsSuccess, retreiveRecordByOffsetErrorMultipleEntities, retreiveRecordByOffsetErrorNoEntity, retreiveRecordError, retreiveRecordStart, retreiveRecordSuccess, saveRecordError, saveRecordStart, saveRecordSuccess } from '../../messages/infra'
 export interface GcpDatastoreInteractorConfiguration {
     gcpProjectId:string|undefined, gcpClientEmail:string|undefined, gcpPrivateKey:string|undefined, gcpKindPrefix:string|undefined
 }
@@ -30,6 +30,19 @@ export class GcpDatastore {
         })
     }
 
+    public retreiveAll<T> (kind: string): Promise<T[]> {
+        kind = this.kindPrefix.concat(kind)
+        console.log(queryAllRecordsStart(kind))
+        const query = this.gcpDatastore.createQuery(kind)
+        return query.run()
+            .then((queryResponse:RunQueryResponse) => {
+                const entities:T[] = queryResponse[0]
+                console.log(queryAllRecordsSuccess<T>(entities, kind))
+                return entities
+            })
+            .catch(error => error)
+    }
+
     public retreiveRecordByOffset<T> (kind: string, offset: number):Promise<T|Error> {
         const query = this.gcpDatastore.createQuery(this.kindPrefix.concat(kind)).offset(offset).limit(1)
         console.log(gcpQueryOffSetStart(query))
@@ -47,8 +60,7 @@ export class GcpDatastore {
     }
 
     public retreiveRecordQuantity (kind:string): Promise<number> {
-        const query = this.gcpDatastore.createQuery(this.kindPrefix.concat(kind))
-        query.select('__key__')
+        const query = this.gcpDatastore.createQuery(this.kindPrefix.concat(kind)).select('__key__')
         return this.gcpDatastore.runQuery(query)
             .then(queryResponse => Promise.resolve(queryResponse[0].length))
             .catch(error => Promise.reject(error))
@@ -56,10 +68,9 @@ export class GcpDatastore {
 
     public queryRecordsOnGoogleDatastore<T> (kind:string, filters:GcpQueryFilter[]):Promise<T[]|Error> {
         kind = this.kindPrefix.concat(kind)
-        console.log(queryRecordsStart(kind))
+        console.log(queryRecordsStart(kind), filters.map(filter => queryRecordsFilter(filter)).join(','))
         const query = this.gcpDatastore.createQuery(kind)
         filters.forEach(filter => {
-            console.log(queryRecordsFilter(filter))
             query.filter(filter.property, filter.operator, filter.value)
         })
         return query.run()
@@ -72,13 +83,14 @@ export class GcpDatastore {
             .catch(error => error)
     }
 
-    public retreiveRecordOnGoogleDatastore (gcpEntitypath:string[]):Promise<Entities|Error> {
+    public retreiveRecordOnGoogleDatastore <T> (gcpEntitypath:string[]):Promise<T|Error> {
         const path = this.kindPrefix.concat(gcpEntitypath.join(this.keyPathSeparator))
         console.log(retreiveRecordStart(path))
         return this.gcpDatastore.get(this.gcpDatastore.key({ path: path.split(this.keyPathSeparator) }))
             .then(result => {
-                console.log(retreiveRecordSuccess(path))
-                return Promise.resolve(result[0])
+                const entity = result[0] as T
+                console.log(retreiveRecordSuccess(path, entity))
+                return Promise.resolve(entity)
             })
             .catch(error => {
                 console.log(retreiveRecordError(error))

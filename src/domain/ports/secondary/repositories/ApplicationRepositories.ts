@@ -14,6 +14,8 @@ import type { GlobalCleavageDrawPileRepository } from './GlobalCleavageDrawPileR
 import type { PlayerRepository } from './PlayerRepository'
 import type { PublicCleavageDrawPileRepository } from './PublicCleavageDrawPileRepository'
 import type { VideoExtractRepository } from './VideoExtractRepository'
+import type { RegisteredStreamersRepository } from './RegisteredStreamersRepository'
+import type { InMemoryGlobalRegisteredStreamersRepository } from '../../../../infra/repositories/registeredStreamers/InMemoryRegisteredStreamersRepository'
 
 export interface ClientApplicationRepositories {
     videoExtracts: VideoExtractRepository
@@ -44,12 +46,15 @@ export interface ProductionClientApplicationRepositories extends ClientApplicati
 }
 
 export interface ServerApplicationRepositories {
+    globalRegisteredStreamers:RegisteredStreamersRepository
     globalCleavageDrawPileRepository:GlobalCleavageDrawPileRepository
 }
 export interface FakeServerApplicationRepositories extends ServerApplicationRepositories {
+    globalRegisteredStreamers: InMemoryGlobalRegisteredStreamersRepository
     globalCleavageDrawPileRepository: InMemoryGlobalCleavageDrawPileRepository
 
 }
 export interface ProductionServerApplicationRepositories extends ServerApplicationRepositories {
+    globalRegisteredStreamers:RegisteredStreamersRepository
     globalCleavageDrawPileRepository: GlobalCleavageDrawPileRepository
 }

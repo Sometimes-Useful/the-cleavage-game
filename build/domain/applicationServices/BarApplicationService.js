@@ -50,6 +50,7 @@ var GamePhase_1 = require("../entities/GamePhase");
 var ChangeGamePhaseEvent_1 = require("../events/changeGamePhase/ChangeGamePhaseEvent");
 var InstallNewStoolsOnTableEvent_1 = require("../events/installNewStoolsOnTable/InstallNewStoolsOnTableEvent");
 var SpriteType_1 = require("../entities/SpriteType");
+var EraseEvent_1 = require("../events/erase/EraseEvent");
 var BarApplicationService = /** @class */ (function () {
     function BarApplicationService(barRepository, eventGateway, uuidGateway) {
         this.barRepository = barRepository;
@@ -65,7 +66,24 @@ var BarApplicationService = /** @class */ (function () {
         this.defaultBarPosition = { x: 0, y: 0 };
         this.defaultBarSize = { width: 8.2, height: 6.8 };
         this.firstStoolOffset = { x: 0.6, y: -0.4 };
+        this.tableStoolPlayerOffsetPosition = { x: -0.1, y: -0.5 };
     }
+    BarApplicationService.prototype.removePlayerFromBarStool = function (username) {
+        var _this = this;
+        return this.barRepository.freeBarStool(username)
+            .then(function () { return _this.eventGateway.sendEvent(new EraseEvent_1.EraseEvent(username)); })["catch"](function (error) { return Promise.reject(error); });
+    };
+    BarApplicationService.prototype.isPlayerInstalledOnBarStool = function (username) {
+        return this.barRepository.isPlayerInstalledOnBarStool(username);
+    };
+    BarApplicationService.prototype.removePlayerFromTableStool = function (username) {
+        var _this = this;
+        return this.barRepository.freeTableStool(username)
+            .then(function () { return _this.eventGateway.sendEvent(new EraseEvent_1.EraseEvent(username)); })["catch"](function (error) { return Promise.reject(error); });
+    };
+    BarApplicationService.prototype.isPlayerInstalledOnTableStool = function (username) {
+        return this.barRepository.isPlayerInstalledOnTableStool(username);
+    };
     BarApplicationService.prototype.installStoolForBar = function () {
         var _this = this;
         var stools = this.makeBarStools();
@@ -74,7 +92,7 @@ var BarApplicationService = /** @class */ (function () {
             uuids.forEach(function (uuid, index) { stools[index].id = uuid; });
             return Promise.all(stools.map(function (stool) { return _this.barRepository.addAvailableBarStool(stool); }));
         })
-            .then(function (results) { return _this.eventGateway.sendEvents(stools.map(function (stool) { return new DrawEvent_1.DrawEvent(stool.id, { position: stool.position, spriteType: SpriteType_1.SpriteType.STOOL }); })); })["catch"](function (error) { return Promise.reject(error); });
+            .then(function (results) { return _this.eventGateway.sendEvents(stools.map(function (stool) { return new DrawEvent_1.DrawEvent(stool.id, { position: stool.position, spriteType: SpriteType_1.SpriteType.STOOL, size: stool.size }); })); })["catch"](function (error) { return Promise.reject(error); });
     };
     BarApplicationService.prototype.makeBarStools = function () {
         var barStools = [];
@@ -108,7 +126,7 @@ var BarApplicationService = /** @class */ (function () {
         })
             .then(function () { return _this.eventGateway.sendEvents([
             new InstallNewStoolsOnBarEvent_1.InstallNewStoolsOnBarEvent(),
-            new DrawEvent_1.DrawEvent(uuid, { position: _this.defaultBarPosition, spriteType: SpriteType_1.SpriteType.BAR }),
+            new DrawEvent_1.DrawEvent(uuid, { position: _this.defaultBarPosition, spriteType: SpriteType_1.SpriteType.BAR, size: _this.defaultBarSize }),
             new NavigateEvent_1.NavigateEvent(InterfaceView_1.InterfaceView.GAME),
             new ChangeGamePhaseEvent_1.ChangeGamePhaseEvent(GamePhase_1.GamePhase.NEW_CLEAVAGE)
         ]); })["catch"](function (error) { return Promise.reject(error); });
@@ -125,7 +143,10 @@ var BarApplicationService = /** @class */ (function () {
     BarApplicationService.prototype.occupyTableStool = function (tableStool, username) {
         var _this = this;
         return this.barRepository.setOccupiedTableStool(username, tableStool)
-            .then(function () { return _this.eventGateway.sendEvent(new PlayerMoveEvent_1.PlayerMoveEvent(username, tableStool.position)); })["catch"](function (error) { return Promise.reject(error); });
+            .then(function () { return _this.eventGateway.sendEvent(new PlayerMoveEvent_1.PlayerMoveEvent(username, {
+            x: _this.precisionRound(tableStool.position.x + _this.tableStoolPlayerOffsetPosition.x, 2),
+            y: _this.precisionRound(tableStool.position.y + _this.tableStoolPlayerOffsetPosition.y, 2)
+        })); })["catch"](function (error) { return Promise.reject(error); });
     };
     BarApplicationService.prototype.nextOccupiedBarStool = function () {
         return this.barRepository.nextOccupiedBarStool();
@@ -154,7 +175,9 @@ var BarApplicationService = /** @class */ (function () {
     BarApplicationService.prototype.onStoolsForTable = function (stools) {
         var _this = this;
         return Promise.all(stools.map(function (stool) { return _this.barRepository.addAvailableTableStool(stool); }))
-            .then(function (results) { return _this.eventGateway.sendEvent(new TableStoolAvailableEvent_1.TableStoolAvailableEvent()); })["catch"](function (error) { return Promise.reject(error); });
+            .then(function (results) { return _this.eventGateway.sendEvents(__spreadArray([
+            new TableStoolAvailableEvent_1.TableStoolAvailableEvent()
+        ], __read(stools.map(function (stool) { return new DrawEvent_1.DrawEvent(stool.id, { position: stool.position, size: stool.size, spriteType: SpriteType_1.SpriteType.STOOL }); })), false)); })["catch"](function (error) { return Promise.reject(error); });
     };
     BarApplicationService.prototype.stoolsForTable = function (table) {
         var tableStoolsPromise = [];
@@ -253,7 +276,10 @@ var BarApplicationService = /** @class */ (function () {
         var _this = this;
         console.log(JSON.stringify(table));
         return this.barRepository.addTable(table)
-            .then(function () { return _this.eventGateway.sendEvent(new InstallNewStoolsOnTableEvent_1.InstallNewStoolsOnTableEvent(table.id)); })["catch"](function (error) { return Promise.reject(error); });
+            .then(function () { return _this.eventGateway.sendEvents([
+            new InstallNewStoolsOnTableEvent_1.InstallNewStoolsOnTableEvent(table.id),
+            new DrawEvent_1.DrawEvent(table.id, { position: table.position, size: table.size, spriteType: SpriteType_1.SpriteType.TABLE })
+        ]); })["catch"](function (error) { return Promise.reject(error); });
     };
     BarApplicationService.prototype.playerQuit = function (player) {
         return this.eventGateway.sendEvent(new PlayerQuitEvent_1.PlayerQuitEvent(player));

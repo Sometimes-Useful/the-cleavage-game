@@ -7,4 +7,5 @@ var SpriteType;
     SpriteType["PLAYER"] = "PLAYER";
     SpriteType["BAR"] = "BAR";
     SpriteType["STOOL"] = "STOOL";
+    SpriteType["TABLE"] = "TABLE";
 })(SpriteType = exports.SpriteType || (exports.SpriteType = {}));

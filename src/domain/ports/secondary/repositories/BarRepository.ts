@@ -5,6 +5,9 @@ import type { Stool } from '../../../entities/Stool'
 import type { OccupiedStool } from '../../../applicationServices/BarApplicationService'
 
 export interface BarRepository {
+    isPlayerInstalledOnBarStool(username: string): Promise<boolean>
+    freeTableStool(username: string): Promise<void>
+    isPlayerInstalledOnTableStool(username: string): Promise<boolean>
     installBar(bar:Bar): Promise<void>
     freeBarStool(username: string):Promise<void>
     nextOccupiedBarStool(): Promise<OccupiedStool|undefined>
@@ -16,7 +19,7 @@ export interface BarRepository {
     retrieveBar(): Promise<Bar>
     retrieveTables():Promise<Table[]>;
     addTable(table1: Table): Promise<void>;
-    setOccupiedBarStool(username: any, stool: Stool): Promise<void>;
+    setOccupiedBarStool(username: string, stool: Stool): Promise<void>;
     setOccupiedTableStool(username: string, stool: Stool): Promise<void>;
     hasAvailableBarStool():Promise<boolean>;
     nextAvailableTableStool():Promise<Stool>;

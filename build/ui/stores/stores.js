@@ -1,6 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.gamePhaseStore = exports.autoplayStore = exports.soundVolumeStore = exports.musicVolumeStore = exports.interfaceViewStore = exports.currentCleavageStore = exports.applicationEventStore = void 0;
+exports.isStreamerRegisteredStore = exports.listOfRegisteredStreamersStore = exports.cleavageDrawPileQuantityStore = exports.videoExtractVolumeStore = exports.videoExtractStore = exports.gamePhaseStore = exports.autoplayStore = exports.soundVolumeStore = exports.musicVolumeStore = exports.interfaceViewStore = exports.currentCleavageStore = exports.applicationEventStore = void 0;
 var store_1 = require("svelte/store");
 var InterfaceView_1 = require("../../domain/entities/InterfaceView");
 var defaultVolumeLevels_1 = require("../../infra/gateways/interface/defaultVolumeLevels");
@@ -12,3 +12,8 @@ exports.musicVolumeStore = (0, store_1.writable)(defaultVolumeLevels_1.defaultMu
 exports.soundVolumeStore = (0, store_1.writable)(defaultVolumeLevels_1.defaultSoundVolumeLevel);
 exports.autoplayStore = (0, store_1.writable)(false);
 exports.gamePhaseStore = (0, store_1.writable)(GamePhase_1.GamePhase.NONE);
+exports.videoExtractStore = (0, store_1.writable)(undefined);
+exports.videoExtractVolumeStore = (0, store_1.writable)(defaultVolumeLevels_1.defaultVideoExtractVolumeLevel);
+exports.cleavageDrawPileQuantityStore = (0, store_1.writable)(0);
+exports.listOfRegisteredStreamersStore = (0, store_1.writable)([]);
+exports.isStreamerRegisteredStore = (0, store_1.writable)(undefined);

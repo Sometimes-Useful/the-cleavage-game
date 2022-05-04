@@ -2,10 +2,28 @@
 exports.__esModule = true;
 exports.InterfaceApplicationService = void 0;
 var notifications_1 = require("../entities/notification/notifications");
+var sound_1 = require("../entities/sound");
+var SoundType_1 = require("../entities/SoundType");
 var InterfaceApplicationService = /** @class */ (function () {
     function InterfaceApplicationService(interfaceGateway) {
         this.interfaceGateway = interfaceGateway;
     }
+    InterfaceApplicationService.prototype.updateStreamerRegistered = function (isStreamerRegistered) {
+        return this.interfaceGateway.updateStreamerRegistered(isStreamerRegistered);
+    };
+    InterfaceApplicationService.prototype.updateRegisteredStreamers = function (streamers) {
+        return this.interfaceGateway.updateListOfRegisteredStreamers(streamers);
+    };
+    InterfaceApplicationService.prototype.updateCleavageDrawpileQuantity = function (cleavageDrawpileQuantity) {
+        return this.interfaceGateway.updateCleavageDrawpileQuantity(cleavageDrawpileQuantity);
+    };
+    InterfaceApplicationService.prototype.changeVideoExtractVolumeLevel = function (volume) {
+        return Promise.all([
+            this.playSound(new sound_1.Sound(SoundType_1.SupportedSound.TICK)),
+            this.interfaceGateway.changeVideoExtractVolumeLevel(volume)
+        ])
+            .then(function () { return Promise.resolve(); })["catch"](function (error) { return Promise.reject(error); });
+    };
     InterfaceApplicationService.prototype.changeGamePhase = function (gamePhase) {
         return this.interfaceGateway.changeGamePhase(gamePhase);
     };

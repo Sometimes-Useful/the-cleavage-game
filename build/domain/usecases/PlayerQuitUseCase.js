@@ -38,16 +38,31 @@ var PlayerQuitUseCase = /** @class */ (function (_super) {
     PlayerQuitUseCase.prototype.onPlayer = function (player) {
         var _this = this;
         return this.applicationServices.player.removePlayer(player)
-            .then(function () { return _this.applicationServices.cleavage.hasCleavage(); })
+            .then(function () { return _this.applicationServices.cleavage.hasCurrentCleavage(); })
             .then(function (hasCleavage) { return hasCleavage
             ? _this.onCleavage(player)
+            : _this.quitBar(player); })["catch"](function (error) { return Promise.reject(error); });
+    };
+    PlayerQuitUseCase.prototype.quitBar = function (player) {
+        var _this = this;
+        return this.applicationServices.bar.isPlayerInstalledOnTableStool(player.username)
+            .then(function (isPlayerInstalledOnStool) { return isPlayerInstalledOnStool
+            ? _this.applicationServices.bar.removePlayerFromTableStool(player.username)
+            : _this.onPlayerMaybeInstalledOnBarStool(player); })["catch"](function (error) { return Promise.reject(error); });
+    };
+    PlayerQuitUseCase.prototype.onPlayerMaybeInstalledOnBarStool = function (player) {
+        var _this = this;
+        return this.applicationServices.bar.isPlayerInstalledOnBarStool(player.username)
+            .then(function (isPlayerInstalledOnBarStool) { return isPlayerInstalledOnBarStool
+            ? _this.applicationServices.bar.removePlayerFromBarStool(player.username)
             : Promise.resolve(); })["catch"](function (error) { return Promise.reject(error); });
     };
     PlayerQuitUseCase.prototype.onCleavage = function (player) {
         var _this = this;
         return this.applicationServices.cleavage.removePlayerOnCleavage(player)
-            .then(function () { return _this.applicationServices.cleavage.loadCleavage(); })
-            .then(function (cleavage) { return _this.applicationServices.interface.updateCleavage(cleavage); })["catch"](function (error) { return Promise.reject(error); });
+            .then(function () { return _this.applicationServices.cleavage.loadCurrentCleavage(); })
+            .then(function (cleavage) { return _this.applicationServices.interface.updateCleavage(cleavage); })
+            .then(function () { return _this.quitBar(player); })["catch"](function (error) { return Promise.reject(error); });
     };
     return PlayerQuitUseCase;
 }(UseCase_1.UseCase));
