@@ -20,7 +20,6 @@ jobs:
           node-version: 16.14.2
       - uses: actions/checkout@v3
       - run: npm install
-      - run: ls
       - run: npm run test -- -g "Feature:"
   integration_test:
     name: Integration Test Suites
@@ -41,5 +40,27 @@ jobs:
           node-version: 16.14.2
       - uses: actions/checkout@v3
       - run: npm install
-      - run: ls
       - run: npm run test -- -g "Integration Test - Global Cleavage Draw Pile Repository|Integration Test - Chat Gateway"
+  build_docker_image:
+    name: Build Docker Image
+    runs-on : ubuntu-latest
+    env:
+      TWITCHUSERNAME: benjaminbohec
+      TWITCHTOKEN: ${{ secrets.TWITCHTOKEN }}
+      TWITCHCHANNEL: benjaminbohec
+      BACKEND_SHEME: http
+      BACKEND_FQDN: "localhost"
+      PORT: 8080
+      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      GCP_CLIENT_EMAIL: ${{ secrets.GCP_CLIENT_EMAIL }}
+      GCP_PRIVATE_KEY: ${{ secrets.GCP_PRIVATE_KEY }}
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.14.2
+      - uses: actions/checkout@v3
+      - run: npm install
+      - run: npm run build:server
+      - run: npm run build:client
+      - uses: actions/docker@v1
+      - run : ls
