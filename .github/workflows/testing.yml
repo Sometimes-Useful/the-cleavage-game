@@ -1,7 +1,8 @@
 name: Testing workflow
 on: [push]
 jobs:
-  acceptance test:
+  acceptance_test:
+    name: Acceptance Test Suites
     runs-on : ubuntu-latest
     env:
       TWITCHUSERNAME: benjaminbohec
@@ -21,7 +22,8 @@ jobs:
       - run: npm install
       - run: ls
       - run: npm run test -- -g "Feature:"
-  integration test:
+  integration_test:
+    name: Integration Test Suites
     runs-on : ubuntu-latest
     env:
       TWITCHUSERNAME: benjaminbohec
