@@ -52,6 +52,7 @@ jobs:
       BACKEND_FQDN: ${{ github.ref_name }}.lejeuduclivage.com
       PORT: 8080
       GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      GCP_PROJECT_ID_WITHOUT_OBJECT: ${{ secrets.GCP_PROJECT_ID_WITHOUT_OBJECT }}
       GCP_CLIENT_EMAIL: ${{ secrets.GCP_CLIENT_EMAIL }}
       GCP_PRIVATE_KEY: ${{ secrets.GCP_PRIVATE_KEY }}
       GCP_CLOUDRUN_SERVICE: the-cleavage-game-${{ github.ref_name }}
@@ -68,21 +69,21 @@ jobs:
       - name: Setup Cloud SDK
         uses: google-github-actions/setup-gcloud@v0
         with:
-          project_id: ${{ env.GCP_PROJECT_ID }}
+          project_id: ${{ env.GCP_PROJECT_ID_WITHOUT_OBJECT }}
           service_account_key: ${{ secrets.GCP_CLOUDRUN_SA_KEY }}
           export_default_credentials: true  # Set to true to authenticate the Cloud Run action
       - name: Authorize Docker push
         run: gcloud auth configure-docker
       - name: Build and Push Container
         run: |-
-          docker build -t gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
-          docker push gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
+          docker build -t gcr.io/${{ env.GCP_PROJECT_ID_WITHOUT_OBJECT }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
+          docker push gcr.io/${{ env.GCP_PROJECT_ID_WITHOUT_OBJECT }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
       - name: Deploy to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0
         with:
           service: ${{ env.GCP_CLOUDRUN_SERVICE }}
-          image: gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
+          image: gcr.io/${{ env.GCP_PROJECT_ID_WITHOUT_OBJECT }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
           region: ${{ env.GCP_REGION }}
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
