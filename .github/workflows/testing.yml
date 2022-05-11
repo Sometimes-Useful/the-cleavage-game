@@ -81,7 +81,7 @@ jobs:
         run: gcloud auth configure-docker
       - name: Build and Push Container to Google Cloud
         run: |-
-          docker build -t gcr.io/${{ env.GCP_PROJECT_ID_WITHOUT_OBJECT }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }} -
+          docker build -t gcr.io/${{ env.GCP_PROJECT_ID_WITHOUT_OBJECT }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }} ../../Dockerfile
           docker push gcr.io/${{ env.GCP_PROJECT_ID_WITHOUT_OBJECT }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
       - name: Deploy to Google Cloud Platform - Cloud Run
         id: deploy
