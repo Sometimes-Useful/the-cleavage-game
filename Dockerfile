@@ -11,10 +11,7 @@ COPY build build
 COPY package*.json ./
 
 
-RUN node -v
-RUN ls
-RUN ls ./build/webServer
-
-
+RUN echo ${PORT}
 # Code file to execute when the docker container starts up
 ENTRYPOINT ["node", "./build/webServer/main.js"]
+EXPOSE ${PORT}
