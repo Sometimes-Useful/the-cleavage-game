@@ -1,3 +1,5 @@
+name: Testing workflow
+on: [push]
 jobs:
   test:
     runs-on : ubuntu-latest
