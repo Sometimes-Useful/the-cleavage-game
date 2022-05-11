@@ -3,6 +3,8 @@ on: [push]
 jobs:
   test:
     runs-on : ubuntu-latest
+    env:
+      TWITCHUSERNAME: benjaminbohec
     steps:
       - uses: actions/setup-node@v3
         with:
