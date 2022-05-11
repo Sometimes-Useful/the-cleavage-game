@@ -7,6 +7,7 @@ jobs:
       TWITCHUSERNAME: benjaminbohec
       TWITCHTOKEN: ${{ secrets.TWITCHTOKEN }}
       TWITCHCHANNEL: benjaminbohec
+      BACKEND_SHEME: http
     steps:
       - uses: actions/setup-node@v3
         with:
