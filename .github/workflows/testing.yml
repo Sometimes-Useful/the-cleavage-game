@@ -4,4 +4,9 @@ jobs:
   test:
     runs-on : ubuntu-latest
     steps:
-      - run: echo "Hello World"
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.4.2
+      - uses: actions/checkout@v3
+      - run: npm install
+      - run: npm run test -- -g "Feature"
