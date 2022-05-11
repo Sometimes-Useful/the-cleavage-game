@@ -1,7 +1,7 @@
 name: Testing workflow
 on: [push]
 jobs:
-  test:
+  acceptance test:
     runs-on : ubuntu-latest
     env:
       TWITCHUSERNAME: benjaminbohec
@@ -20,4 +20,24 @@ jobs:
       - uses: actions/checkout@v3
       - run: npm install
       - run: ls
-      - run: npm run test -- -g "Feature"
+      - run: npm run test -- -g "Feature:"
+  integration test:
+    runs-on : ubuntu-latest
+    env:
+      TWITCHUSERNAME: benjaminbohec
+      TWITCHTOKEN: ${{ secrets.TWITCHTOKEN }}
+      TWITCHCHANNEL: benjaminbohec
+      BACKEND_SHEME: http
+      BACKEND_FQDN: "localhost"
+      PORT: 8080
+      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      GCP_CLIENT_EMAIL: ${{ secrets.GCP_CLIENT_EMAIL }}
+      GCP_PRIVATE_KEY: ${{ secrets.GCP_PRIVATE_KEY }}
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.14.2
+      - uses: actions/checkout@v3
+      - run: npm install
+      - run: ls
+      - run: npm run test -- -g "Integration Test:"
