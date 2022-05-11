@@ -56,7 +56,6 @@ jobs:
       GCP_CLIENT_EMAIL: ${{ secrets.GCP_CLIENT_EMAIL }}
       GCP_PRIVATE_KEY: ${{ secrets.GCP_PRIVATE_KEY }}
       GCP_CLOUDRUN_SERVICE: the-cleavage-game-${{ github.ref_name }}
-      GCP_CLOUDRUN_SA_KEY: ${{ secrets.GCP_PRIVATE_KEY }}
       GCP_REGION: us-central1
     steps:
       - uses: actions/setup-node@v3
@@ -70,7 +69,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v0
         with:
           project_id: ${{ env.GCP_PROJECT_ID_WITHOUT_OBJECT }}
-          service_account_key: ${{ secrets.GCP_CLOUDRUN_SA_KEY }}
+          credentials_json: '${{ secrets.GCP_SA_JSON }}'
           export_default_credentials: true  # Set to true to authenticate the Cloud Run action
       - name: Authorize Docker push
         run: gcloud auth configure-docker
