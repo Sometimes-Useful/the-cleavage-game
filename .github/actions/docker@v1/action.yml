@@ -2,4 +2,4 @@ name: 'Build docker image'
 description: 'Greet someone and record the time'
 runs:
   using: 'docker'
-  image: 'dockerfile'
+  image: '../../../Dockerfile'
