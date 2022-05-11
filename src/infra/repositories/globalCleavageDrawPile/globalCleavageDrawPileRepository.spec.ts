@@ -21,7 +21,7 @@ const envs = [
     fake,
     gcp
 ]
-describe('Integration Test: Global Cleavage Draw Pile Repository', () => {
+describe('Integration Test - Global Cleavage Draw Pile Repository', () => {
     envs.forEach(environnement => {
         describe(`${environnement.adapter.constructor.name}`, () => {
             describe('Nothing > save > one cleavage', () => {

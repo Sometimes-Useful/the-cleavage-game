@@ -23,7 +23,7 @@ const envs = [
     fake,
     axios
 ]
-describe('Integration Test: Global Cleavage Draw Pile Gateway', () => {
+describe('Integration Test - Global Cleavage Draw Pile Gateway', () => {
     envs.forEach(environnement => {
         describe(`${environnement.adapter.constructor.name}`, () => {
             describe('Nothing > save > one cleavage', () => {

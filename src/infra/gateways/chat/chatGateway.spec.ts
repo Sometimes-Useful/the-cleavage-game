@@ -36,7 +36,7 @@ const twitch:IntegrationEnvironnement = {
 
 const envs = [fake, twitch]
 
-describe('Integration Test: Chat Gateway', () => {
+describe('Integration Test - Chat Gateway', () => {
     envs.forEach(environnement => {
         describe(`${environnement.adapter.constructor.name}`, () => {
             describe('Connect', () => {
