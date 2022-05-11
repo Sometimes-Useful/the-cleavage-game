@@ -86,4 +86,3 @@ jobs:
           region: ${{ env.GCP_REGION }}
       - name: Show Output
         run: echo ${{ steps.deploy.outputs.url }}
-        - uses: ./.github/actions/docker@v1
