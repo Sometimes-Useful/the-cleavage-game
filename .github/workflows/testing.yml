@@ -62,5 +62,5 @@ jobs:
       - run: npm install
       - run: npm run build:server
       - run: npm run build:client
-      - uses: actions/docker@v1
+      - uses: ./.github/actions/docker@v1
       - run : ls
