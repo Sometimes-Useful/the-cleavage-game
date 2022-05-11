@@ -42,4 +42,4 @@ jobs:
       - uses: actions/checkout@v3
       - run: npm install
       - run: ls
-      - 'run: npm run test -- -g "Integration Test: Global Cleavage Draw Pile Repository|Integration Test: Chat Gateway"'
+      - run: npm run test -- -g "Integration Test: Global Cleavage Draw Pile Repository|Integration Test: Chat Gateway"
