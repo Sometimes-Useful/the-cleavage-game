@@ -19,4 +19,5 @@ jobs:
           node-version: 16.4.2
       - uses: actions/checkout@v3
       - run: npm install
+      - run: ls
       - run: npm run test -- -g "Feature"
