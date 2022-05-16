@@ -89,8 +89,8 @@ jobs:
           service: ${{ env.GCP_CLOUDRUN_SERVICE }}
           image: gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
           region: ${{ env.GCP_REGION }}
-          secrets: |
-            GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}:latest
-            GCP_CLIENT_EMAIL=${{ secrets.GCP_CLIENT_EMAIL }}:latest
+          env_vars: |
+            GCP_PROJECT_ID=${{ env.GCP_PROJECT_ID }}
+            GCP_CLIENT_EMAIL=${{ env.GCP_CLIENT_EMAIL }}
       - name: Show deployment URL
         run: echo ${{ steps.deploy.outputs.url }}

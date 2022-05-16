@@ -26,11 +26,13 @@ describe('Integration Test: Global Registered Streamers Repository', () => {
     envs.forEach(environnement => {
         describe(`${environnement.adapter.constructor.name}`, () => {
             describe('Nothing > save > one streamer', () => {
-                before(() => {
+                before((done) => {
                     if (environnement.adapter.constructor.name === GcpGlobalRegisteredStreamersRepository.name) {
                         const adapter = environnement.adapter as GcpGlobalRegisteredStreamersRepository
                         return Promise.all(streamers.map(streamer => adapter.delete(streamer.username)))
-                    }
+                            .then(() => done())
+                            .catch(error => done(error))
+                    } else { done() }
                 })
                 streamers.forEach(streamer => {
                     it(`Don't has registered streamer - ${streamer.username}`, () => environnement.adapter.isExistByUsername(streamer.username).then(result => expect(result).equal(false)))
