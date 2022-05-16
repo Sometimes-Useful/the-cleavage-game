@@ -89,10 +89,7 @@ jobs:
           service: ${{ env.GCP_CLOUDRUN_SERVICE }}
           image: gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
           region: ${{ env.GCP_REGION }}
-          env_vars: |
-            BACKEND_SHEME=${{ env.GCP_PROJECT_ID }}
-            BACKEND_FQDN=${{ env.BACKEND_FQDN }}
-            PORT=${{ env.PORT }}
+          env_vars: BACKEND_SHEME=${{ env.BACKEND_SHEME }},BACKEND_FQDN=${{ env.BACKEND_FQDN }},PORT=${{ env.PORT }}
           secrets: |
             GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}:latest
             GCP_CLIENT_EMAIL=${{ secrets.GCP_CLIENT_EMAIL }}:latest
