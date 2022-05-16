@@ -90,11 +90,11 @@ jobs:
           image: gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
           region: ${{ env.GCP_REGION }}
           secrets: |
-            GCP_PROJECT_ID='${{ secrets.GCP_PROJECT_ID }}':latest
-            GCP_CLIENT_EMAIL='${{ secrets.GCP_CLIENT_EMAIL }}':latest
-            GCP_PRIVATE_KEY='${{ secrets.GCP_PRIVATE_KEY }}':latest
-            BACKEND_SHEME='${{ env.BACKEND_SHEME }}':latest
-            BACKEND_FQDN='${{ env.BACKEND_FQDN }}':latest
-            PORT='${{ env.PORT }}':latest
+            GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}:latest
+            GCP_CLIENT_EMAIL=${{ secrets.GCP_CLIENT_EMAIL }}:latest
+            GCP_PRIVATE_KEY=${{ secrets.GCP_PRIVATE_KEY }}:latest
+            BACKEND_SHEME=${{ env.BACKEND_SHEME }}:latest
+            BACKEND_FQDN=${{ env.BACKEND_FQDN }}:latest
+            PORT=${{ env.PORT }}:latest
       - name: Show deployment URL
         run: echo ${{ steps.deploy.outputs.url }}
