@@ -5,3 +5,4 @@ prod.env
 dev.env
 the-cleavage-game_GCP.json
 cloudbuild.yaml
+privatekey.pem
