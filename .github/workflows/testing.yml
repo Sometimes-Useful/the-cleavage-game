@@ -92,9 +92,9 @@ jobs:
           secrets: |
             GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}:latest
             GCP_CLIENT_EMAIL=${{ secrets.GCP_CLIENT_EMAIL }}:latest
-            GCP_PRIVATE_KEY=${{ secrets.GCP_PRIVATE_KEY }}:latest
-            BACKEND_SHEME=${{ env.BACKEND_SHEME }}:latest
-            BACKEND_FQDN=${{ env.BACKEND_FQDN }}:latest
-            PORT=${{ env.PORT }}:latest
+            GCP_PRIVATE_KEY=blah:latest
+            BACKEND_SHEME=https:latest
+            BACKEND_FQDN=dev.lejeuduclivage.com:latest
+            PORT=8080:latest
       - name: Show deployment URL
         run: echo ${{ steps.deploy.outputs.url }}
