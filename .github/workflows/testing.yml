@@ -54,7 +54,7 @@ jobs:
       GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
       GCP_CLIENT_EMAIL: ${{ secrets.GCP_CLIENT_EMAIL }}
       GCP_PRIVATE_KEY: ${{ secrets.GCP_PRIVATE_KEY }}
-      GCP_CLOUDRUN_SERVICE: the-cleavage-game-${{ github.ref_name }}
+      GCP_CLOUDRUN_SERVICE: ${{ secrets.GCP_PROJECT_ID }}-${{ github.ref_name }}
       GCP_REGION: us-central1
     steps:
       - name: Install Nodejs
@@ -89,8 +89,6 @@ jobs:
           service: ${{ env.GCP_CLOUDRUN_SERVICE }}
           image: gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
           region: ${{ env.GCP_REGION }}
-          env_vars: |
-            GCP_PROJECT_ID=${{ env.GCP_PROJECT_ID }}
-            GCP_CLIENT_EMAIL=${{ env.GCP_CLIENT_EMAIL }}
+          env_vars: GCP_PROJECT_ID=${{ env.GCP_PROJECT_ID }},GCP_CLIENT_EMAIL=${{ env.GCP_CLIENT_EMAIL }}
       - name: Show deployment URL
         run: echo ${{ steps.deploy.outputs.url }}
