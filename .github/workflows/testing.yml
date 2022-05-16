@@ -79,18 +79,18 @@ jobs:
       - name: Authorize Docker push on Google Cloud container registry
         run: gcloud auth configure-docker
       - name: Build docker container from Dockerfile
-        run: docker build -t gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }} .
+        run: docker build -t gcr.io/${{ env.GCP_PROJECT_ID:latest }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }} .
       - name: Push Container to Google Cloud Storage
-        run: docker push gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
+        run: docker push gcr.io/${{ env.GCP_PROJECT_ID:latest }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
       - name: Deploy to Google Cloud Platform - Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0
         with:
           service: ${{ env.GCP_CLOUDRUN_SERVICE }}
-          image: gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
+          image: gcr.io/${{ env.GCP_PROJECT_ID:latest }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
           region: ${{ env.GCP_REGION }}
           secrets: |
-            GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}
+            GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID:latest }}
             GCP_CLIENT_EMAIL=${{ secrets.GCP_CLIENT_EMAIL }}
       - name: Show deployment URL
         run: echo ${{ steps.deploy.outputs.url }}
