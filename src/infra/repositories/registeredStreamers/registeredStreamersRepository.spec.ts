@@ -22,14 +22,14 @@ const envs = [
     gcp
 ]
 const streamers = [streamer1, streamer2]
-describe('Integration Test: Global Registered Streamers Repository', () => {
+describe('Integration Test - Global Registered Streamers Repository', () => {
     envs.forEach(environnement => {
         describe(`${environnement.adapter.constructor.name}`, () => {
             describe('Nothing > save > one streamer', () => {
                 before((done) => {
                     if (environnement.adapter.constructor.name === GcpGlobalRegisteredStreamersRepository.name) {
                         const adapter = environnement.adapter as GcpGlobalRegisteredStreamersRepository
-                        return Promise.all(streamers.map(streamer => adapter.delete(streamer.username)))
+                        Promise.all(streamers.map(streamer => adapter.delete(streamer.username)))
                             .then(() => done())
                             .catch(error => done(error))
                     } else { done() }
