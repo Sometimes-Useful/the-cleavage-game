@@ -4,9 +4,9 @@ exports.backendPort = exports.backendFqdn = exports.backendSheme = exports.gcpPr
 var dotenv_1 = require("dotenv");
 var EnvironmentVariable_1 = require("../infra/EnvironmentVariable");
 (0, dotenv_1.config)();
-exports.gcpProjectId = JSON.parse(process.env.GCP_PROJECT_ID ? process.env.GCP_PROJECT_ID : (0, EnvironmentVariable_1.onMissingEnvVariable)('process.env.GCP_PROJECT_ID')).gcpProjectId;
-exports.gcpClientEmail = JSON.parse(process.env.GCP_CLIENT_EMAIL ? process.env.GCP_CLIENT_EMAIL : (0, EnvironmentVariable_1.onMissingEnvVariable)('process.env.GCP_CLIENT_EMAIL')).gcpClientEmail;
-exports.gcpPrivateKey = JSON.parse(process.env.GCP_PRIVATE_KEY ? process.env.GCP_PRIVATE_KEY : (0, EnvironmentVariable_1.onMissingEnvVariable)('process.env.GCP_PRIVATE_KEY')).gcpPrivateKey;
+exports.gcpProjectId = process.env.GCP_PROJECT_ID ? process.env.GCP_PROJECT_ID : (0, EnvironmentVariable_1.onMissingEnvVariable)('process.env.GCP_PROJECT_ID');
+exports.gcpClientEmail = process.env.GCP_CLIENT_EMAIL ? process.env.GCP_CLIENT_EMAIL : (0, EnvironmentVariable_1.onMissingEnvVariable)('process.env.GCP_CLIENT_EMAIL');
+exports.gcpPrivateKey = process.env.GCP_PRIVATE_KEY ? process.env.GCP_PRIVATE_KEY : (0, EnvironmentVariable_1.onMissingEnvVariable)('process.env.GCP_PRIVATE_KEY');
 exports.backendSheme = process.env.BACKEND_SHEME ? process.env.BACKEND_SHEME : (0, EnvironmentVariable_1.onMissingEnvVariable)('process.env.BACKEND_SHEME');
 exports.backendFqdn = process.env.BACKEND_FQDN ? process.env.BACKEND_FQDN : (0, EnvironmentVariable_1.onMissingEnvVariable)('process.env.BACKEND_FQDN');
 exports.backendPort = process.env.PORT;
