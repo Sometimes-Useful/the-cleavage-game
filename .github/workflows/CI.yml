@@ -112,7 +112,7 @@ jobs:
       - name: Deploy to Google Cloud Platform - Cloud Run
         id: gcpCloudRunDeploy
         run: >
-          echo "::set-output name=deploy::$(
+          echo "::set-output name=url::$(
           gcloud beta run deploy ${{ env.GCP_CLOUDRUN_SERVICE }}
           --image gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
           --quiet
@@ -126,21 +126,21 @@ jobs:
           --max-instances 1
           --concurrency 1000
           --allow-unauthenticated
-          --format json
+          --format="value(url)"
           )"
       - name: List GCP Cloud Run domain mappings
         run: gcloud beta run domain-mappings list --region ${{ env.GCP_REGION }}
       - name: Cloud Run Deploy - Outputs
         run: |
           echo OUTPUTS: ${{join(steps.gcpCloudRunDeploy.outputs.*, '\n')}}
-          echo URL: ${{ steps.gcpCloudRunDeploy.outputs.deploy.url }}
+          echo URL: ${{ steps.gcpCloudRunDeploy.outputs.url }}
       - name: GitHub deployment - Success
         if: success()
         uses: chrnorm/deployment-status@v2
         id: deployment_success
         with:
           token: '${{ github.token }}'
-          environment-url: ${{ steps.gcpCloudRunDeploy.outputs.deploy.url }}
+          environment-url: ${{ steps.gcpCloudRunDeploy.outputs.url }}
           deployment-id: ${{ steps.gitHubDeployment.outputs.deployment_id }}
           state: 'success'
       - name: GitHub deployment - Failed
