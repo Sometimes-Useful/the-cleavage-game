@@ -59,9 +59,9 @@ jobs:
     permissions:
       deployments: write
     steps:
-      - name: GitHub deployment - Pending
+      - name: Create GitHub deployment
         uses: chrnorm/deployment-action@v2
-        id: deployment
+        id: gitHubDeployment
         with:
           token: '${{ github.token }}'
           environment: ${{ github.ref_name }}
@@ -84,7 +84,7 @@ jobs:
         id: deployment_in_progress
         with:
           token: '${{ github.token }}'
-          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          deployment-id: ${{ steps.gitHubDeployment.outputs.deployment_id }}
           state: 'in_progress'
       - name: 'Authenticate to Google Cloud'
         id: 'auth'
@@ -98,7 +98,7 @@ jobs:
       - name: Push Container to Google Cloud Storage
         run: docker push gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
       - name: Deploy to Google Cloud Platform - Cloud Run
-        id: deploy
+        id: gcpCloudRunDeploy
         uses: google-github-actions/deploy-cloudrun@v0
         with:
           service: ${{ env.GCP_CLOUDRUN_SERVICE }}
@@ -115,8 +115,8 @@ jobs:
         id: deployment_success
         with:
           token: '${{ github.token }}'
-          environment-url: ${{ steps.deploy.outputs.url }}
-          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          environment-url: ${{ steps.gcpCloudRunDeploy.outputs.url }}
+          deployment-id: ${{ steps.gitHubDeployment.outputs.deployment_id }}
           state: 'success'
       - name: GitHub deployment - Failed
         if: failure()
@@ -124,5 +124,5 @@ jobs:
         id: deployment_failed
         with:
           token: '${{ github.token }}'
-          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          deployment-id: ${{ steps.gitHubDeployment.outputs.deployment_id }}
           state: 'failure'
