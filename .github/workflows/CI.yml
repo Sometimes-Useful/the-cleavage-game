@@ -61,7 +61,7 @@ jobs:
     steps:
       - name: GitHub deployment - Pending
         uses: chrnorm/deployment-action@v2
-        id: deployment
+        id: deployment_pending
         with:
           token: '${{ github.token }}'
           environment-url: ${{ steps.deploy.outputs.url }}
@@ -82,7 +82,7 @@ jobs:
         run: docker build -t gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }} .
       - name: GitHub deployment - In Progress
         uses: chrnorm/deployment-action@v2
-        id: deployment
+        id: deployment_in_progress
         with:
           token: '${{ github.token }}'
           environment-url: ${{ steps.deploy.outputs.url }}
@@ -114,7 +114,7 @@ jobs:
       - name: GitHub deployment - Success
         if: success()
         uses: chrnorm/deployment-action@v2
-        id: deployment
+        id: deployment_success
         with:
           token: '${{ github.token }}'
           environment-url: ${{ steps.deploy.outputs.url }}
@@ -123,7 +123,7 @@ jobs:
       - name: GitHub deployment - Failed
         if: failure()
         uses: chrnorm/deployment-action@v2
-        id: deployment
+        id: deployment_failed
         with:
           token: '${{ github.token }}'
           environment-url: ${{ steps.deploy.outputs.url }}
