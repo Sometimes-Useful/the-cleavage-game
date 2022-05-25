@@ -64,7 +64,6 @@ jobs:
         id: deployment
         with:
           token: '${{ github.token }}'
-          environment-url: ${{ steps.deploy.outputs.url }}
           environment: ${{ github.ref_name }}
       - name: Install Nodejs
         uses: actions/setup-node@v3
@@ -116,6 +115,7 @@ jobs:
         id: deployment_success
         with:
           token: '${{ github.token }}'
+          environment-url: ${{ steps.deploy.outputs.url }}
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
           state: 'success'
       - name: GitHub deployment - Failed
