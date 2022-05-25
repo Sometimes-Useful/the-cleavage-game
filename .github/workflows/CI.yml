@@ -128,6 +128,10 @@ jobs:
           --format json
       - name: List GCP Cloud Run domain mappings
         run: gcloud beta run domain-mappings list --region ${{ env.GCP_REGION }}
+      - name: Cloud Run Deploy - Outputs
+        run: |
+          echo OUTPUTS: ${{ steps.gcpCloudRunDeploy.outputs }}
+          echo URL: ${{ steps.gcpCloudRunDeploy.outputs.url }}
       - name: GitHub deployment - Success
         if: success()
         uses: chrnorm/deployment-status@v2
