@@ -124,12 +124,6 @@ jobs:
           --allow-unauthenticated
           --format="value(status.url)"
           )"
-      - name: Update GCP Cloud Run domain mappings
-        if: ${{ github.ref_name }} == 'main'
-        run: |
-          gcloud domains verify ${{ env.PRODUCTION_URL }}
-          gcloud beta run domain-mappings create --service=${{ env.GCP_CLOUDRUN_SERVICE }} --domain=${{ env.PRODUCTION_URL }} --region ${{ env.GCP_REGION }}
-          gcloud beta run domain-mappings create --service=${{ env.GCP_CLOUDRUN_SERVICE }} --domain=www.${{ env.PRODUCTION_URL }} --region ${{ env.GCP_REGION }}
       - name: GitHub deployment - Success
         if: success()
         uses: chrnorm/deployment-status@v2
