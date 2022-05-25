@@ -59,6 +59,13 @@ jobs:
     permissions:
       deployments: write
     steps:
+      - name: GitHub deployment - Pending
+        uses: chrnorm/deployment-action@v2
+        id: deployment
+        with:
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deploy.outputs.url }}
+          environment: ${{ github.ref_name }}
       - name: Install Nodejs
         uses: actions/setup-node@v3
         with:
@@ -73,6 +80,14 @@ jobs:
         run: npm run build:client
       - name: Build docker container from Dockerfile
         run: docker build -t gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }} .
+      - name: GitHub deployment - In Progress
+        uses: chrnorm/deployment-action@v2
+        id: deployment
+        with:
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deploy.outputs.url }}
+          environment: ${{ github.ref_name }}
+          state: 'in_progress'
       - name: 'Authenticate to Google Cloud'
         id: 'auth'
         uses: 'google-github-actions/auth@v0'
@@ -96,10 +111,21 @@ jobs:
           env_vars: GCP_PROJECT_ID=${{ env.GCP_PROJECT_ID }},GCP_CLIENT_EMAIL=${{ secrets.GCP_CLIENT_EMAIL }},BACKEND_SHEME=${{ env.BACKEND_SHEME }},BACKEND_FQDN=${{ env.BACKEND_FQDN }}
       - name: List GCP Cloud Run domain mappings
         run: gcloud beta run domain-mappings list --region ${{ env.GCP_REGION }}
-      - name: Create GitHub deployment
+      - name: GitHub deployment - Success
+        if: success()
         uses: chrnorm/deployment-action@v2
         id: deployment
         with:
           token: '${{ github.token }}'
           environment-url: ${{ steps.deploy.outputs.url }}
           environment: ${{ github.ref_name }}
+          state: 'success'
+      - name: GitHub deployment - Failed
+        if: failure()
+        uses: chrnorm/deployment-action@v2
+        id: deployment
+        with:
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deploy.outputs.url }}
+          environment: ${{ github.ref_name }}
+          state: 'failure'
