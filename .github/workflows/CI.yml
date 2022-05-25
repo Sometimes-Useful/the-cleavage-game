@@ -126,7 +126,7 @@ jobs:
           --max-instances=1
           --concurrency=1000
           --allow-unauthenticated
-          --format='value[](url())'
+          --format="value(status.url)"
           )"
       - name: List GCP Cloud Run domain mappings
         run: gcloud beta run domain-mappings list --region ${{ env.GCP_REGION }}
