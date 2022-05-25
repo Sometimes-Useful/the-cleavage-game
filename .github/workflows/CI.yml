@@ -97,16 +97,33 @@ jobs:
         run: gcloud auth configure-docker
       - name: Push Container to Google Cloud Storage
         run: docker push gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
+      #- name: Deploy to Google Cloud Platform - Cloud Run
+      #  id: gcpCloudRunDeploy
+      #  uses: google-github-actions/deploy-cloudrun@v0
+      #  with:
+      #    service: ${{ env.GCP_CLOUDRUN_SERVICE }}
+      #    image: gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
+      #    region: ${{ env.GCP_REGION }}
+      #    secrets: |
+      #      GCP_PRIVATE_KEY=GCP_PRIVATE_KEY:latest
+      #    env_vars: GCP_PROJECT_ID=${{ env.GCP_PROJECT_ID }},GCP_CLIENT_EMAIL=${{ secrets.GCP_CLIENT_EMAIL }},BACKEND_SHEME=${{ env.BACKEND_SHEME }},BACKEND_FQDN=${{ env.BACKEND_FQDN }}
       - name: Deploy to Google Cloud Platform - Cloud Run
         id: gcpCloudRunDeploy
-        uses: google-github-actions/deploy-cloudrun@v0
-        with:
-          service: ${{ env.GCP_CLOUDRUN_SERVICE }}
-          image: gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
-          region: ${{ env.GCP_REGION }}
-          secrets: |
-            GCP_PRIVATE_KEY=GCP_PRIVATE_KEY:latest
-          env_vars: GCP_PROJECT_ID=${{ env.GCP_PROJECT_ID }},GCP_CLIENT_EMAIL=${{ secrets.GCP_CLIENT_EMAIL }},BACKEND_SHEME=${{ env.BACKEND_SHEME }},BACKEND_FQDN=${{ env.BACKEND_FQDN }}
+        run: |
+          gcloud beta run deploy ${{ env.GCP_CLOUDRUN_SERVICE }} \
+            --image gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }} \
+            --quiet \
+            --platform managed \
+            --region ${{ env.GCP_REGION }} \
+            --update-env-vars GCP_PROJECT_ID=${{ env.GCP_PROJECT_ID }},GCP_CLIENT_EMAIL=${{ secrets.GCP_CLIENT_EMAIL }},BACKEND_SHEME=${{ env.BACKEND_SHEME }},BACKEND_FQDN=${{ env.BACKEND_FQDN }} \
+            --update-secrets GCP_PRIVATE_KEY=GCP_PRIVATE_KEY:latest \
+            --project ${{ env.GCP_PROJECT_ID }} \
+            --memory 256Mi \
+            --min-instances 0 \
+            --max-instances 1 \
+            --concurrency 1000 \
+            --allow-unauthenticated \
+            --format json
       - name: List GCP Cloud Run domain mappings
         run: gcloud beta run domain-mappings list --region ${{ env.GCP_REGION }}
       - name: GitHub deployment - Success
