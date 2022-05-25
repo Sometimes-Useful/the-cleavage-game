@@ -48,7 +48,7 @@ jobs:
       TWITCHUSERNAME: benjaminbohec
       TWITCHTOKEN: ${{ secrets.TWITCHTOKEN }}
       TWITCHCHANNEL: benjaminbohec
-      BACKEND_SHEME: http
+      BACKEND_SHEME: https
       BACKEND_FQDN: ${{ github.ref_name }}.lejeuduclivage.com
       PORT: 8080
       GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}

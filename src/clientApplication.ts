@@ -55,7 +55,7 @@ const chatGateway = new TwitchChatGateway(eventGateway)
 const randomGateway = new ProductionRandomGateway()
 const dateGateway = new ProductionDateGateway()
 const uuidGateway = new ProductionUuidGateway()
-const axiosBackendInstance = new AxiosBackendInstance(clientBackendSheme, clientBackendFqdn, clientBackendPort)
+const axiosBackendInstance = new AxiosBackendInstance((clientBackendSheme && clientBackendFqdn) ? { sheme: clientBackendSheme, endpoint: clientBackendFqdn, port: clientBackendPort } : undefined)
 const globalCleavageDrawPileGateway = new AxiosGlobalCleavageDrawPileGateway(axiosBackendInstance)
 const streamersGateway = new AxiosStreamersGateway(axiosBackendInstance)
 
