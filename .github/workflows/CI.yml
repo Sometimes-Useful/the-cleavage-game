@@ -45,6 +45,7 @@ jobs:
     name: Build Docker Image
     runs-on : ubuntu-latest
     env:
+      PRODUCTION_URL: lejeuduclivage.com
       TWITCHUSERNAME: benjaminbohec
       TWITCHTOKEN: ${{ secrets.TWITCHTOKEN }}
       TWITCHCHANNEL: benjaminbohec
@@ -93,22 +94,12 @@ jobs:
           credentials_json: '${{ secrets.GCP_SA_JSON }}'
       - name: Setup Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v0
+      - name: Install gcloud beta component
+        run: gcloud components install --quiet beta
       - name: Authorize Docker push on Google Cloud container registry
         run: gcloud auth configure-docker
       - name: Push Container to Google Cloud Storage
         run: docker push gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
-      #- name: Deploy to Google Cloud Platform - Cloud Run
-      #  id: gcpCloudRunDeploy
-      #  uses: google-github-actions/deploy-cloudrun@v0
-      #  with:
-      #    service: ${{ env.GCP_CLOUDRUN_SERVICE }}
-      #    image: gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
-      #    region: ${{ env.GCP_REGION }}
-      #    secrets: |
-      #      GCP_PRIVATE_KEY=GCP_PRIVATE_KEY:latest
-      #    env_vars: GCP_PROJECT_ID=${{ env.GCP_PROJECT_ID }},GCP_CLIENT_EMAIL=${{ secrets.GCP_CLIENT_EMAIL }},BACKEND_SHEME=${{ env.BACKEND_SHEME }},BACKEND_FQDN=${{ env.BACKEND_FQDN }}
-      - name: Install gcloud beta component
-        run: gcloud components install --quiet beta
       - name: Deploy to Google Cloud Platform - Cloud Run
         id: gcpCloudRunDeploy
         run: >
@@ -118,7 +109,7 @@ jobs:
           --quiet
           --platform=managed
           --region=${{ env.GCP_REGION }}
-          --update-env-vars=GCP_PROJECT_ID=${{ env.GCP_PROJECT_ID }},GCP_CLIENT_EMAIL=${{ secrets.GCP_CLIENT_EMAIL }},BACKEND_SHEME=${{ env.BACKEND_SHEME }},BACKEND_FQDN=${{ env.BACKEND_FQDN }}
+          --update-env-vars=GCP_PROJECT_ID=${{ env.GCP_PROJECT_ID }},GCP_CLIENT_EMAIL=${{ secrets.GCP_CLIENT_EMAIL }}
           --update-secrets=GCP_PRIVATE_KEY=GCP_PRIVATE_KEY:latest
           --project=${{ env.GCP_PROJECT_ID }}
           --memory=256Mi
@@ -128,12 +119,11 @@ jobs:
           --allow-unauthenticated
           --format="value(status.url)"
           )"
-      - name: List GCP Cloud Run domain mappings
-        run: gcloud beta run domain-mappings list --region ${{ env.GCP_REGION }}
-      - name: Cloud Run Deploy - Outputs
+      - name: Update GCP Cloud Run domain mappings
+        if: ${{ github.ref_name }} == 'main'
         run: |
-          echo OUTPUTS: ${{join(steps.gcpCloudRunDeploy.outputs.*, '\n')}}
-          echo URL: ${{ steps.gcpCloudRunDeploy.outputs.url }}
+          gcloud beta run domain-mappings create --service=${{ env.GCP_CLOUDRUN_SERVICE }} --domain=${{ env.PRODUCTION_URL }} --region ${{ env.GCP_REGION }}
+          gcloud beta run domain-mappings create --service=${{ env.GCP_CLOUDRUN_SERVICE }} --domain=www.${{ env.PRODUCTION_URL }} --region ${{ env.GCP_REGION }}
       - name: GitHub deployment - Success
         if: success()
         uses: chrnorm/deployment-status@v2
