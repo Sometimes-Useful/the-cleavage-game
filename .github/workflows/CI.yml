@@ -102,7 +102,7 @@ jobs:
         run: docker push gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
       - name: Update GCP Secrets
         run: |
-          echo ${{ secrets.GCP_PRIVATE_KEY }} >> ./cred
+          echo "${{ secrets.GCP_PRIVATE_KEY }}" >> ./cred
           gcloud beta secrets versions add GCP_PRIVATE_KEY --data-file=./cred
           rm ./cred
       - name: Deploy to Google Cloud Platform - Cloud Run
