@@ -22,32 +22,40 @@ export class DrawCleavageUseCase extends UseCase {
     ) { super() }
 
     execute (event: DrawCleavageEvent): Promise<void> {
+        return this.applicationServices.autoplay.hasAutoplay()
+            .then(isAutoPlay => isAutoPlay ? this.onAutoPlay(isAutoPlay) : this.onNotAutoPlay(isAutoPlay))
+    }
+
+    private onAutoPlay (isAutoPlay:boolean): Promise<void> {
+        return this.onNoPublicCleavage(isAutoPlay)
+    }
+
+    private onNotAutoPlay (isAutoPlay:boolean): Promise<void> {
         return this.applicationServices.cleavage.nextPublicCleavage()
             .then(cleavage => cleavage
-                ? this.onCleavage(cleavage)
-                : this.onNoPublicCleavage()
+                ? this.onCleavage(cleavage, isAutoPlay)
+                : this.onNoPublicCleavage(isAutoPlay)
             )
             .catch(error => Promise.reject(error))
     }
 
-    private onCleavage (cleavage: Cleavage):Promise<void> {
+    private onCleavage (cleavage: Cleavage, isAutoPlay:boolean):Promise<void> {
         return Promise.all([
             this.applicationServices.cleavage.saveCleavage(cleavage),
             this.applicationServices.interface.updateCleavage(cleavage),
             this.applicationServices.interface.playSound(new Sound(SupportedSound.DICE_ROLL))
         ])
-            .then(results => this.applicationServices.autoplay.hasAutoplay())
-            .then(hasAutoplay => hasAutoplay
+            .then(results => isAutoPlay
                 ? this.applicationServices.event.sentEvent(new LaunchCleavageEvent(cleavage.title, cleavage.leftChoice.name, cleavage.rightChoice.name))
                 : Promise.resolve()
             )
             .catch(error => Promise.reject(error))
     }
 
-    private onNoPublicCleavage (): Promise<void> {
+    private onNoPublicCleavage (isAutoPlay:boolean): Promise<void> {
         return this.applicationServices.cleavage.randomGlobalCleavage()
             .then(cleavage => cleavage
-                ? this.onCleavage(cleavage)
+                ? this.onCleavage(cleavage, isAutoPlay)
                 : this.onNoGlobalCleavage()
             )
             .catch(error => Promise.reject(error))

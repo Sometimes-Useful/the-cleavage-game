@@ -1,30 +1,47 @@
-import type { ApplicationEvent } from '../../events/GameEvent'
-import type { UseCase } from '../../usecases/UseCase'
-import type { ClientApplicationServices } from '../ApplicationServices'
 import { EventType } from '../../events/EventType'
+import type { ApplicationEvent } from '../../events/GameEvent'
+import { eventNotSupported } from '../../messages/messages'
 import { ApplicationStartUseCase } from '../../usecases/ApplicationStartUseCase'
 import { AskForHelpUseCase } from '../../usecases/AskForHelpUseCase'
 import { CancelCleavageUseCase } from '../../usecases/CancelCleavageUseCase'
+import { ChangeGamePhaseUseCase } from '../../usecases/ChangeGamePhaseUseCase'
 import { ChangeMusicVolumeUseCase } from '../../usecases/ChangeMusicVolumeUseCase'
 import { ChangeSoundVolumeUseCase } from '../../usecases/ChangeSoundVolumeUseCase'
+import { ChangeVideoExtractVolumeUseCase } from '../../usecases/ChangeVideoExtractVolumeUseCase'
+import { CheckAutoplayUseCase } from '../../usecases/CheckAutoplayUseCase'
+import { CheckRegisteredStreamerUseCase } from '../../usecases/CheckRegisteredStreamersUseCase'
+import { ConnectChatUseCase } from '../../usecases/ConnectChatUseCase'
+import { CreateBarUseCase } from '../../usecases/CreateBarUseCase'
+import { DisconnectChatUseCase } from '../../usecases/DisconnectChatUseCase'
+import { DrawCleavageUseCase } from '../../usecases/DrawCleavageUseCase'
+import { DrawUseCase } from '../../usecases/DrawUseCase'
+import { EraseUseCase } from '../../usecases/EraseUseCase'
+import { InstallNewStoolsOnBarUseCase } from '../../usecases/InstallNewStoolsOnBarUseCase'
+import { InstallNewStoolsOnTableUseCase } from '../../usecases/InstallNewStoolsOnTableUseCase'
+import { InstallNewTableUseCase } from '../../usecases/InstallNewTableUseCase'
+import { LaunchCleavageUseCase } from '../../usecases/LaunchCleavageUseCase'
 import { NavigateUseCase } from '../../usecases/NavigateUseCase'
+import { NewCleavageUseCase } from '../../usecases/NewCleavageUseCase'
 import { PlayerApplauseUseCase } from '../../usecases/PlayerApplauseEvent'
 import { PlayerCleaveUseCase } from '../../usecases/PlayerCleaveUseCase'
 import { PlayerHyperLikeUseCase } from '../../usecases/PlayerHyperLikeUseCase'
+import { PlayerJoinBarUseCase } from '../../usecases/PlayerJoinBarUseCase'
+import { PlayerMessageUseCase } from '../../usecases/PlayerMessageUseCase'
+import { PlayerMoveUseCase } from '../../usecases/PlayerMoveUseCase'
 import { PlayerQuitUseCase } from '../../usecases/PlayerQuitUseCase'
 import { PlayerShootUseCase } from '../../usecases/PlayerShootUseCase'
 import { PlayerWhistleUseCase } from '../../usecases/PlayerWhistleUseCase'
-import { SuggestCleavageUseCase } from '../../usecases/SuggestCleavageUseCase'
-import { LaunchCleavageUseCase } from '../../usecases/LaunchCleavageUseCase'
-import { DisconnectChatUseCase } from '../../usecases/DisconnectChatUseCase'
-import { DrawCleavageUseCase } from '../../usecases/DrawCleavageUseCase'
-import { NewCleavageUseCase } from '../../usecases/NewCleavageUseCase'
-import { ConnectChatUseCase } from '../../usecases/ConnectChatUseCase'
-import { eventNotSupported } from '../../messages/messages'
-import { PlayerMessageUseCase } from '../../usecases/PlayerMessageUseCase'
-import { CheckAutoplayUseCase } from '../../usecases/CheckAutoplayUseCase'
+import { RefreshCleavageDrawpileQuantityUseCase } from '../../usecases/RefreshCleavageDrawpileQuantityUseCase'
+import { RefreshRegisteredStreamersUseCase } from '../../usecases/RefreshRegisteredStreamersUseCase'
+import { RegisterStreamerUseCase } from '../../usecases/RegisterStreamerUseCase'
 import { StartAutoplayUseCase } from '../../usecases/StartAutoplayUseCase'
 import { StopAutoplayUseCase } from '../../usecases/StopAutoplayUseCase'
+import { SuggestCleavageUseCase } from '../../usecases/SuggestCleavageUseCase'
+import { TableStoolAvailableUseCase } from '../../usecases/TableStoolAvailableUseCase'
+import type { UseCase } from '../../usecases/UseCase'
+import { VideoExtractStartUseCase } from '../../usecases/VideoExtractStartUseCase'
+import { VideoExtractStopUseCase } from '../../usecases/VideoExtractStopUseCase'
+import type { ClientApplicationServices } from '../ApplicationServices'
 
 export class PrimaryClientController {
     constructor (private applicationServices: ClientApplicationServices) {
@@ -50,6 +67,23 @@ export class PrimaryClientController {
         this.useCases.set(EventType.START_AUTOPLAY, new StartAutoplayUseCase(this.applicationServices))
         this.useCases.set(EventType.CHECK_AUTOPLAY, new CheckAutoplayUseCase(this.applicationServices))
         this.useCases.set(EventType.STOP_AUTOPLAY, new StopAutoplayUseCase(this.applicationServices))
+        this.useCases.set(EventType.PLAYER_JOIN_BAR, new PlayerJoinBarUseCase(this.applicationServices))
+        this.useCases.set(EventType.PLAYER_MOVE, new PlayerMoveUseCase(this.applicationServices))
+        this.useCases.set(EventType.INSTALL_NEW_TABLE, new InstallNewTableUseCase(this.applicationServices))
+        this.useCases.set(EventType.INSTALL_NEW_STOOLS_ON_TABLE, new InstallNewStoolsOnTableUseCase(this.applicationServices))
+        this.useCases.set(EventType.TABLE_STOOL_AVAILABLE, new TableStoolAvailableUseCase(this.applicationServices))
+        this.useCases.set(EventType.CREATE_BAR, new CreateBarUseCase(this.applicationServices))
+        this.useCases.set(EventType.INSTALL_NEW_STOOLS_ON_BAR, new InstallNewStoolsOnBarUseCase(this.applicationServices))
+        this.useCases.set(EventType.DRAW, new DrawUseCase(this.applicationServices))
+        this.useCases.set(EventType.CHANGE_GAME_PHASE, new ChangeGamePhaseUseCase(this.applicationServices))
+        this.useCases.set(EventType.VIDEO_EXTRACT_START, new VideoExtractStartUseCase(this.applicationServices))
+        this.useCases.set(EventType.VIDEO_EXTRACT_STOP, new VideoExtractStopUseCase(this.applicationServices))
+        this.useCases.set(EventType.CHANGE_VIDEO_EXTRACT_VOLUME, new ChangeVideoExtractVolumeUseCase(this.applicationServices))
+        this.useCases.set(EventType.ERASE, new EraseUseCase(this.applicationServices))
+        this.useCases.set(EventType.REFRESH_CLEAVAGE_DRAWPILE_QUANTITY, new RefreshCleavageDrawpileQuantityUseCase(this.applicationServices))
+        this.useCases.set(EventType.REGISTER_STREAMER, new RegisterStreamerUseCase(this.applicationServices))
+        this.useCases.set(EventType.REFRESH_REGISTERED_STREAMERS, new RefreshRegisteredStreamersUseCase(this.applicationServices))
+        this.useCases.set(EventType.CHECK_REGISTERED_STREAMER, new CheckRegisteredStreamerUseCase(this.applicationServices))
     }
 
     executeEvent (event: ApplicationEvent): Promise<void> {

@@ -1,17 +1,19 @@
 import type { ChatApplicationService } from '../applicationServices/ChatApplicationService'
-import type { ApplicationEvent } from '../events/GameEvent'
-import type { InterfaceApplicationService } from '../applicationServices/InterfaceApplicationService'
-import { InterfaceView } from '../entities/InterfaceView'
-import { UseCase } from './UseCase'
+import type { CleavageApplicationService } from '../applicationServices/CleavageService'
 import type { EventApplicationService } from '../applicationServices/EventApplicationService'
+import type { InterfaceApplicationService } from '../applicationServices/InterfaceApplicationService'
+import { GamePhase } from '../entities/GamePhase'
+import { InterfaceView } from '../entities/InterfaceView'
+import { ChangeGamePhaseEvent } from '../events/changeGamePhase/ChangeGamePhaseEvent'
 import { NavigateEvent } from '../events/navigateEvent/NavigateEvent'
-import type { AutoplayApplicationService } from '../applicationServices/AutoplayApplicationService'
-import { DrawCleavageEvent } from '../events/drawCleavage/DrawCleavageEvent'
+import type { NewCleavageEvent } from '../events/newCleavage/NewCleavageEvent'
+import { VideoExtractStartEvent } from '../events/videoExtractStart/VideoExtractStartEvent'
+import { UseCase } from './UseCase'
 export interface NewCleavageUseCaseApplicationServices {
-    autoplay: AutoplayApplicationService
     interface: InterfaceApplicationService,
     chat:ChatApplicationService,
-    event:EventApplicationService
+    event:EventApplicationService,
+    cleavage: CleavageApplicationService
 }
 
 export class NewCleavageUseCase extends UseCase {
@@ -19,7 +21,7 @@ export class NewCleavageUseCase extends UseCase {
         private applicationServices:NewCleavageUseCaseApplicationServices
     ) { super() }
 
-    execute (event: ApplicationEvent): Promise<void> {
+    execute (event: NewCleavageEvent): Promise<void> {
         return this.applicationServices.chat.isConnected()
             .then(isConnected => isConnected
                 ? this.onConnected()
@@ -30,10 +32,13 @@ export class NewCleavageUseCase extends UseCase {
 
     private onConnected (): void | PromiseLike<void> {
         return this.applicationServices.interface.newCleavage()
-            .then(() => this.applicationServices.autoplay.hasAutoplay())
-            .then(hasAutoplay => this.applicationServices.event.sentEvents([
-                new NavigateEvent(InterfaceView.NEW_CLEAVAGE),
-                ...(hasAutoplay ? [new DrawCleavageEvent()] : [])
+            .then(() => Promise.all([
+                this.applicationServices.interface.retrieveCurrentView(),
+                this.applicationServices.cleavage.retrieveCurrentGamePhase()
+            ]))
+            .then(([currentView, currentGamePhase]) => this.applicationServices.event.sentEvents([
+                ...currentGamePhase === GamePhase.NEW_CLEAVAGE ? [] : currentView !== InterfaceView.GAME ? [new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE)] : [new VideoExtractStartEvent()],
+                ...currentView !== InterfaceView.GAME ? [new NavigateEvent(InterfaceView.GAME)] : []
             ]))
             .catch(error => Promise.reject(error))
     }

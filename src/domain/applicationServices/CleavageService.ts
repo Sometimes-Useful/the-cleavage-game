@@ -7,14 +7,29 @@ import type { PublicCleavageDrawPileRepository } from '../ports/secondary/reposi
 import type { CurrentCleavageRepository } from '../ports/secondary/repositories/CurrentCleavageRepository'
 import type { ChatGateway } from '../ports/secondary/gateways/ChatGateway'
 import type { GlobalCleavageDrawPileGateway } from '../ports/secondary/gateways/GlobalCleavageDrawPileGateway'
+import type { GamePhaseRepository } from '../ports/secondary/repositories/GamePhaseRepository'
+import type { GamePhase } from '../entities/GamePhase'
 
 export class CleavageApplicationService {
     constructor (
         private publicCleavageDrawPileRepository: PublicCleavageDrawPileRepository,
         private globalCleavageDrawPileGateway:GlobalCleavageDrawPileGateway,
         private currentCleavageRepository:CurrentCleavageRepository,
-        private chatGateway:ChatGateway
+        private chatGateway:ChatGateway,
+        private gamePhaseRepository: GamePhaseRepository
     ) { }
+
+    retrieveCleavageDrawpileQuantity ():Promise<number> {
+        return this.globalCleavageDrawPileGateway.retrieveCleavageDrawpileQuantity()
+    }
+
+    changeGamePhase (gamePhase: GamePhase): Promise<void> {
+        return this.gamePhaseRepository.changeGamePhase(gamePhase)
+    }
+
+    retrieveCurrentGamePhase (): Promise<GamePhase> {
+        return this.gamePhaseRepository.retrieveCurrentGamePhase()
+    }
 
     saveGlobalCleavage (cleavage: Cleavage): Promise<void> {
         const currentClevageDto = cleavage.toDto()
@@ -23,20 +38,20 @@ export class CleavageApplicationService {
     }
 
     removePlayerOnCleavage (player:Player):Promise<void> {
-        return this.loadCleavage()
+        return this.loadCurrentCleavage()
             .then(cleavage => {
-                cleavage.leftChoice.players = cleavage.leftChoice.players.filter(cleavePlayer => cleavePlayer.username !== player.username)
-                cleavage.rightChoice.players = cleavage.rightChoice.players.filter(cleavePlayer => cleavePlayer.username !== player.username)
-                cleavage.players = cleavage.players.filter(cleavePlayer => cleavePlayer.username !== player.username)
+                cleavage.leftChoice.players = cleavage.leftChoice.players.filter(cleavePlayer => cleavePlayer !== player.username)
+                cleavage.rightChoice.players = cleavage.rightChoice.players.filter(cleavePlayer => cleavePlayer !== player.username)
+                cleavage.players = cleavage.players.filter(cleavePlayer => cleavePlayer !== player.username)
                 return this.saveCleavage(cleavage)
             })
             .catch(error => Promise.reject(error))
     }
 
     public addPlayerOnCleavage (player:Player): Promise<void> {
-        return this.loadCleavage()
+        return this.loadCurrentCleavage()
             .then(cleavage => {
-                cleavage.players.push(player)
+                cleavage.players.push(player.username)
                 return this.saveCleavage(cleavage)
             })
             .catch(error => Promise.reject(error))
@@ -50,11 +65,11 @@ export class CleavageApplicationService {
         return this.publicCleavageDrawPileRepository.addCleavage(cleavage)
     }
 
-    loadCleavage ():Promise<Cleavage> {
+    loadCurrentCleavage ():Promise<Cleavage> {
         return this.currentCleavageRepository.load()
     }
 
-    hasCleavage (): Promise<boolean> {
+    hasCurrentCleavage (): Promise<boolean> {
         return this.currentCleavageRepository.hasCleavage()
     }
 
@@ -69,7 +84,7 @@ export class CleavageApplicationService {
     }
 
     private onCleave (cleavage: Cleavage, event: PlayerCleaveEvent): Promise<void> {
-        if (!cleavage.players.some(player => player.username === event.player.username))cleavage.players.push(event.player)
+        if (!cleavage.players.some(player => player === event.username))cleavage.players.push(event.username)
         const playerPreviousCleave = this.previousPlayerCleave(cleavage, event)
         return playerPreviousCleave !== PlayerCleave.NOTHING
             ? this.onPlayerAlreadyCleave(event, playerPreviousCleave, cleavage)
@@ -77,30 +92,30 @@ export class CleavageApplicationService {
     }
 
     private previousPlayerCleave (cleavage: Cleavage, event: PlayerCleaveEvent):PlayerCleave {
-        return cleavage.leftChoice.players.some(player => player.username === event.player.username)
+        return cleavage.leftChoice.players.some(player => player === event.username)
             ? PlayerCleave.LEFT
-            : cleavage.rightChoice.players.some(player => player.username === event.player.username)
+            : cleavage.rightChoice.players.some(player => player === event.username)
                 ? PlayerCleave.RIGHT
                 : PlayerCleave.NOTHING
     }
 
     private cleave (event: PlayerCleaveEvent, cleavage: Cleavage) {
-        if (event.playerCleave === PlayerCleave.LEFT) cleavage.leftChoice.players.push(event.player)
-        if (event.playerCleave === PlayerCleave.RIGHT) cleavage.rightChoice.players.push(event.player)
+        if (event.playerCleave === PlayerCleave.LEFT) cleavage.leftChoice.players.push(event.username)
+        if (event.playerCleave === PlayerCleave.RIGHT) cleavage.rightChoice.players.push(event.username)
         return this.saveCleavage(cleavage)
     }
 
     private onPlayerAlreadyCleave (event: PlayerCleaveEvent, previousPlayerCleave: PlayerCleave, cleavage:Cleavage): Promise<void> {
         return event.playerCleave === previousPlayerCleave
-            ? this.chatGateway.sendMessageToPlayer(new MessageForPlayer(event.player, `You have still cleave ${previousPlayerCleave}`))
+            ? this.chatGateway.sendMessageToPlayer(new MessageForPlayer(event.username, `You have still cleave ${previousPlayerCleave}`))
             : this.uncleave(event, previousPlayerCleave, cleavage)
                 .then(cleavage => this.cleave(event, cleavage))
                 .catch(error => Promise.reject(error))
     }
 
     private uncleave (event: PlayerCleaveEvent, previousPlayerCleave: PlayerCleave, cleavage: Cleavage): Promise<Cleavage> {
-        if (previousPlayerCleave === PlayerCleave.LEFT) cleavage.leftChoice.players = cleavage.leftChoice.players.filter(player => player.username !== event.player.username)
-        if (previousPlayerCleave === PlayerCleave.RIGHT) cleavage.rightChoice.players = cleavage.rightChoice.players.filter(player => player.username !== event.player.username)
+        if (previousPlayerCleave === PlayerCleave.LEFT) cleavage.leftChoice.players = cleavage.leftChoice.players.filter(player => player !== event.username)
+        if (previousPlayerCleave === PlayerCleave.RIGHT) cleavage.rightChoice.players = cleavage.rightChoice.players.filter(player => player !== event.username)
         return Promise.resolve(cleavage)
     }
 

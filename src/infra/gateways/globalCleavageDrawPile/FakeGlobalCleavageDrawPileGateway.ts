@@ -2,6 +2,10 @@ import type { Cleavage } from '../../../domain/entities/Cleavage'
 import type { GlobalCleavageDrawPileGateway } from '../../../domain/ports/secondary/gateways/GlobalCleavageDrawPileGateway'
 
 export class FakeGlobalCleavageDrawPileGateway implements GlobalCleavageDrawPileGateway {
+    retrieveCleavageDrawpileQuantity (): Promise<number> {
+        return Promise.resolve(this.globalCleavageDrawPile.length)
+    }
+
     drawGlobalCleavage (): Promise<Cleavage | undefined> {
         return Promise.resolve(this.globalCleavageDrawPile[0])
     }

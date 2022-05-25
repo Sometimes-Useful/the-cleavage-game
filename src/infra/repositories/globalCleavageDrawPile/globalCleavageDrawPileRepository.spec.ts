@@ -4,8 +4,7 @@ import { commonCleavage1 } from '../../../domain/tests/testContexts'
 import type { GlobalCleavageDrawPileRepository } from '../../../domain/ports/secondary/repositories/GlobalCleavageDrawPileRepository'
 import { InMemoryGlobalCleavageDrawPileRepository } from './InMemoryGlobalCleavageRepository'
 import { GcpGlobalCleavageDrawPileRepository } from './GcpGlobalCleavageDrawPileRepository'
-import { GcpDatastore } from './GcpDatastore'
-import { config } from 'dotenv'
+import { GcpDatastore } from '../../tech/GcpDatastore'
 import { gcpClientEmail, gcpPrivateKey, gcpProjectId } from '../../../env/serverEnvironnementVariables'
 
 interface IntegrationEnvironnement {
@@ -14,21 +13,15 @@ interface IntegrationEnvironnement {
 const fake:IntegrationEnvironnement = {
     adapter: new InMemoryGlobalCleavageDrawPileRepository()
 }
-config()
 const gcp:IntegrationEnvironnement = {
-    adapter: new GcpGlobalCleavageDrawPileRepository(new GcpDatastore({
-        gcpProjectId: gcpProjectId,
-        gcpClientEmail: gcpClientEmail,
-        gcpPrivateKey: gcpPrivateKey,
-        gcpKindPrefix: 'INT'
-    }))
+    adapter: new GcpGlobalCleavageDrawPileRepository(new GcpDatastore({ gcpProjectId, gcpClientEmail, gcpPrivateKey, gcpKindPrefix: 'INT' }))
 }
 
 const envs = [
     fake,
     gcp
 ]
-describe('Integration Test: Global Cleavage Draw Pile Repository', () => {
+describe('Integration Test - Global Cleavage Draw Pile Repository', () => {
     envs.forEach(environnement => {
         describe(`${environnement.adapter.constructor.name}`, () => {
             describe('Nothing > save > one cleavage', () => {

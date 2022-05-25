@@ -1,12 +1,50 @@
 import type { Cleavage } from '../entities/Cleavage'
+import type { GamePhase } from '../entities/GamePhase'
+import type { InterfaceEntityState } from '../entities/InterfaceEntityState'
 import type { InterfaceView } from '../entities/InterfaceView'
 import type { Music } from '../entities/music/Music'
 import type { ApplicationNotification } from '../entities/notification/Notification'
 import { noCleavageAvailableNotification } from '../entities/notification/notifications'
-import type { Sound } from '../entities/sound'
+import { Sound } from '../entities/sound'
+import { SupportedSound } from '../entities/SoundType'
+import type { StreamerDto } from '../entities/StreamerDto'
 import type { InterfaceGateway } from '../ports/secondary/gateways/InterfaceGateway'
 
 export class InterfaceApplicationService {
+    constructor (private interfaceGateway:InterfaceGateway) {}
+    updateStreamerRegistered (isStreamerRegistered: boolean): any {
+        return this.interfaceGateway.updateStreamerRegistered(isStreamerRegistered)
+    }
+
+    updateRegisteredStreamers (streamers: StreamerDto[]): Promise<void> {
+        return this.interfaceGateway.updateListOfRegisteredStreamers(streamers)
+    }
+
+    updateCleavageDrawpileQuantity (cleavageDrawpileQuantity: number): Promise<void> {
+        return this.interfaceGateway.updateCleavageDrawpileQuantity(cleavageDrawpileQuantity)
+    }
+
+    changeVideoExtractVolumeLevel (volume: number): Promise<void> {
+        return Promise.all([
+            this.playSound(new Sound(SupportedSound.TICK)),
+            this.interfaceGateway.changeVideoExtractVolumeLevel(volume)
+        ])
+            .then(() => Promise.resolve())
+            .catch(error => Promise.reject(error))
+    }
+
+    changeGamePhase (gamePhase: GamePhase):Promise<void> {
+        return this.interfaceGateway.changeGamePhase(gamePhase)
+    }
+
+    removeEntityInterfaceState (id: string): Promise<void> {
+        return this.interfaceGateway.removeEntityInterfaceState(id)
+    }
+
+    updateEntityInterfaceState (id:string, interfaceEntityState:InterfaceEntityState): Promise<void> {
+        return this.interfaceGateway.updateEntityInterfaceState(id, interfaceEntityState)
+    }
+
     disableAutoplay (): Promise<void> {
         return this.interfaceGateway.disableAutoplay()
     }
@@ -15,7 +53,6 @@ export class InterfaceApplicationService {
         return this.interfaceGateway.enableAutoplay()
     }
 
-    constructor (private interfaceGateway:InterfaceGateway) {}
     changeMusicVolumeLevel (volume: number) {
         return this.interfaceGateway.changeMusicVolumeLevel(volume)
     }

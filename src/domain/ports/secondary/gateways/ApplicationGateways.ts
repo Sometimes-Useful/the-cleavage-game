@@ -8,18 +8,23 @@ import type { InMemoryProductionClientEventGateway } from '../../../../infra/gat
 import type { InMemoryProductionServerEventGateway } from '../../../../infra/gateways/event/InMemoryProductionServerEventGateway'
 import type { FakeGlobalCleavageDrawPileGateway } from '../../../../infra/gateways/globalCleavageDrawPile/FakeGlobalCleavageDrawPileGateway'
 import type { FakeInterfaceGateway } from '../../../../infra/gateways/interface/FakeInterfaceGateway'
-import type { SvelteAndToneInterfaceGateway } from '../../../../infra/gateways/interface/SvelteAndToneInterfaceGateway'
+import type { SvelteTonePixiInterfaceGateway } from '../../../../infra/gateways/interface/SvelteTonePixiInterfaceGateway'
 import type { FakeRandomGateway } from '../../../../infra/gateways/random/FakeRandomGateway'
 import type { ProductionRandomGateway } from '../../../../infra/gateways/random/ProductionRandomGateway'
+import type { FakeStreamersGateway } from '../../../../infra/gateways/streamers/FakeStreamersGateway'
+import type { FakeUuidGateway } from '../../../../infra/gateways/uuid/FakeUuidGateway'
 import type { ChatGateway } from './ChatGateway'
 import type { DateGateway } from './DateGateway'
 import type { EventGatewaySecondary } from './EventGatewaySecondary'
 import type { GlobalCleavageDrawPileGateway } from './GlobalCleavageDrawPileGateway'
 import type { InterfaceGateway } from './InterfaceGateway'
-
 import type { RandomGateway } from './RandomGateway'
+import type { StreamersGateway } from './StreamersGateway'
+import type { UuidGateway } from './UuidGateway'
 
 export interface ClientApplicationGateways {
+    streamers: StreamersGateway
+    uuid:UuidGateway
     globalCleavageDrawPile:GlobalCleavageDrawPileGateway;
     date: DateGateway;
     chat: ChatGateway;
@@ -29,6 +34,8 @@ export interface ClientApplicationGateways {
 }
 
 export interface FakeClientApplicationGateways extends ClientApplicationGateways {
+    streamers: FakeStreamersGateway
+    uuid: FakeUuidGateway
     globalCleavageDrawPile: FakeGlobalCleavageDrawPileGateway
     date: FakeDateGateway;
     random: FakeRandomGateway;
@@ -38,12 +45,13 @@ export interface FakeClientApplicationGateways extends ClientApplicationGateways
 }
 
 export interface ProductionClientApplicationGateways extends ClientApplicationGateways {
+    streamers: StreamersGateway
     globalCleavageDrawPile:GlobalCleavageDrawPileGateway;
     date: ProductionDateGateway
     random: ProductionRandomGateway
     chat: TwitchChatGateway;
     event: InMemoryProductionClientEventGateway;
-    interface: SvelteAndToneInterfaceGateway;
+    interface: SvelteTonePixiInterfaceGateway;
 }
 
 export interface ServerApplicationGateways {

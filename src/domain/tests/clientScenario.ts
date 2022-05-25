@@ -21,30 +21,46 @@ import { InMemoryAutoplayRepository } from '../../infra/repositories/autoplay/In
 import { FakeGlobalCleavageDrawPileGateway } from '../../infra/gateways/globalCleavageDrawPile/FakeGlobalCleavageDrawPileGateway'
 import { clientTestSuite } from './testSuite'
 import { PrimaryClientController } from '../ports/primary/PrimaryClientController'
+import { InMemoryBarRepository } from '../../infra/repositories/bar/InMemoryBarRepository'
+import { BarApplicationService } from '../applicationServices/BarApplicationService'
+import { FakeUuidGateway } from '../../infra/gateways/uuid/FakeUuidGateway'
+import { InMemoryGamePhaseRepository } from '../../infra/repositories/gamePhase/InMemoryGamePhaseRepository'
+import { InMemoryVideoExtractRepository } from '../../infra/repositories/videoExtract/InMemoryVideoExtractRepository'
+import { VideoExtractApplicationService } from '../applicationServices/VideoExtractApplicationService'
+import { FakeStreamersGateway } from '../../infra/gateways/streamers/FakeStreamersGateway'
+import { StreamersApplicationService } from '../applicationServices/StreamerApplicationService'
 
 export function clientScenario (scenarioTitle: string, unitTests: ((application: FakeClientApplication) => Test)[], skip?: boolean) {
     const eventGateway = new FakeClientEventGateway()
     const applicationGateways: FakeClientApplicationGateways = {
+        streamers: new FakeStreamersGateway(),
         chat: new FakeChatGateway(),
         event: eventGateway,
         interface: new FakeInterfaceGateway(),
         random: new FakeRandomGateway(),
         date: new FakeDateGateway(),
-        globalCleavageDrawPile: new FakeGlobalCleavageDrawPileGateway()
+        globalCleavageDrawPile: new FakeGlobalCleavageDrawPileGateway(),
+        uuid: new FakeUuidGateway()
     }
     const applicationRepositories: FakeClientApplicationRepositories = {
+        videoExtracts: new InMemoryVideoExtractRepository(),
         publicCleavageDrawPile: new InMemoryPublicCleavageDrawPileRepository(),
         player: new InMemoryPlayerRepository(),
         currentCleavage: new InMemoryCurrentCleavageRepository(),
-        autoplay: new InMemoryAutoplayRepository()
+        autoplay: new InMemoryAutoplayRepository(),
+        bar: new InMemoryBarRepository(),
+        gamePhase: new InMemoryGamePhaseRepository()
     }
     const applicationServices: ClientApplicationServices = {
+        streamers: new StreamersApplicationService(applicationGateways.streamers),
+        videoExtract: new VideoExtractApplicationService(applicationRepositories.videoExtracts, applicationGateways.interface, applicationGateways.random),
         chat: new ChatApplicationService(applicationGateways.chat, applicationGateways.interface),
         event: new EventApplicationService(applicationGateways.event),
-        cleavage: new CleavageApplicationService(applicationRepositories.publicCleavageDrawPile, applicationGateways.globalCleavageDrawPile, applicationRepositories.currentCleavage, applicationGateways.chat),
+        cleavage: new CleavageApplicationService(applicationRepositories.publicCleavageDrawPile, applicationGateways.globalCleavageDrawPile, applicationRepositories.currentCleavage, applicationGateways.chat, applicationRepositories.gamePhase),
         interface: new InterfaceApplicationService(applicationGateways.interface),
-        player: new PlayerApplicationService(applicationRepositories.player),
-        autoplay: new AutoplayApplicationService(applicationRepositories.autoplay, applicationGateways.date)
+        player: new PlayerApplicationService(applicationRepositories.player, applicationGateways.event),
+        autoplay: new AutoplayApplicationService(applicationRepositories.autoplay, applicationGateways.date),
+        bar: new BarApplicationService(applicationRepositories.bar, applicationGateways.event, applicationGateways.uuid)
     }
     eventGateway.configureController(new PrimaryClientController(applicationServices))
     const application = new FakeClientApplication(

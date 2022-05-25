@@ -12,7 +12,7 @@ import { PlayerHyperLikeEvent } from './PlayerHyperLikeEvent'
 
 feature(EventType.PLAYER_HYPERLIKE, [
     clientScenario('Scenario 1 : Player hyper like', [
-        application => whenEventOccurs(application, new PlayerHyperLikeEvent()),
-        application => theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, application, new Sound(SupportedSound.HYPERLIKE))
+        whenEventOccurs(new PlayerHyperLikeEvent()),
+        theInterfaceGatewayHasPlayingSounds(Gherkin.THEN, new Sound(SupportedSound.HYPERLIKE))
     ])
 ])

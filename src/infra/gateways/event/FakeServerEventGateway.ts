@@ -3,6 +3,12 @@ import type { EventGatewaySecondary } from '../../../domain/ports/secondary/gate
 import { ServerEventBus } from './ServerEventBus'
 
 export class FakeServerEventGateway extends ServerEventBus implements EventGatewaySecondary {
+    sendEvents (events: ApplicationEvent[]): Promise<void> {
+        return Promise.all(events.map(event => this.sendEvent(event)))
+            .then(results => Promise.resolve())
+            .catch(error => Promise.reject(error))
+    }
+
     sendEvent (event: ApplicationEvent): Promise<void> {
         this.events.push(event)
         return Promise.resolve()

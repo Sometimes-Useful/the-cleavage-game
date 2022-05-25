@@ -22,8 +22,7 @@ export class InMemoryGlobalCleavageDrawPileRepository implements GlobalCleavageD
     }
 
     hasCleavage (cleavage: Cleavage): Promise<boolean> {
-        const hasCleavage = this.cleavagesDrawPile.some(globalCleavage => globalCleavage.title === cleavage.title)
-        return Promise.resolve(hasCleavage)
+        return Promise.resolve(this.cleavagesDrawPile.some(globalCleavage => globalCleavage.title === cleavage.title))
     }
 }
 const defaultLeftChoice:Choice = new Choice({ name: 'Gôche', players: [] })

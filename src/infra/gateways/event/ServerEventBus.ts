@@ -3,6 +3,12 @@ import type { EventGatewayPrimary } from '../../../domain/ports/primary/EventGat
 import type { PrimaryServerCommandController } from '../../../domain/ports/primary/PrimaryServerController'
 
 export abstract class ServerEventBus implements EventGatewayPrimary {
+    onEvents (events:ApplicationEvent[]):Promise<void> {
+        return Promise.all(events.map(event => this.onEvent(event)))
+            .then(results => Promise.resolve())
+            .catch(error => Promise.reject(error))
+    }
+
     onEvent (event: ApplicationEvent): Promise<void> {
         return this.controller
             ? this.controller.executeEvent(event)

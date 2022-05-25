@@ -3,24 +3,30 @@ import type { Player } from '../../../domain/entities/Player'
 import type { PlayerRepository } from '../../../domain/ports/secondary/repositories/PlayerRepository'
 
 export class InMemoryPlayerRepository implements PlayerRepository {
-    hasPlayer (player:Player): Promise<boolean> {
-        const includePlayer = this.currentPlayers.some(includedplayer => includedplayer.username === player.username)
-        return Promise.resolve(includePlayer)
+    playerByUsername (username: string): Promise<Player> {
+        const player = this.currentPlayers.get(username)
+        return player
+            ? Promise.resolve(player)
+            : Promise.reject(new Error(`Player with username '${username}' not found.`))
+    }
+
+    hasPlayer (username:string): Promise<boolean> {
+        return Promise.resolve(this.currentPlayers.has(username))
     }
 
     loadAllPlayers (): Promise<Player[]> {
-        return Promise.resolve(this.currentPlayers)
+        return Promise.resolve([...this.currentPlayers.values()])
     }
 
     remove (player: Player): Promise<void> {
-        this.currentPlayers = this.currentPlayers.filter(currentPlayer => currentPlayer.username !== player.username)
+        this.currentPlayers.delete(player.username)
         return Promise.resolve()
     }
 
-    add (player: Player): Promise<void> {
-        this.currentPlayers.push(player)
+    save (player: Player): Promise<void> {
+        this.currentPlayers.set(player.username, player)
         return Promise.resolve()
     }
 
-    currentPlayers: Player[] = []
+    currentPlayers: Map<string, Player> =new Map()
 }

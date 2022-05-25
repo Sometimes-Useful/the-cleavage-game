@@ -20,7 +20,7 @@ export class CheckAutoplayUseCase extends UseCase {
             .catch(error => Promise.reject(error))
     }
 
-    onAutoPlay (): Promise<void> {
+    private onAutoPlay (): Promise<void> {
         return this.applicationServices.autoplay.isTimeForNextCleavage()
             .then(isTimeForNextCleavage => isTimeForNextCleavage
                 ? this.onTimeForNextCleavage()

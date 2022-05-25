@@ -17,7 +17,8 @@ module.exports = {
     rules: {
         'no-useless-constructor': 'off',
         curly: ['error', 'multi', 'consistent'],
-        indent: ['error', 4]
+        indent: ['error', 4],
+        '@typescript-eslint/member-ordering': ['error', { default: ['signature', 'constructor', 'method', 'field'] }]
     },
     overrides: [
         {

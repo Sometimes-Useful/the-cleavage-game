@@ -1,5 +1,10 @@
 node_modules
 .DS_Store
 .env
+prod.env
+dev.env
 the-cleavage-game_GCP.json
 cloudbuild.yaml
+privatekey.pem
+build
+public/build

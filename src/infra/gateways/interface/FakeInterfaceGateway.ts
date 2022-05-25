@@ -4,8 +4,62 @@ import type { ApplicationNotification } from '../../../domain/entities/notificat
 import type { Sound } from '../../../domain/entities/sound'
 import type { Music } from '../../../domain/entities/music/Music'
 import type { InterfaceGateway } from '../../../domain/ports/secondary/gateways/InterfaceGateway'
+import { GamePhase } from '../../../domain/entities/GamePhase'
+import type { InterfaceEntityState } from '../../../domain/entities/InterfaceEntityState'
+import type { VideoExtract } from '../../../domain/entities/VideoExtract'
+import type { StreamerDto } from '../../../domain/entities/StreamerDto'
 
 export class FakeInterfaceGateway implements InterfaceGateway {
+    updateStreamerRegistered (isRegistered: boolean): Promise<void> {
+        this.isStreamerRegistered = isRegistered
+        return Promise.resolve()
+    }
+
+    updateListOfRegisteredStreamers (streamers: StreamerDto[]): Promise<void> {
+        this.registeredStreamers = streamers
+        return Promise.resolve()
+    }
+
+    updateCleavageDrawpileQuantity (cleavageDrawpileQuantity: number): Promise<void> {
+        this.cleavageDrawpileQuantity = cleavageDrawpileQuantity
+        return Promise.resolve()
+    }
+
+    changeVideoExtractVolumeLevel (volume: number): Promise<void> {
+        this.videoExtractVolume = volume
+        return Promise.resolve()
+    }
+
+    unMuteMusic (): Promise<void> {
+        this.musicMuted = false
+        return Promise.resolve()
+    }
+
+    muteMusic ():Promise<void> {
+        this.musicMuted = true
+        return Promise.resolve()
+    }
+
+    changeVideoExtract (videoExtract: VideoExtract): Promise<void> {
+        this.videoExtract = videoExtract
+        return Promise.resolve()
+    }
+
+    changeGamePhase (gamePhase: GamePhase): Promise<void> {
+        this.gamePhase = gamePhase
+        return Promise.resolve()
+    }
+
+    removeEntityInterfaceState (id: string): Promise<void> {
+        this.interfaceEntitiesState.delete(id)
+        return Promise.resolve()
+    }
+
+    updateEntityInterfaceState (id:string, interfaceEntityState: InterfaceEntityState): Promise<void> {
+        this.interfaceEntitiesState.set(id, interfaceEntityState)
+        return Promise.resolve()
+    }
+
     disableAutoplay (): Promise<void> {
         this.autoplayEnabled = false
         return Promise.resolve()
@@ -55,12 +109,20 @@ export class FakeInterfaceGateway implements InterfaceGateway {
         return Promise.resolve()
     }
 
+    musicMuted: boolean = false
+    gamePhase: GamePhase = GamePhase.NONE
     currentCleavage: Cleavage|undefined
     notifications: ApplicationNotification[] = [];
     playingSounds: Sound[] = []
     musicVolume: number = 0
     soundVolume: number = 0
+    videoExtractVolume: number = 0
     autoplayEnabled: boolean = false
     playingMusic: Music | undefined = undefined
     currentView: InterfaceView = InterfaceView.NONE;
+    interfaceEntitiesState: Map<string, InterfaceEntityState> = new Map()
+    videoExtract: VideoExtract|undefined
+    cleavageDrawpileQuantity: number = 0
+    registeredStreamers: StreamerDto[] = []
+    isStreamerRegistered: boolean = false
 }

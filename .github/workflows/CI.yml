@@ -1,0 +1,128 @@
+name: CI workflow
+on: [push]
+jobs:
+  acceptance_test:
+    name: Acceptance Test Suites
+    runs-on : ubuntu-latest
+    env:
+      TWITCHUSERNAME: benjaminbohec
+      TWITCHTOKEN: ${{ secrets.TWITCHTOKEN }}
+      TWITCHCHANNEL: benjaminbohec
+      BACKEND_SHEME: http
+      BACKEND_FQDN: "localhost"
+      PORT: 8080
+      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      GCP_CLIENT_EMAIL: ${{ secrets.GCP_CLIENT_EMAIL }}
+      GCP_PRIVATE_KEY: ${{ secrets.GCP_PRIVATE_KEY }}
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.14.2
+      - uses: actions/checkout@v3
+      - run: npm install
+      - run: npm run test -- -g "Feature:"
+  integration_test:
+    name: Integration Test Suites
+    runs-on : ubuntu-latest
+    env:
+      TWITCHUSERNAME: benjaminbohec
+      TWITCHTOKEN: ${{ secrets.TWITCHTOKEN }}
+      TWITCHCHANNEL: benjaminbohec
+      BACKEND_SHEME: http
+      BACKEND_FQDN: "localhost"
+      PORT: 8080
+      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      GCP_CLIENT_EMAIL: ${{ secrets.GCP_CLIENT_EMAIL }}
+      GCP_PRIVATE_KEY: ${{ secrets.GCP_PRIVATE_KEY }}
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.14.2
+      - uses: actions/checkout@v3
+      - run: npm install
+      - run: npm run test -- -g "Integration Test - Global Cleavage Draw Pile Repository|Integration Test - Chat Gateway"
+  build_and_deploy_Docker_container_on_GCP_Cloud_Run:
+    name: Build Docker Image
+    runs-on : ubuntu-latest
+    env:
+      TWITCHUSERNAME: benjaminbohec
+      TWITCHTOKEN: ${{ secrets.TWITCHTOKEN }}
+      TWITCHCHANNEL: benjaminbohec
+      BACKEND_SHEME: https
+      BACKEND_FQDN: ${{ github.ref_name }}.lejeuduclivage.com
+      PORT: 8080
+      GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      GCP_CLIENT_EMAIL: ${{ secrets.GCP_CLIENT_EMAIL }}
+      GCP_PRIVATE_KEY: ${{ secrets.GCP_PRIVATE_KEY }}
+      GCP_CLOUDRUN_SERVICE: ${{ secrets.GCP_PROJECT_ID }}-${{ github.ref_name }}
+      GCP_REGION: us-central1
+    permissions:
+      deployments: write
+    steps:
+      - name: Create GitHub deployment
+        uses: chrnorm/deployment-action@v2
+        id: gitHubDeployment
+        with:
+          token: '${{ github.token }}'
+          environment: ${{ github.ref_name }}
+      - name: Install Nodejs
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.14.2
+      - name: Git checkout on branch ${{ github.ref_name }}
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        run: npm install
+      - name: Build server
+        run: npm run build:server
+      - name: Build client
+        run: npm run build:client
+      - name: Build docker container from Dockerfile
+        run: docker build -t gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }} .
+      - name: GitHub deployment - In Progress
+        uses: chrnorm/deployment-status@v2
+        id: deployment_in_progress
+        with:
+          token: '${{ github.token }}'
+          deployment-id: ${{ steps.gitHubDeployment.outputs.deployment_id }}
+          state: 'in_progress'
+      - name: 'Authenticate to Google Cloud'
+        id: 'auth'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_JSON }}'
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0
+      - name: Authorize Docker push on Google Cloud container registry
+        run: gcloud auth configure-docker
+      - name: Push Container to Google Cloud Storage
+        run: docker push gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
+      - name: Deploy to Google Cloud Platform - Cloud Run
+        id: gcpCloudRunDeploy
+        uses: google-github-actions/deploy-cloudrun@v0
+        with:
+          service: ${{ env.GCP_CLOUDRUN_SERVICE }}
+          image: gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
+          region: ${{ env.GCP_REGION }}
+          secrets: |
+            GCP_PRIVATE_KEY=GCP_PRIVATE_KEY:latest
+          env_vars: GCP_PROJECT_ID=${{ env.GCP_PROJECT_ID }},GCP_CLIENT_EMAIL=${{ secrets.GCP_CLIENT_EMAIL }},BACKEND_SHEME=${{ env.BACKEND_SHEME }},BACKEND_FQDN=${{ env.BACKEND_FQDN }}
+      - name: List GCP Cloud Run domain mappings
+        run: gcloud beta run domain-mappings list --region ${{ env.GCP_REGION }}
+      - name: GitHub deployment - Success
+        if: success()
+        uses: chrnorm/deployment-status@v2
+        id: deployment_success
+        with:
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.gcpCloudRunDeploy.outputs.url }}
+          deployment-id: ${{ steps.gitHubDeployment.outputs.deployment_id }}
+          state: 'success'
+      - name: GitHub deployment - Failed
+        if: failure()
+        uses: chrnorm/deployment-status@v2
+        id: deployment_failed
+        with:
+          token: '${{ github.token }}'
+          deployment-id: ${{ steps.gitHubDeployment.outputs.deployment_id }}
+          state: 'failure'

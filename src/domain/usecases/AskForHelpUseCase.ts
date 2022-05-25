@@ -14,6 +14,6 @@ export class AskForHelpUseCase extends UseCase {
     ) { super() }
 
     execute (event: PlayerAskForHelpEvent): Promise<void> {
-        return this.applicationServices.chat.sendMessageToPlayer(new MessageForPlayer(event.player, helpMessage))
+        return this.applicationServices.chat.sendMessageToPlayer(new MessageForPlayer(event.username, helpMessage))
     }
 }

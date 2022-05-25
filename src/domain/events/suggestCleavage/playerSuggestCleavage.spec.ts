@@ -13,15 +13,15 @@ import { newCleavage } from '../startAutoPlay/StartAutoPlay.spec'
 
 feature(EventType.PLAYER_SUGGEST_CLEAVAGE, [
     clientScenario('Scenario 1 : With no public cleavage', [
-        application => theCleavageRepositoryHasPublicCleavages(Gherkin.GIVEN, application, []),
-        application => whenEventOccurs(application, new PlayerSuggestCleavageEvent(player1, newCleavage(cleavageTitle1))),
-        application => theCleavageRepositoryHasPublicCleavages(Gherkin.THEN, application, [newCleavage(cleavageTitle1)]),
-        application => theChatGatewaySendMessageToPlayer(Gherkin.AND_THEN, application, new MessageForPlayer(player1, cleavageSuggested(player1, cleavageTitle1)))
+        theCleavageRepositoryHasPublicCleavages(Gherkin.GIVEN, []),
+        whenEventOccurs(new PlayerSuggestCleavageEvent(player1().username, newCleavage(cleavageTitle1))),
+        theCleavageRepositoryHasPublicCleavages(Gherkin.THEN, [newCleavage(cleavageTitle1)]),
+        theChatGatewaySendMessageToPlayer(Gherkin.AND_THEN, new MessageForPlayer(player1().username, cleavageSuggested(player1().username, cleavageTitle1)))
     ]),
     clientScenario('Scenario 2 : With still existing public cleavage', [
-        application => theCleavageRepositoryHasPublicCleavages(Gherkin.GIVEN, application, newCleavage(cleavageTitle1)),
-        application => whenEventOccurs(application, new PlayerSuggestCleavageEvent(player1, newCleavage(cleavageTitle1))),
-        application => theCleavageRepositoryHasPublicCleavages(Gherkin.THEN, application, newCleavage(cleavageTitle1)),
-        application => theChatGatewaySendMessageToPlayer(Gherkin.THEN, application, new MessageForPlayer(player1, cleavageAlreadySuggested))
+        theCleavageRepositoryHasPublicCleavages(Gherkin.GIVEN, newCleavage(cleavageTitle1)),
+        whenEventOccurs(new PlayerSuggestCleavageEvent(player1().username, newCleavage(cleavageTitle1))),
+        theCleavageRepositoryHasPublicCleavages(Gherkin.THEN, newCleavage(cleavageTitle1)),
+        theChatGatewaySendMessageToPlayer(Gherkin.THEN, new MessageForPlayer(player1().username, cleavageAlreadySuggested))
     ])
 ])

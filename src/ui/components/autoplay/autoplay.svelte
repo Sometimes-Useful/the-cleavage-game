@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { Cleavage } from "../../../domain/entities/Cleavage";
     import type { ApplicationEvent } from "../../../domain/events/GameEvent";
     import { StartAutoPlayEvent } from "../../../domain/events/startAutoPlay/StartAutoPlayEvent";
     import { StopAutoplayEvent } from "../../../domain/events/stopAutoplay/StopAutoplayEvent";
@@ -7,16 +6,11 @@
     import Button from "../button/button.svelte";
     import InputNumber from "../inputs/inputNumber.svelte";
     let autoplayMinutes:number = 3
-    export let newCleavage:Cleavage | undefined
-    const defaultCleavage = () => new Cleavage({title: "",leftChoice: {name:"Gôche",players:[]},rightChoice: {name:"Drouate",players:[]}, players:[]})
-    const resetCleavageTitleAndSendEvent = (event:ApplicationEvent) =>{
-        newCleavage = defaultCleavage()
-        applicationEventStore.set(event)
-    }
+    const resetCleavageTitleAndSendEvent = (event:ApplicationEvent) =>applicationEventStore.set(event)
     const onClickStartAutoPlay = () => resetCleavageTitleAndSendEvent(new StartAutoPlayEvent(autoplayMinutes))
     const onClickStopAutoPlay = () => resetCleavageTitleAndSendEvent(new StopAutoplayEvent())
 </script>
-<div class="flex flex-col items-end">
+<div class="flex flex-row items-end justify-end">
     {#if $autoplayStore }
         <Button onClick={onClickStopAutoPlay} text="Stop Auto Play!"/>
     {:else}

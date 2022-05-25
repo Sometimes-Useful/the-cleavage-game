@@ -4,6 +4,8 @@ import type { LaunchCleavageEvent } from '../events/launchCleavage/LaunchCleavag
 import { Cleavage } from '../entities/Cleavage'
 import { NavigateEvent } from '../events/navigateEvent/NavigateEvent'
 import type { ClientApplicationServices } from '../ports/ApplicationServices'
+import { ChangeGamePhaseEvent } from '../events/changeGamePhase/ChangeGamePhaseEvent'
+import { GamePhase } from '../entities/GamePhase'
 
 export class LaunchCleavageUseCase extends UseCase {
     constructor (
@@ -25,14 +27,15 @@ export class LaunchCleavageUseCase extends UseCase {
                 title: event.cleavageTitle,
                 leftChoice: { name: event.leftChoiceName, players: [] },
                 rightChoice: { name: event.rightChoiceName, players: [] },
-                players
+                players: players.map(player => player.username)
             })))
-            .then(() => this.applicationServices.cleavage.loadCleavage())
+            .then(() => this.applicationServices.cleavage.loadCurrentCleavage())
             .then(cleavage => Promise.all([
                 this.applicationServices.interface.updateCleavage(cleavage),
                 this.applicationServices.cleavage.saveGlobalCleavage(cleavage)
             ]))
-            .then(results => this.applicationServices.event.sentEvent(new NavigateEvent(InterfaceView.CURRENT_CLEAVAGE)))
+            .then(results => this.applicationServices.event.sentEvent(new ChangeGamePhaseEvent(GamePhase.CLEAVING))
+            )
             .catch(error => Promise.reject(error))
     }
 }

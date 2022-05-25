@@ -1,8 +1,9 @@
 import type { Player } from '../../../entities/Player'
 
 export interface PlayerRepository {
-    hasPlayer(player:Player): Promise<boolean>;
+    playerByUsername(username: string):Promise<Player>;
+    hasPlayer(username:string): Promise<boolean>;
     loadAllPlayers():Promise<Player[]>;
     remove(player: Player): Promise<void>;
-    add(player: Player): Promise<void>;
+    save(player: Player): Promise<void>;
 }

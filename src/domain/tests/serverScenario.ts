@@ -10,6 +10,8 @@ import { GlobalCleavageDrawPileApplicationService } from '../applicationServices
 import { FakeRandomGateway } from '../../infra/gateways/random/FakeRandomGateway'
 import { PrimaryServerCommandController } from '../ports/primary/PrimaryServerController'
 import { PrimaryServerQueryController } from '../ports/primary/PrimaryServerQueryController'
+import { InMemoryGlobalRegisteredStreamersRepository } from '../../infra/repositories/registeredStreamers/InMemoryRegisteredStreamersRepository'
+import { GlobalStreamersApplicationService } from '../applicationServices/GlobalStreamersApplicationService'
 
 export function serverScenario (scenarioTitle: string, unitTests: ((application: FakeServerApplication) => Test)[], skip?: boolean) {
     const eventGateway = new FakeServerEventGateway()
@@ -18,9 +20,11 @@ export function serverScenario (scenarioTitle: string, unitTests: ((application:
         random: new FakeRandomGateway()
     }
     const applicationRepositories: FakeServerApplicationRepositories = {
+        globalRegisteredStreamers: new InMemoryGlobalRegisteredStreamersRepository(),
         globalCleavageDrawPileRepository: new InMemoryGlobalCleavageDrawPileRepository()
     }
     const applicationServices: ServerApplicationServices = {
+        globalStreamers: new GlobalStreamersApplicationService(applicationRepositories.globalRegisteredStreamers),
         globalCleavageDrawPile: new GlobalCleavageDrawPileApplicationService(applicationRepositories.globalCleavageDrawPileRepository, applicationGateways.random)
     }
     eventGateway.configureController(new PrimaryServerCommandController(applicationServices))

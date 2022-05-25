@@ -1,34 +1,26 @@
 
-import axios, { AxiosInstance } from 'axios'
 import { Cleavage, CleavageDTO } from '../../../domain/entities/Cleavage'
 import type { GlobalCleavageDrawPileGateway } from '../../../domain/ports/secondary/gateways/GlobalCleavageDrawPileGateway'
 import { BACKEND_API_URL } from '../../../api/Backend_API_URL'
+import type { AxiosBackendInstance } from '../../tech/AxiosBackendInstance'
 
 export class AxiosGlobalCleavageDrawPileGateway implements GlobalCleavageDrawPileGateway {
-    constructor (
-        sheme:string,
-        endpoint:string,
-        port?:string
-    ) {
-        const baseURL = `${sheme}://${endpoint}${port ? `:${parseInt(port).toString()}` : ''}`
-        this.backendApiInstance = axios.create({ baseURL })
-        console.log(`${this.constructor.name} with backend base url: ${baseURL}`)
+    constructor (private axiosBackendInstance:AxiosBackendInstance) {}
+    retrieveCleavageDrawpileQuantity (): Promise<number> {
+        return this.axiosBackendInstance.axiosInstance.get<string>(BACKEND_API_URL.GLOBAL_CLEAVAGE_DRAWPILE_QUANTITY)
+            .then(response => Promise.resolve(parseInt(response.data)))
+            .catch(error => Promise.reject(error))
     }
 
     drawGlobalCleavage (): Promise<Cleavage | undefined> {
-        return this.backendApiInstance.get<CleavageDTO | ''>(BACKEND_API_URL.GLOBAL_CLEAVAGE_DRAWPILE_DRAW)
-            .then(response => {
-                console.log(response.data)
-                return Promise.resolve(response.data ? new Cleavage(response.data) : undefined)
-            })
+        return this.axiosBackendInstance.axiosInstance.get<CleavageDTO | ''>(BACKEND_API_URL.GLOBAL_CLEAVAGE_DRAWPILE_DRAW)
+            .then(response => Promise.resolve(response.data ? new Cleavage(response.data) : undefined))
             .catch(error => Promise.reject(error))
     }
 
     save (cleavage: Cleavage): Promise<void> {
-        return this.backendApiInstance.post<void>(BACKEND_API_URL.GLOBAL_CLEAVAGE_DRAWPILE_SAVE, cleavage)
+        return this.axiosBackendInstance.axiosInstance.post<void>(BACKEND_API_URL.GLOBAL_CLEAVAGE_DRAWPILE_SAVE, cleavage)
             .then(response => Promise.resolve(response.data))
             .catch(error => Promise.reject(error))
     }
-
-    private backendApiInstance:AxiosInstance
 }

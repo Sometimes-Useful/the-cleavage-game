@@ -4,7 +4,8 @@ import type { GlobalCleavageDrawPileGateway } from '../../../domain/ports/second
 import { AxiosGlobalCleavageDrawPileGateway } from './AxiosGlobalCleavageDrawPileGateway'
 import { FakeGlobalCleavageDrawPileGateway } from './FakeGlobalCleavageDrawPileGateway'
 import { commonCleavage1 } from '../../../domain/tests/testContexts'
-import { clientBackendFqdn, clientBackendPort, clientBackendSheme } from '../../../env/clientEnvironnementVariables'
+// import { clientBackendFqdn, clientBackendPort, clientBackendSheme } from '../../../env/clientEnvironnementVariables'
+import { AxiosBackendInstance } from '../../tech/AxiosBackendInstance'
 
 interface IntegrationEnvironnement {
     adapter: GlobalCleavageDrawPileGateway
@@ -12,15 +13,19 @@ interface IntegrationEnvironnement {
 const fake:IntegrationEnvironnement = {
     adapter: new FakeGlobalCleavageDrawPileGateway()
 }
+const axiosBackendInstance = new AxiosBackendInstance(undefined
+    // { sheme: clientBackendSheme, endpoint: clientBackendFqdn, port: clientBackendPort }
+)
+
 const axios:IntegrationEnvironnement = {
-    adapter: new AxiosGlobalCleavageDrawPileGateway(clientBackendSheme, clientBackendFqdn, clientBackendPort)
+    adapter: new AxiosGlobalCleavageDrawPileGateway(axiosBackendInstance)
 }
 
 const envs = [
     fake,
     axios
 ]
-describe('Integration Test: Global Cleavage Draw Pile Gateway', () => {
+describe('Integration Test - Global Cleavage Draw Pile Gateway', () => {
     envs.forEach(environnement => {
         describe(`${environnement.adapter.constructor.name}`, () => {
             describe('Nothing > save > one cleavage', () => {

@@ -1,6 +1,6 @@
 import { Cleavage, CleavageDTO } from '../../../domain/entities/Cleavage'
 import type { GlobalCleavageDrawPileRepository } from '../../../domain/ports/secondary/repositories/GlobalCleavageDrawPileRepository'
-import type { GcpDatastore } from './GcpDatastore'
+import type { GcpDatastore, GcpQueryFilter } from '../../tech/GcpDatastore'
 
 export class GcpGlobalCleavageDrawPileRepository implements GlobalCleavageDrawPileRepository {
     constructor (private gcpDatastore:GcpDatastore) {}
@@ -21,7 +21,8 @@ export class GcpGlobalCleavageDrawPileRepository implements GlobalCleavageDrawPi
     }
 
     hasCleavage (cleavage: Cleavage): Promise<boolean> {
-        return this.gcpDatastore.queryRecordsOnGoogleDatastore<CleavageDTO>(this.globalCleavageKind, [{ property: 'title', operator: '=', value: cleavage.title }])
+        const cleavageWithTitleFilter:GcpQueryFilter = { property: this.cleavageTitleProperty, operator: '=', value: cleavage[this.cleavageTitleProperty] }
+        return this.gcpDatastore.queryRecordsOnGoogleDatastore<CleavageDTO>(this.globalCleavageKind, [cleavageWithTitleFilter])
             .then(result => result instanceof Error ? Promise.resolve(false) : result.length === 1)
             .catch(error => Promise.reject(error))
     }
@@ -36,5 +37,6 @@ export class GcpGlobalCleavageDrawPileRepository implements GlobalCleavageDrawPi
         return [this.globalCleavageKind, cleavage.title]
     }
 
-    private globalCleavageKind = 'globalCleavage'
+    private readonly globalCleavageKind = 'globalCleavage'
+    private readonly cleavageTitleProperty = 'title'
 }
