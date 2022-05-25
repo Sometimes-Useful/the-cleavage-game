@@ -130,7 +130,7 @@ jobs:
         run: gcloud beta run domain-mappings list --region ${{ env.GCP_REGION }}
       - name: Cloud Run Deploy - Outputs
         run: |
-          echo OUTPUTS: ${{ steps.gcpCloudRunDeploy.outputs }}
+          echo OUTPUTS: ${{join(steps.gcpCloudRunDeploy.outputs.*, '\n')}}
           echo URL: ${{ steps.gcpCloudRunDeploy.outputs.url }}
       - name: GitHub deployment - Success
         if: success()
