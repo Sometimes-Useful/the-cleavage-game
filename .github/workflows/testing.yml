@@ -71,8 +71,6 @@ jobs:
         run: npm run build:client
       - name: Build docker container from Dockerfile
         run: docker build -t gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }} .
-      - name: Push Container to Google Cloud Storage
-        run: docker push gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
       - name: 'Authenticate to Google Cloud'
         id: 'auth'
         uses: 'google-github-actions/auth@v0'
@@ -82,6 +80,8 @@ jobs:
         uses: google-github-actions/setup-gcloud@v0
       - name: Authorize Docker push on Google Cloud container registry
         run: gcloud auth configure-docker
+      - name: Push Container to Google Cloud Storage
+        run: docker push gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
       - name: Deploy to Google Cloud Platform - Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0
