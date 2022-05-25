@@ -90,8 +90,8 @@ jobs:
           image: gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
           region: ${{ env.GCP_REGION }}
           secrets: |
-            GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}:latest
-            GCP_CLIENT_EMAIL=${{ secrets.GCP_CLIENT_EMAIL }}:latest
+            GCP_PROJECT_ID=blah:latest
+            GCP_CLIENT_EMAIL=blah:latest
             GCP_PRIVATE_KEY=blah:latest
             BACKEND_SHEME=https:latest
             BACKEND_FQDN=dev.lejeuduclivage.com:latest
