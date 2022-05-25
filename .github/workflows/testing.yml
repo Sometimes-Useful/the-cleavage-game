@@ -1,4 +1,4 @@
-name: Testing workflow
+name: CI workflow
 on: [push]
 jobs:
   acceptance_test:
@@ -41,7 +41,7 @@ jobs:
       - uses: actions/checkout@v3
       - run: npm install
       - run: npm run test -- -g "Integration Test - Global Cleavage Draw Pile Repository|Integration Test - Chat Gateway"
-  build_docker_image:
+  build_and_deploy_Docker_container_on_GCP_Cloud_Run:
     name: Build Docker Image
     runs-on : ubuntu-latest
     env:
@@ -56,6 +56,8 @@ jobs:
       GCP_PRIVATE_KEY: ${{ secrets.GCP_PRIVATE_KEY }}
       GCP_CLOUDRUN_SERVICE: ${{ secrets.GCP_PROJECT_ID }}-${{ github.ref_name }}
       GCP_REGION: us-central1
+    permissions:
+      deployments: write
     steps:
       - name: Install Nodejs
         uses: actions/setup-node@v3
@@ -92,5 +94,12 @@ jobs:
           secrets: |
             GCP_PRIVATE_KEY=GCP_PRIVATE_KEY:latest
           env_vars: GCP_PROJECT_ID=${{ env.GCP_PROJECT_ID }},GCP_CLIENT_EMAIL=${{ secrets.GCP_CLIENT_EMAIL }},BACKEND_SHEME=${{ env.BACKEND_SHEME }},BACKEND_FQDN=${{ env.BACKEND_FQDN }}
-      - name: Show deployment URL
-        run: echo ${{ steps.deploy.outputs.url }}
+      - name: List GCP Cloud Run domain mappings
+        run: gcloud run domain-mappings list
+      - name: Create GitHub deployment
+        uses: chrnorm/deployment-action@v2
+        id: deployment
+        with:
+          # token: '${{ github.token }}'
+          environment-url: ${{ steps.deploy.outputs.url }}
+          environment: ${{ github.ref_name }}
