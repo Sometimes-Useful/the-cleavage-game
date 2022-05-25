@@ -95,7 +95,7 @@ jobs:
             GCP_PRIVATE_KEY=GCP_PRIVATE_KEY:latest
           env_vars: GCP_PROJECT_ID=${{ env.GCP_PROJECT_ID }},GCP_CLIENT_EMAIL=${{ secrets.GCP_CLIENT_EMAIL }},BACKEND_SHEME=${{ env.BACKEND_SHEME }},BACKEND_FQDN=${{ env.BACKEND_FQDN }}
       - name: List GCP Cloud Run domain mappings
-        run: gcloud run domain-mappings list
+        run: gcloud beta run domain-mappings list
       - name: Create GitHub deployment
         uses: chrnorm/deployment-action@v2
         id: deployment
