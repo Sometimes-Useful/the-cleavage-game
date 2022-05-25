@@ -101,7 +101,7 @@ jobs:
       - name: Push Container to Google Cloud Storage
         run: docker push gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
       - name: Update GCP Secrets
-        run: printf ${{ secrets.GCP_PRIVATE_KEY }} | gcloud beta secrets versions add GCP_PRIVATE_KEY --data-file=-
+        run: printf "${{ secrets.GCP_PRIVATE_KEY }}" | gcloud beta secrets versions add GCP_PRIVATE_KEY --data-file=-
       - name: Deploy to Google Cloud Platform - Cloud Run
         id: gcpCloudRunDeploy
         run: >
