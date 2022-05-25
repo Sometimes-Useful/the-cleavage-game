@@ -100,6 +100,8 @@ jobs:
         run: gcloud auth configure-docker
       - name: Push Container to Google Cloud Storage
         run: docker push gcr.io/${{ env.GCP_PROJECT_ID }}/${{ env.GCP_CLOUDRUN_SERVICE }}:${{  github.sha }}
+      - name: Update GCP Secrets
+        run: printf ${{ secrets.GCP_PRIVATE_KEY }} | gcloud beta secrets create GCP_PRIVATE_KEY --data-file=-
       - name: Deploy to Google Cloud Platform - Cloud Run
         id: gcpCloudRunDeploy
         run: >
@@ -122,6 +124,7 @@ jobs:
       - name: Update GCP Cloud Run domain mappings
         if: ${{ github.ref_name }} == 'main'
         run: |
+          gcloud domains verify ${{ env.PRODUCTION_URL }}
           gcloud beta run domain-mappings create --service=${{ env.GCP_CLOUDRUN_SERVICE }} --domain=${{ env.PRODUCTION_URL }} --region ${{ env.GCP_REGION }}
           gcloud beta run domain-mappings create --service=${{ env.GCP_CLOUDRUN_SERVICE }} --domain=www.${{ env.PRODUCTION_URL }} --region ${{ env.GCP_REGION }}
       - name: GitHub deployment - Success
