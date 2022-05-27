@@ -1,7 +1,7 @@
 import type { BarRepository } from '../../../domain/ports/secondary/repositories/BarRepository'
 import type { Bar } from '../../../domain/entities/Bar'
 import type { Table } from '../../../domain/tests/Table'
-import { Direction } from '../../../domain/applicationServices/Direction'
+import { Direction } from '../../../domain/entities/Direction'
 import type { Stool } from '../../../domain/entities/Stool'
 import type { OccupiedStool } from '../../../domain/applicationServices/BarApplicationService'
 

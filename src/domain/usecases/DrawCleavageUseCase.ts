@@ -24,6 +24,7 @@ export class DrawCleavageUseCase extends UseCase {
     execute (event: DrawCleavageEvent): Promise<void> {
         return this.applicationServices.autoplay.hasAutoplay()
             .then(isAutoPlay => isAutoPlay ? this.onAutoPlay(isAutoPlay) : this.onNotAutoPlay(isAutoPlay))
+            .catch(error => Promise.reject(error))
     }
 
     private onAutoPlay (isAutoPlay:boolean): Promise<void> {
@@ -32,10 +33,7 @@ export class DrawCleavageUseCase extends UseCase {
 
     private onNotAutoPlay (isAutoPlay:boolean): Promise<void> {
         return this.applicationServices.cleavage.nextPublicCleavage()
-            .then(cleavage => cleavage
-                ? this.onCleavage(cleavage, isAutoPlay)
-                : this.onNoPublicCleavage(isAutoPlay)
-            )
+            .then(cleavage => cleavage ? this.onCleavage(cleavage, isAutoPlay) : this.onNoPublicCleavage(isAutoPlay))
             .catch(error => Promise.reject(error))
     }
 
@@ -54,10 +52,7 @@ export class DrawCleavageUseCase extends UseCase {
 
     private onNoPublicCleavage (isAutoPlay:boolean): Promise<void> {
         return this.applicationServices.cleavage.randomGlobalCleavage()
-            .then(cleavage => cleavage
-                ? this.onCleavage(cleavage, isAutoPlay)
-                : this.onNoGlobalCleavage()
-            )
+            .then(cleavage => cleavage ? this.onCleavage(cleavage, isAutoPlay) : this.onNoGlobalCleavage())
             .catch(error => Promise.reject(error))
     }
 

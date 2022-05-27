@@ -12,9 +12,10 @@ import type { GamePhase } from '../../entities/GamePhase'
 import type { InterfaceEntityState } from '../../entities/InterfaceEntityState'
 import type { VideoExtract } from '../../entities/VideoExtract'
 import type { StreamerDto } from '../../entities/StreamerDto'
+import { uniqueOrArrayToArray } from '../../../generic/array'
 
 export const theInterfaceGatewayHasNotifications = (gherkinPrefix: Gherkin, expectedNotifications: ApplicationNotification[] | ApplicationNotification) => (application:FakeClientApplication):Test => {
-    const notifications = Array.isArray(expectedNotifications) ? expectedNotifications : [expectedNotifications]
+    const notifications = uniqueOrArrayToArray(expectedNotifications)
     return it(`${gherkinPrefix} the notifications are sents : ${notifications.map(notification => JSON.stringify(notification)).join(',\n')}`, () => {
         expect(application.gateways.interface.notifications).deep.equal(notifications)
     })
@@ -36,7 +37,7 @@ export const theInterfaceGatewayDontHaveCleavage = (gherkinPrefix:Gherkin) => (a
     it(`${gherkinPrefix} the interface gateway don't have cleavage.`, () => expect(application.gateways.interface.currentCleavage).equal(undefined))
 
 export const theInterfaceGatewayHasPlayingSounds = (gherkinPrefix:Gherkin, expectedPlayingSounds: Sound|Sound[]) => (application:FakeClientApplication):Test => {
-    const sounds : Sound[] = Array.isArray(expectedPlayingSounds) ? expectedPlayingSounds : [expectedPlayingSounds]
+    const sounds = uniqueOrArrayToArray(expectedPlayingSounds)
     return it(`${gherkinPrefix} the interface gateway is playing sounds : '${JSON.stringify(sounds)}'.`, () => {
         if (isGiven(gherkinPrefix)) application.gateways.interface.playingSounds = sounds
         expect(application.gateways.interface.playingSounds).deep.equal(sounds)
@@ -132,29 +133,27 @@ export const theInterfaceGatewayHasCleavageDrawpileQuantity = (gherkinPrefix: Gh
     })
 
 export const theInterfaceGatewayHasRegisteredStreamers = (gherkinPrefix: Gherkin, expectedRegisteredStreamer: StreamerDto|StreamerDto[]) => (application: FakeClientApplication): Test => {
-    const expectedRegisteredStreamers = Array.isArray(expectedRegisteredStreamer) ? expectedRegisteredStreamer : [expectedRegisteredStreamer]
+    const expectedRegisteredStreamers = uniqueOrArrayToArray(expectedRegisteredStreamer)
     return it(`${gherkinPrefix} the interface gateway has registered streamers.`, () => {
         if (isGiven(gherkinPrefix)) application.gateways.interface.registeredStreamers = expectedRegisteredStreamers
         expect(application.gateways.interface.registeredStreamers).deep.equal(expectedRegisteredStreamers)
     })
 }
 
-export const theInterfaceGatewayDontHaveRegisteredStreamers = (gherkinPrefix: Gherkin) => (application: FakeClientApplication): Test => {
-    return it(`${gherkinPrefix} the interface gateway don't have registered streamers.`, () => {
+export const theInterfaceGatewayDontHaveRegisteredStreamers = (gherkinPrefix: Gherkin) => (application: FakeClientApplication): Test =>
+    it(`${gherkinPrefix} the interface gateway don't have registered streamers.`, () => {
         if (isGiven(gherkinPrefix)) application.gateways.interface.registeredStreamers = []
         expect(application.gateways.interface.registeredStreamers).deep.equal([])
     })
-}
-export const theInterfaceGatewayHasStreamerRegistered = (gherkinPrefix: Gherkin) => (application: FakeClientApplication): Test => {
-    return it(`${gherkinPrefix} the interface gateway has the streamer registered.`, () => {
+
+export const theInterfaceGatewayHasStreamerRegistered = (gherkinPrefix: Gherkin) => (application: FakeClientApplication): Test =>
+    it(`${gherkinPrefix} the interface gateway has the streamer registered.`, () => {
         if (isGiven(gherkinPrefix)) application.gateways.interface.isStreamerRegistered = true
         expect(application.gateways.interface.isStreamerRegistered).deep.equal(true)
     })
-}
 
-export const theInterfaceGatewayDontHaveStreamerRegistered = (gherkinPrefix: Gherkin) => (application: FakeClientApplication):Test => {
-    return it(`${gherkinPrefix} the interface gateway don't have the streamer registered.`, () => {
+export const theInterfaceGatewayDontHaveStreamerRegistered = (gherkinPrefix: Gherkin) => (application: FakeClientApplication):Test =>
+    it(`${gherkinPrefix} the interface gateway don't have the streamer registered.`, () => {
         if (isGiven(gherkinPrefix)) application.gateways.interface.isStreamerRegistered = false
         expect(application.gateways.interface.isStreamerRegistered).deep.equal(false)
     })
-}

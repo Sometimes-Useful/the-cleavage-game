@@ -3,14 +3,14 @@ import type { RandomGateway } from '../ports/secondary/gateways/RandomGateway'
 import type { GlobalCleavageDrawPileRepository } from '../ports/secondary/repositories/GlobalCleavageDrawPileRepository'
 
 export class GlobalCleavageDrawPileApplicationService {
-    retrieveCleavageDrawPileQuantity (): Promise<number> {
-        return this.globalCleavageDrawPileRepository.globalCleavageQuantity()
-    }
-
     constructor (
         private globalCleavageDrawPileRepository: GlobalCleavageDrawPileRepository,
         private randomGateway: RandomGateway
     ) { }
+
+    retrieveCleavageDrawPileQuantity (): Promise<number> {
+        return this.globalCleavageDrawPileRepository.globalCleavageQuantity()
+    }
 
     save (cleavage: Cleavage): Promise<void> {
         return this.globalCleavageDrawPileRepository.hasCleavage(cleavage)

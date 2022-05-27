@@ -30,16 +30,16 @@ export class VideoExtractApplicationService {
 
     private onMajorChoice (majorChoice: string, cleavage:Cleavage): Promise<void> {
         return this.videoExtractRepository.retreiveVideoExtractsByChoice(majorChoice)
-            .then(videoExtracts => {
-                const videoExtract = videoExtracts.reduce((a, b) => Math.abs(b.percentage - cleavage.majorScore()) < Math.abs(a.percentage - cleavage.majorScore()) ? b : a)
-                console.log(JSON.stringify(cleavage))
-                console.log(JSON.stringify(videoExtract))
-                return this.playVideo(videoExtract)
-            })
+            .then(videoExtracts => this.playVideo(this.videoExtractWithClosestMajorChoiceScore(videoExtracts, cleavage)))
+            .catch(error => Promise.reject(error))
     }
 
-    private playVideo (videoExtract: VideoExtract): void | PromiseLike<void> {
-        Promise.all([
+    private videoExtractWithClosestMajorChoiceScore (videoExtracts: VideoExtract[], cleavage: Cleavage):VideoExtract {
+        return videoExtracts.reduce((a, b) => Math.abs(b.percentage - cleavage.majorScore()) < Math.abs(a.percentage - cleavage.majorScore()) ? b : a)
+    }
+
+    private playVideo (videoExtract: VideoExtract):Promise<void> {
+        return Promise.all([
             this.interfaceGateway.changeVideoExtract(videoExtract),
             this.interfaceGateway.muteMusic()
         ])
@@ -49,8 +49,16 @@ export class VideoExtractApplicationService {
 
     private onNoMajorChoice (): Promise<void> {
         return this.videoExtractRepository.retreiveEqualityVideoExtracts()
-            .then(videoExtracts => Promise.all([videoExtracts, this.randomGateway.randomIntegerOnRange(1, videoExtracts.length)]))
-            .then(([videoExtracts, random]) => this.playVideo(videoExtracts[random - 1]))
+            .then(videoExtracts => Promise.all([
+                videoExtracts,
+                this.randomGateway.randomIntegerOnRange(1, videoExtracts.length)
+            ]))
+            .then(([videoExtracts, randomVideoNumber]) => {
+                const videoExtract = videoExtracts.at(randomVideoNumber - 1)
+                return videoExtract
+                    ? this.playVideo(videoExtract)
+                    : Promise.reject(new Error(`There is no video extract at index ${randomVideoNumber - 1}.`))
+            })
             .catch(error => Promise.reject(error))
     }
 

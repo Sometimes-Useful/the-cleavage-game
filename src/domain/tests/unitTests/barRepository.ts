@@ -5,11 +5,12 @@ import type { Bar } from '../../entities/Bar'
 import type { Gherkin } from '../Gherkin'
 import type { Table } from '../Table'
 import { detailedComparisonMessage, isGiven, stringifyWithDetailledSetAndMap } from './unitTests'
-import type { Direction } from '../../applicationServices/Direction'
+import type { Direction } from '../../entities/Direction'
 import type { Stool } from '../../entities/Stool'
+import { uniqueOrArrayToArray } from '../../../generic/array'
 
 export const theBarRepositoryHasAvailableTableStool = (gherkinPrefix: Gherkin, stool: Stool | Stool[]) => (application:FakeClientApplication): Test => {
-    const stools = Array.isArray(stool) ? stool : [stool]
+    const stools = uniqueOrArrayToArray(stool)
     return it(`${gherkinPrefix} the Bar repository has available table stools '${JSON.stringify(stools)}'.`, () => {
         if (isGiven(gherkinPrefix)) application.repositories.bar.availableTableStools = stools
         expect(application.repositories.bar.availableTableStools).deep.equal(stools)
@@ -24,7 +25,7 @@ export const theBarRepositoryHasOccupiedTableStool = (gherkinPrefix: Gherkin, st
 }
 
 export const theBarRepositoryHasAvailableBarStool = (gherkinPrefix: Gherkin, stool: Stool | Stool[]) => (application:FakeClientApplication): Test => {
-    const stools = Array.isArray(stool) ? stool : [stool]
+    const stools = uniqueOrArrayToArray(stool)
     return it(`${gherkinPrefix} the Bar repository has available bar stools '${JSON.stringify(stools)}'.`, () => {
         if (isGiven(gherkinPrefix)) application.repositories.bar.availableBarStools = stools
         expect(application.repositories.bar.availableBarStools).deep.equal(stools)

@@ -1,5 +1,6 @@
 import { expect } from 'chai'
 import { Test, it } from 'mocha'
+import { uniqueOrArrayToArray } from '../../../generic/array'
 import type { FakeClientApplication } from '../../../infra/applications/client/FakeApplication'
 import type { StreamerDto } from '../../entities/StreamerDto'
 import type { Gherkin } from '../Gherkin'
@@ -12,7 +13,7 @@ export const theStreamersGatewayDontHaveStreamers = (gherkinPrefix: Gherkin) => 
     })
 
 export const theStreamersGatewayHasStreamers = (gherkinPrefix: Gherkin, username: StreamerDto|StreamerDto[]) => (application: FakeClientApplication):Test => {
-    const expectedUsernames = Array.isArray(username) ? username : [username]
+    const expectedUsernames = uniqueOrArrayToArray(username)
     return it(`${gherkinPrefix} the streamers gateway has the following streamers: ${expectedUsernames}`, () => {
         if (isGiven(gherkinPrefix)) application.gateways.streamers.registeredStreamers = expectedUsernames
         expect(application.gateways.streamers.registeredStreamers).deep.equal(expectedUsernames)

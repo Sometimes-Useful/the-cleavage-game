@@ -16,15 +16,19 @@ export class ChangeGamePhaseUseCase extends UseCase {
     execute (event: ChangeGamePhaseEvent): Promise<void> {
         return this.applicationServices.cleavage.retrieveCurrentGamePhase()
             .then(previousGamePhase => this.onPreviousGamePhase(event, previousGamePhase))
+            .catch(error => Promise.reject(error))
     }
 
-    onPreviousGamePhase (event: ChangeGamePhaseEvent, previousGamePhase: GamePhase): Promise<void> {
+    private onPreviousGamePhase (event: ChangeGamePhaseEvent, previousGamePhase: GamePhase): Promise<void> {
         return this.applicationServices.cleavage.changeGamePhase(event.gamePhase)
             .then(() => this.applicationServices.interface.changeGamePhase(event.gamePhase))
-            .then(() => previousGamePhase !== GamePhase.NONE
-                ? this.applicationServices.interface.playSound(new Sound(SupportedSound.POUFFF))
-                : Promise.resolve()
-            )
+            .then(() => this.playPouffOnGamePhases(previousGamePhase))
             .catch(error => Promise.reject(error))
+    }
+
+    private playPouffOnGamePhases (previousGamePhase: GamePhase): Promise<void> {
+        return previousGamePhase !== GamePhase.NONE
+            ? this.applicationServices.interface.playSound(new Sound(SupportedSound.POUFFF))
+            : Promise.resolve()
     }
 }

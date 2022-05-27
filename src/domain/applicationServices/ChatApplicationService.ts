@@ -28,6 +28,10 @@ export class ChatApplicationService {
 
     disconnectChat (): Promise<void> {
         return this.isConnected()
-            .then(isConnected => isConnected ? this.chatGateway.disconnect() : this.interfaceGateway.notify(alreadyDisconnectedToChatNotification))
+            .then(isConnected => isConnected
+                ? this.chatGateway.disconnect()
+                : this.interfaceGateway.notify(alreadyDisconnectedToChatNotification)
+            )
+            .catch(error => Promise.reject(error))
     }
 }
