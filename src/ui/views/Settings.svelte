@@ -19,7 +19,7 @@ import { ChangeVideoExtractVolumeEvent } from "../../domain/events/changeVideoEx
     musicVolumeStore.subscribe(volume => musicVolume = volume)
     videoExtractVolumeStore.subscribe(volume=> videoExtractVolume = volume)
 </script>
-<main class="bg-dark-background h-full w-full flex flex-col justify-evenly">
+<main class="bg-background h-full w-full flex flex-col justify-evenly">
     <div class="flex flex-col w-full items-center">
         <Title/>
         <Subtitle subtitle="Options"/>
@@ -30,6 +30,6 @@ import { ChangeVideoExtractVolumeEvent } from "../../domain/events/changeVideoEx
         <Slider id="soundVolume" text="Volume - Sons" onInput={onSoundVolumeChange} value={soundVolume}/>
     </div>
     <div class="flex flex-col w-full  items-center">
-        <Button onClick={()=>applicationEventStore.set(new NavigateEvent(InterfaceView.MAIN_MENU))} text="Menu Principal!"/>
+        <Button emphasis="high" onClick={()=>applicationEventStore.set(new NavigateEvent(InterfaceView.MAIN_MENU))} text="Menu Principal"/>
     </div>
 </main>

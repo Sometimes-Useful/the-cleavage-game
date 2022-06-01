@@ -6,7 +6,12 @@
     import YouTubePlayer from "../components/youtubePlayer/youtubePlayer.svelte"
     import { gamePhaseStore } from "../stores/stores";
 </script>
-<main class="bg-dark-background h-full w-full flex flex-col justify-between">
+<main class="
+    h-full
+    w-full
+    flex flex-col
+    justify-between
+">
     {#if $gamePhaseStore === GamePhase.PLAY_VIDEO}
         <YouTubePlayer/>
     {:else}

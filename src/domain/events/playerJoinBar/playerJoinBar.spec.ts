@@ -8,7 +8,7 @@ import { PlayerMoveEvent } from '../playerMove/PlayerMoveEvent'
 import { theBarRepositoryHasAvailableBarStool, theBarRepositoryHasAvailableTableStool, theBarRepositoryHasOccupiedBarStool, theBarRepositoryHasOccupiedTableStool } from '../../tests/unitTests/barRepository'
 import { InstallNewTableEvent } from '../installNewTable/InstallNewTableEvent'
 import { PlayerQuitEvent } from '../playerQuit/PlayerQuitEvent'
-import { player1, stool1A, stoolBarA } from '../../tests/testContexts'
+import { player1, playerPositionOnStool1A, playerPositionOnStool1B, stool1A, stool1B, stoolBarA } from '../../tests/testContexts'
 
 feature(EventType.PLAYER_JOIN_BAR, [
     clientScenario('Scenario 1 : player join bar with available table stool', [
@@ -17,7 +17,7 @@ feature(EventType.PLAYER_JOIN_BAR, [
         whenEventOccurs(new PlayerJoinBarEvent(player1().username)),
         theBarRepositoryHasAvailableTableStool(Gherkin.THEN, []),
         theBarRepositoryHasOccupiedTableStool(Gherkin.AND_THEN, new Map([[player1().username, stool1A]])),
-        theEventIsSent(Gherkin.AND_THEN, new PlayerMoveEvent(player1().username, stool1A.position))
+        theEventIsSent(Gherkin.AND_THEN, new PlayerMoveEvent(player1().username, playerPositionOnStool1A))
     ]),
     clientScenario('Scenario 2 : player join bar with no available table stool', [
         theBarRepositoryHasAvailableTableStool(Gherkin.GIVEN, []),
@@ -43,5 +43,13 @@ feature(EventType.PLAYER_JOIN_BAR, [
         theEventIsSent(Gherkin.AND_THEN, [
             new PlayerQuitEvent(player1().username)
         ])
+    ]),
+    clientScenario('Scenario 4 : player join bar with available table stool 1B', [
+        theBarRepositoryHasAvailableTableStool(Gherkin.GIVEN, [stool1B]),
+        theBarRepositoryHasOccupiedTableStool(Gherkin.AND_GIVEN, new Map()),
+        whenEventOccurs(new PlayerJoinBarEvent(player1().username)),
+        theBarRepositoryHasAvailableTableStool(Gherkin.THEN, []),
+        theBarRepositoryHasOccupiedTableStool(Gherkin.AND_THEN, new Map([[player1().username, stool1B]])),
+        theEventIsSent(Gherkin.AND_THEN, new PlayerMoveEvent(player1().username, playerPositionOnStool1B))
     ])
 ])

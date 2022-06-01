@@ -11,20 +11,20 @@
     const soundCredits = new Array(...credits).map(([sound,author])=>`${sound} - ${author}`).join("<br>")
     const musicCredits = `Main Music - Ken Hamm - Buckbreak`
 </script>
-<main class="bg-dark-background h-full w-full flex flex-col justify-evenly">
+<main class="bg-background h-full w-full flex flex-col justify-evenly">
     <div class="flex flex-col w-full items-center">
         <Title/>
         <Subtitle subtitle="Credits"/>
     </div>
     <div class="flex flex-col w-full  items-center">
         <Subtitle subtitle="Team"/>
-        <Paragraph text={teamDescription} center={true}/>
+        <Paragraph emphasis="low" text={teamDescription} center={true}/>
         <Subtitle subtitle="Sounds"/>
-        <Paragraph text={soundCredits} center={true}/>
+        <Paragraph emphasis="low" text={soundCredits} center={true}/>
         <Subtitle subtitle="Musics"/>
-        <Paragraph text={musicCredits} center={true}/>
+        <Paragraph emphasis="low" text={musicCredits} center={true}/>
     </div>
     <div class="flex flex-col w-full  items-center">
-        <Button onClick={()=>applicationEventStore.set(new NavigateEvent(InterfaceView.MAIN_MENU))} text="Menu Principal!"/>
+        <Button emphasis="high" onClick={()=>applicationEventStore.set(new NavigateEvent(InterfaceView.MAIN_MENU))} text="Menu Principal"/>
     </div>
 </main>

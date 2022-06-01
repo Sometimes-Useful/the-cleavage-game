@@ -277,11 +277,7 @@ export class BarApplicationService {
 
     installPlayerOnTableStool (username:string): Promise<void> {
         return this.barRepository.nextAvailableTableStool()
-            .then(stool => Promise.all([
-                this.barRepository.setOccupiedTableStool(username, stool),
-                this.eventGateway.sendEvent(new PlayerMoveEvent(username, stool.position))
-            ]))
-            .then(results => Promise.resolve())
+            .then(stool => this.occupyTableStool(stool, username))
             .catch(error => Promise.reject(error))
     }
 
@@ -289,16 +285,17 @@ export class BarApplicationService {
         return this.barRepository.hasAvailableTableStool()
     }
 
-    hasAvailableBarStool () {
+    hasAvailableBarStool ():Promise<boolean> {
         return this.barRepository.hasAvailableBarStool()
     }
 
-    isOnY (entity1Target: PhysicalEntity, entity: PhysicalEntity) {
-        return entity1Target.position.y <= entity.position.y + entity.size.height && entity1Target.position.y + entity1Target.size.height >= entity.position.y
+    private isOnY (entity1: PhysicalEntity, entity2: PhysicalEntity) {
+        return entity1.position.y <= entity2.position.y + entity2.size.height &&
+            entity1.position.y + entity1.size.height >= entity2.position.y
     }
 
-    isOnX (entity1Target: PhysicalEntity, entity: PhysicalEntity) {
-        return entity1Target.position.x <= entity.position.x + entity.size.width && entity1Target.position.x + entity1Target.size.width >= entity.position.x
+    private isOnX (entity1: PhysicalEntity, entity2: PhysicalEntity) {
+        return entity1.position.x <= entity2.position.x + entity2.size.width && entity1.position.x + entity1.size.width >= entity2.position.x
     }
 
     private readonly stoolRowsPerTables = 2

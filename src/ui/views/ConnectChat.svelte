@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { afterUpdate, onDestroy, onMount } from "svelte";
+    import { afterUpdate,onDestroy } from "svelte";
     import { InterfaceView } from "../../domain/entities/InterfaceView";
     import { CheckRegisteredStreamerEvent } from "../../domain/events/checkRegisteredStreamer/CheckRegisteredStreamerEvent";
     import { ConnectChatEvent } from "../../domain/events/connectChat/ConnectChatEvent";
@@ -21,18 +21,11 @@
         }
     afterUpdate(() => {if (username && token && channel) applicationEventStore.set(new CheckRegisteredStreamerEvent(username)) })
     onDestroy(()=>isStreamerRegisteredStore.set(undefined))
-    onMount(()=> {
-        isStreamerRegisteredStore.subscribe(value => {
-            console.log("isStreamerRegisteredStore",value)
-            console.log("username && token && channel && $isStreamerRegisteredStore ==! undefined",username && token && channel && (value !== undefined))
-        })
-    })
-
 </script>
-<main class="bg-dark-background h-full w-full flex flex-col justify-evenly">
+<main class=" h-full w-full flex flex-col justify-evenly">
     <div class="flex flex-col w-full items-center">
         <Title/>
-        <Subtitle subtitle="Connectes-toi sur ta chaine Twitch pour faire participer tes viewers !!!"/>
+        <Subtitle subtitle="Connectes-toi sur ta chaine Twitch."/>
     </div>
     <div  class="flex flex-row  w-full place-items-center justify-center">
         <div class="flex flex-col items-center">
@@ -41,9 +34,9 @@
             <TextBox id="channel" name="channel" bind:inputValue={channel} placeholder="Chaine Twitch"/>
             {#if username && token && channel && ($isStreamerRegisteredStore !== undefined)}
                 <input type="checkbox" id="registerStreamer" name="Faire parti des streamers qui jouent au jeu du clivage?" checked={$isStreamerRegisteredStore} bind:value={isRegisterStreamer} >
-                <Button text="Connexion Twitch !" onClick={onConnect}/>
+                <Button text="Connexion Twitch !" emphasis="high" onClick={onConnect}/>
             {/if}
-            <Button text="Menu principal" onClick={() => applicationEventStore.set(new NavigateEvent(InterfaceView.MAIN_MENU)) }/>
+            <Button text="Menu principal" emphasis="medium" onClick={() => applicationEventStore.set(new NavigateEvent(InterfaceView.MAIN_MENU)) }/>
         </div>
         <LinkComponent text="Twitch Token Generator" href="https://twitchapps.com/tmi/" newTab={true}/>
     </div>

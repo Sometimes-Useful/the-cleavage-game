@@ -35,7 +35,7 @@
             console.log(`YT Player On Error : ${event.data}`) 
             setTimeout(()=>onStop(event.target),2000) 
         },
-        onApiChange(event: YT.PlayerEvent) { console.log("YT Player On API Change") },
+        onApiChange(event: YT.PlayerEvent) { console.log("YT Player On API Change",event) },
     }
     const onVideoExtract = (videoExtract:VideoExtract,targetPlayer:YT.Player) => {
         const videoByIdSettings:YT.VideoByIdSettings = {

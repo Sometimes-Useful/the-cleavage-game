@@ -19,11 +19,11 @@
         const pixiHtmlElement=document.getElementById(pixiHtmlElementId);
         if(pixiHtmlElement) {
             clientApplication.addingViewToDom(pixiHtmlElement).then(() => resizePixi());
-            new ResizeObserver(entries =>{
+            new ResizeObserver(() =>{
                 if(interval)clearTimeout(interval);
                 interval=setTimeout(()=>resizePixi(),100);
             }).observe(pixiHtmlElement)
         }
     })
 </script>
-<div id={pixiHtmlElementId} class="flex flex-row w-full h-full items-center justify-center"></div>
+<div id={pixiHtmlElementId} class="flex flex-row w-full h-full px-1 items-center justify-center"></div>

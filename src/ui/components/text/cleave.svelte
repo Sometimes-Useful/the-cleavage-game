@@ -4,7 +4,6 @@
     export let text:string = ""
     export let cleave:number
     export let totalCleave:number
-    export let color :"Red"|"Blue"
     export let choiceType: "Left"|"Right"
     let cleavePercentageText:string
     beforeUpdate(()=> {
@@ -13,5 +12,5 @@
     })
 </script>
 <div class="flex flex-col w-full">
-    <CleaveChoiceReadOnly choiceName={text} choicePercentageText={cleavePercentageText} {choiceType} {color}/>
+    <CleaveChoiceReadOnly choiceName={text} choicePercentageText={cleavePercentageText} {choiceType}/>
 </div>

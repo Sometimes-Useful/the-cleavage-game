@@ -1,17 +1,13 @@
-import type { Position } from '../../entities/Position'
 import { clientScenario } from '../../tests/clientScenario'
 import { feature } from '../../tests/feature'
 import { Gherkin } from '../../tests/Gherkin'
-import { player1, player2, stool1A, stool1B, stoolBarA, stoolBarB } from '../../tests/testContexts'
+import { player1, player2, playerPositionOnStool1A, playerPositionOnStool1B, stool1A, stool1B, stoolBarA, stoolBarB } from '../../tests/testContexts'
 import { theBarRepositoryHasAvailableBarStool, theBarRepositoryHasAvailableTableStool, theBarRepositoryHasOccupiedBarStool, theBarRepositoryHasOccupiedTableStool } from '../../tests/unitTests/barRepository'
 import { theEventIsSent, whenEventOccurs } from '../../tests/unitTests/eventGateway'
 import { EventType } from '../EventType'
 import { InstallNewTableEvent } from '../installNewTable/InstallNewTableEvent'
 import { PlayerMoveEvent } from '../playerMove/PlayerMoveEvent'
 import { TableStoolAvailableEvent } from './TableStoolAvailableEvent'
-
-const playerPositionOnStool1A:Position = { x: -0.1, y: -2.9 }
-const playerPositionOnStool1B:Position = { x: 0.7, y: -2.9 }
 
 feature(EventType.TABLE_STOOL_AVAILABLE, [
     clientScenario('Scenario 1 - Install player on table stool when 1 table stool available', [

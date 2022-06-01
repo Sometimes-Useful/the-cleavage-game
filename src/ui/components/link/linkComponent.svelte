@@ -4,9 +4,13 @@
     export let newTab:boolean = false
     const rotatizer = Math.random() * 100
 </script>
-
-{#if newTab }
-    <a class="text-center font-sans underline text-low-emphasis hover:text-medium-emphasis visited:text-low-emphasis {rotatizer < 33 ? "" : rotatizer < 66 ? "rotate-3" : "-rotate-3" }" {href} target="_blank">{text}</a>
-{:else}
-    <a class="text-center font-sans underline text-low-emphasis hover:text-medium-emphasis visited:text-low-emphasis {rotatizer < 33 ? "" : rotatizer < 66 ? "rotate-3" : "-rotate-3" }" {href}>{text}</a>
-{/if}
+<a class="
+        text-center
+        font-sans
+        underline 
+        text-primary hover:text-primary-variant visited:text-secondary-variant
+        {rotatizer < 33 ? "" : rotatizer < 66 ? "rotate-3" : "-rotate-3" }
+    "
+    {href}
+    target={newTab ? "_blank" : "_self"}
+>{text}</a>
