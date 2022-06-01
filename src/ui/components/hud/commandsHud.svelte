@@ -14,6 +14,7 @@
     import Button from "../button/button.svelte";
     import InputNumber from "../inputs/inputNumber.svelte";
     import TextBox from "../inputs/textBox.svelte";
+import { commandHudId } from "./commandsHud";
     let newCleavage:Cleavage
     let customCleavageTitle:string = ""
     let autoplayMinutes:number = 3
@@ -37,7 +38,7 @@
         newCleavage = currentCleavage ? currentCleavage :defaultCleavage()
     })
 </script>
-<div id="commandHud" class="flex flex-row w-full justify-center p-1">
+<div id={commandHudId} class="flex flex-row w-full justify-center p-1">
     {#if $gamePhaseStore === GamePhase.CLEAVING}
 
         <div class="flex flex-row justify-between">
