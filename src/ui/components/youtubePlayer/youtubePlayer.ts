@@ -3,7 +3,17 @@ import { VideoExtractStopEvent } from '../../../domain/events/videoExtractEnd/Vi
 import { applicationEventStore, videoExtractStore, videoExtractVolumeStore } from '../../stores/stores'
 let playerTimeoutToPlayVideoExtract :NodeJS.Timeout|undefined
 export const youtubeHtmlElementId = 'youtube'
-export const createYouTubePlayer = () => new YT.Player(youtubeHtmlElementId, { height: '100%', width: '100%', playerVars, events })
+const playerVars:YT.PlayerVars = {
+    autoplay: 0,
+    controls: 1,
+    // cc_load_policy:0,
+    disablekb: 1,
+    fs: 0,
+    // iv_load_policy:3,
+    modestbranding: 1
+    // showinfo:0 deprecated
+}
+
 let videoExtract :VideoExtract | undefined
 let videoExtractVolume:number
 videoExtractStore.subscribe(videoExtractStoreValue => { videoExtract = videoExtractStoreValue })
@@ -54,17 +64,10 @@ const loadYouTubeIFrameApiScript = (youtubeIframeApiUrl: string, onYouTubeIframe
     (window as any).onYouTubeIframeAPIReady = onYouTubeIframeAPIReadyCallback
 }
 const isExternalScriptLoaded = (url:string) => [...document.getElementsByTagName('script')].some(script => script.src === url)
-const playerVars:YT.PlayerVars = {
-    autoplay: 0,
-    controls: 1,
-    // cc_load_policy:0,
-    disablekb: 1,
-    fs: 0,
-    // iv_load_policy:3,
-    modestbranding: 1
-    // showinfo:0 deprecated
-}
+const createYouTubePlayer = () => new YT.Player(youtubeHtmlElementId, { height: '100%', width: '100%', playerVars, events })
 export function onYoutubeComponentMount () {
     const youtubeIframeApiUrl = 'https://www.youtube.com/iframe_api'
-    isExternalScriptLoaded(youtubeIframeApiUrl) ? createYouTubePlayer() : loadYouTubeIFrameApiScript(youtubeIframeApiUrl, createYouTubePlayer)
+    isExternalScriptLoaded(youtubeIframeApiUrl)
+        ? createYouTubePlayer()
+        : loadYouTubeIFrameApiScript(youtubeIframeApiUrl, createYouTubePlayer)
 };
