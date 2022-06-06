@@ -6,7 +6,6 @@
     export let step:number = 1
     export let onInput:svelte.JSX.FormEventHandler<HTMLInputElement>
     export let value:number
-    const rotatizer = Math.random() * 100
 </script>
 <div class="flex flex-col w-full items-center p-3">
   <label for={id} class="form-label text-primary font-sans mb-2">{text} - {value}</label>
@@ -17,7 +16,6 @@
         border-2 rounded-md 
         w-full md:w-1/2 xl:w-1/3 h-1 
         border-primary  accent-secondary
-        {rotatizer < 33 ? "" : rotatizer < 66 ? "rotate-1" : "-rotate-1" }
     "
     on:input={onInput}
     {value}

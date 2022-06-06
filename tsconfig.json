@@ -5,7 +5,7 @@
     "strict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports":true,
-    "types": ["node", "svelte"]
+    "types": ["node", "svelte","youtube"]
   },
   "exclude": ["node_modules/*", "__sapper__/*", "public/*"]
 }

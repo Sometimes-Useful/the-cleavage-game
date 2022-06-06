@@ -26,7 +26,7 @@ import { RefreshCleavageDrawpileQuantityEvent } from "../../domain/events/refres
     <div class="flex flex-col items-center">
         <Subtitle subtitle={`Déjà ${$cleavageDrawPileQuantityStore} clivages de dispo!`}/>
     </div>
-    <div class="flex flex-col self-center">
+    <div class="flex flex-col p-3 self-center bg-white rounded-xl bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-10 border border-white border-opacity-20 drop-shadow">
         <Button text="Jouer" emphasis="high" size="large" onClick={()=>applicationEventStore.set(new NewCleavageEvent())}/>
         <Button text="Options" emphasis="medium" size="large" onClick={()=>applicationEventStore.set(new NavigateEvent(InterfaceView.SETTINGS))}/>
         <Button text="Credits" emphasis="medium" size="large" onClick={()=>applicationEventStore.set(new NavigateEvent(InterfaceView.CREDITS))}/>

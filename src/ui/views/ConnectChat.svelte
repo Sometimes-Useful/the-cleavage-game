@@ -27,17 +27,20 @@
         <Title/>
         <Subtitle subtitle="Connectes-toi sur ta chaine Twitch."/>
     </div>
-    <div  class="flex flex-row  w-full place-items-center justify-center">
-        <div class="flex flex-col items-center">
-            <TextBox id="user" name="user" bind:inputValue={username} placeholder="Utilisateur Twitch"/>
-            <TextBox id="password" name="password" bind:inputValue={token} placeholder="Token Twitch" type="password"/>
-            <TextBox id="channel" name="channel" bind:inputValue={channel} placeholder="Chaine Twitch"/>
-            {#if username && token && channel && ($isStreamerRegisteredStore !== undefined)}
-                <input type="checkbox" id="registerStreamer" name="Faire parti des streamers qui jouent au jeu du clivage?" checked={$isStreamerRegisteredStore} bind:value={isRegisterStreamer} >
-                <Button text="Connexion Twitch !" emphasis="high" onClick={onConnect}/>
-            {/if}
-            <Button text="Menu principal" emphasis="medium" onClick={() => applicationEventStore.set(new NavigateEvent(InterfaceView.MAIN_MENU)) }/>
+    <div  class="flex flex-row place-items-center justify-center ">
+        <div  class="flex flex-col items-center p-2 bg-white rounded-xl bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-10 border border-white border-opacity-20 drop-shadow">
+                <TextBox id="user" name="user" bind:inputValue={username} placeholder="Utilisateur Twitch" width="w-full"/>
+                <TextBox id="password" name="password" bind:inputValue={token} placeholder="Token Twitch" type="password"  width="w-full"/>
+                <LinkComponent text="Twitch Token Generator" href="https://twitchapps.com/tmi/" newTab={true} />
+                <TextBox id="channel" name="channel" bind:inputValue={channel} placeholder="Chaine Twitch"  width="w-full"/>
+                {#if username && token && channel && ($isStreamerRegisteredStore !== undefined)}
+                    <div class="flex flex-row w-full items-center justify-between">
+                        <label class="text-primary font-sans pr-2" for="registerStreamer">{@html "Faire parti de l'annuaire<br>des streamers?"}</label>
+                        <input type="checkbox" id="registerStreamer" name="registerStreamer" checked={$isStreamerRegisteredStore} bind:value={isRegisterStreamer} >
+                    </div>
+                    <Button text="Connexion Twitch" emphasis="high" onClick={onConnect}  width="w-full"/>
+                {/if}
+                <Button text="Menu principal" emphasis="medium" onClick={() => applicationEventStore.set(new NavigateEvent(InterfaceView.MAIN_MENU)) } width="w-full"/>   
         </div>
-        <LinkComponent text="Twitch Token Generator" href="https://twitchapps.com/tmi/" newTab={true}/>
     </div>
 </main>

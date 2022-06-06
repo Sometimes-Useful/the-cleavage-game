@@ -1,6 +1,10 @@
 module.exports = {
     content: ['./public/index.html', './src/**/*.svelte'],
     theme: {
+        backdropFilter: {
+            none: 'none',
+            blur: 'blur(20px)'
+        },
         extend: {
             colors: {
                 background: '#190F00',
@@ -14,5 +18,7 @@ module.exports = {
             sans: ['Arial']
         }
     },
-    plugins: []
+    plugins: [
+        require('tailwindcss-filters')
+    ]
 }
