@@ -1,4 +1,4 @@
-import { Direction } from '../../applicationServices/Direction'
+import { Direction } from '../../entities/Direction'
 import { SpriteType } from '../../entities/SpriteType'
 import { clientScenario } from '../../tests/clientScenario'
 import { feature } from '../../tests/feature'

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { afterUpdate } from "svelte";
     import { Cleavage } from "../../../domain/entities/Cleavage";
     import { GamePhase } from "../../../domain/entities/GamePhase";
     import { InterfaceView } from "../../../domain/entities/InterfaceView";
@@ -8,61 +9,76 @@
     import { LaunchCleavageEvent } from "../../../domain/events/launchCleavage/LaunchCleavageEvent";
     import { NavigateEvent } from "../../../domain/events/navigateEvent/NavigateEvent";
     import { NewCleavageEvent } from "../../../domain/events/newCleavage/NewCleavageEvent";
-    import { applicationEventStore, currentCleavageStore, gamePhaseStore } from "../../stores/stores";
-    import Autoplay from "../autoplay/autoplay.svelte";
+    import { StartAutoPlayEvent } from "../../../domain/events/startAutoPlay/StartAutoPlayEvent";
+    import { StopAutoplayEvent } from "../../../domain/events/stopAutoplay/StopAutoplayEvent";
+    import { applicationEventStore, autoplayStore, currentCleavageStore, gamePhaseStore } from "../../stores/stores";
     import Button from "../button/button.svelte";
+    import InputNumber from "../inputs/inputNumber.svelte";
     import TextBox from "../inputs/textBox.svelte";
+    import { commandHudId } from "./commandsHud";
     let newCleavage:Cleavage
+    let customCleavageTitle:string = ""
+    let autoplayMinutes:number = 3
     const defaultCleavage = () => new Cleavage({title:"",leftChoice:{name:"Gôche",players:[]},rightChoice: {name:"Drouate",players:[]},players:[]})
     const resetCleavageTitleAndSendEvent = (event:ApplicationEvent) =>{
             newCleavage = defaultCleavage()
+            customCleavageTitle = newCleavage.title
             applicationEventStore.set(event)
         }
+    const onClickStartAutoPlay = () => resetCleavageTitleAndSendEvent(new StartAutoPlayEvent(autoplayMinutes))
+    const onClickStopAutoPlay = () => resetCleavageTitleAndSendEvent(new StopAutoplayEvent())
+    const onCustomCleavageTitleChange = () => {customCleavageTitle = newCleavage.title}
     const onClickLaunchCleavageButton = () => resetCleavageTitleAndSendEvent(new LaunchCleavageEvent(newCleavage.title,newCleavage.leftChoice.name,newCleavage.rightChoice.name))
     const onClickNewCleavageButton = () => $applicationEventStore = new NewCleavageEvent()
     const onClickCancelButton = () => resetCleavageTitleAndSendEvent(new CancelCleavageEvent())
     const onClickRandomCleavageButton = () => resetCleavageTitleAndSendEvent(new DrawCleavageEvent())
     const onClickMainMenu = () => resetCleavageTitleAndSendEvent(new NavigateEvent(InterfaceView.MAIN_MENU))
+    const shouldCleave = (cleavage:Cleavage)=> cleavage.title.length > 0 && cleavage.leftChoice.name.length > 0 && cleavage.rightChoice.name.length > 0
     currentCleavageStore.subscribe(currentCleavage =>  {
-        console.log("UPDATED CURRENT CLEAVAGE STORE")
         newCleavage = currentCleavage ? currentCleavage :defaultCleavage()
     })
+    afterUpdate(()=>{
+        console.log("newCleavage",newCleavage)
+        console.log("customCleavageTitle",customCleavageTitle)
+    })
 </script>
-<div id="commandHud" class="flex flex-row w-full px-2 pb-2 pt-1">
+<div id={commandHudId} class="flex flex-row w-full justify-center p-2">
     {#if $gamePhaseStore === GamePhase.CLEAVING}
-        <div class="flex flex-col w-full items-start">
-        </div> 
-        <div class="flex flex-col w-full items-center">
-            <Button onClick={onClickNewCleavageButton} text="Nouveau clivage!"/>
-        </div> 
-        <div class="flex flex-col w-full items-end justify-end">
-            <Autoplay/>
-        </div>
-    {/if}
-    {#if $gamePhaseStore === GamePhase.NEW_CLEAVAGE}
-        <div class="flex flex-col w-full items-start justify-end">
-            <Button onClick={onClickMainMenu} text="Menu Principal!"/>
-        </div>
-        <div class="flex flex-col w-full items-center">
-            {#if !$currentCleavageStore}
-                <TextBox id="title" name="title" type="textarea" mainInput={true} bind:inputValue={newCleavage.title} placeholder="On clive sur quoi?"/>
-                <div class="flex flex-row items-center">
-                    <TextBox id="leftChoice" name="leftChoice" placeholder="Choix?" bind:inputValue={newCleavage.leftChoice.name}/>
-                    <TextBox id="rightChoice" name="rightChoice" placeholder="Choix?" bind:inputValue={newCleavage.rightChoice.name}/>    
+        <div class="flex flex-col justify-between bg-white rounded-xl bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-10 border border-white border-opacity-20 drop-shadow">
+            <Button onClick={onClickNewCleavageButton} emphasis="high" text="Nouveau clivage"/>
+            {#if $autoplayStore }
+                <Button  margin="m-1"onClick={onClickStopAutoPlay} emphasis="medium" text="Stop Auto Play" />
+            {:else}
+                <div class="flex flex-row justify-end">
+                    <InputNumber margin="m-1" width="w-1/6" id="autoPlayTime" name="autoPlayTime" placeholder="Cycle autoplay" bind:inputValue={autoplayMinutes}/>
+                    <Button margin="m-1" width="w-1/3" onClick={onClickStartAutoPlay} emphasis="medium" text="Auto Play"/>
                 </div>
             {/if}
-            <div class="flex flex-row w-full items-center justify-center">
-                {#if newCleavage.title.length > 0 && newCleavage.leftChoice.name.length > 0 && newCleavage.rightChoice.name.length > 0 }
-                    <Button onClick={onClickLaunchCleavageButton} text="Let'z go!" wfull={true}/>
-                    <Button onClick={onClickRandomCleavageButton} size="large" text="🎲"/>
-                    <Button onClick={onClickCancelButton} text="heu... non 😅"  wfull={true}/>
+        </div> 
+    {/if}
+    {#if $gamePhaseStore === GamePhase.NEW_CLEAVAGE}
+        <div class="flex flex-row justify-center p-1 bg-white rounded-xl bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-10 border border-white border-opacity-20 drop-shadow">
+            <div class="flex flex-col {customCleavageTitle.length === 0 && !$currentCleavageStore ?"justify-end":"justify-between"} content-start w-1/4">
+                {#if shouldCleave(newCleavage) }<Button margin="m-1" onClick={onClickCancelButton} emphasis="medium" text="❌ Refuser"/>  {/if}
+                {#if !$currentCleavageStore && customCleavageTitle.length > 0}<TextBox margin="m-1" id="leftChoice" name="leftChoice" placeholder="Choix?" bind:inputValue={newCleavage.leftChoice.name}/>{/if} 
+                <Button onClick={onClickMainMenu} margin="m-1" emphasis="medium" text="Menu Principal"/>
+            </div>
+            <div class="flex flex-col justify-between items-center w-1/2">
+                {#if customCleavageTitle.length === 0}<Button margin="m-1" width="w-1/2" onClick={onClickRandomCleavageButton} emphasis="high" text="🎲 Piocher 🎲" />{/if}
+                {#if !$currentCleavageStore }<TextBox  margin="m-1" width="w-full" height="h-full" id="title" name="title" type="textarea"  bind:inputValue={newCleavage.title} onInput={onCustomCleavageTitleChange} placeholder="Proposer un nouveau clivage"/>{/if}
+            </div>
+            <div class="flex flex-col {customCleavageTitle.length === 0 && !$currentCleavageStore ?"justify-end":"justify-between"} content-end w-1/4">
+                {#if shouldCleave(newCleavage) }<Button margin="m-1" onClick={onClickLaunchCleavageButton} emphasis="high" text="⭐️ Cliver ⭐️"  />{/if}
+                {#if !$currentCleavageStore && customCleavageTitle.length > 0}<TextBox margin="m-1" id="rightChoice" name="rightChoice" placeholder="Choix?" bind:inputValue={newCleavage.rightChoice.name}/> {/if} 
+                {#if $autoplayStore }
+                    <Button  margin="m-1"onClick={onClickStopAutoPlay} emphasis="medium" text="Stop Auto Play" />
                 {:else}
-                    <Button onClick={onClickRandomCleavageButton} size="large" text="🎲"/>
+                    <div class="flex flex-row justify-end">
+                        <InputNumber margin="m-1" width="w-1/3" id="autoPlayTime" name="autoPlayTime" placeholder="Cycle autoplay" bind:inputValue={autoplayMinutes}/>
+                        <Button margin="m-1" width="w-full" onClick={onClickStartAutoPlay} emphasis="medium" text="Auto Play"/>
+                    </div>
                 {/if}
-            </div> 
-        </div>
-        <div class="flex flex-col w-full items-end justify-end">
-            <Autoplay/>
+            </div>
         </div>
     {/if}
 </div>

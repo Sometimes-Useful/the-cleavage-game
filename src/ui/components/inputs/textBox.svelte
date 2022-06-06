@@ -1,15 +1,20 @@
 <script lang="ts">
     import { beforeUpdate } from "svelte";
+import type { Margin, Width } from "../tailwindClasses";
     export let inputValue:string
     export let type:"text"|"password"|"textarea" = "text"
     export let placeholder:string
     export let id:string
     export let name:string
-    export let mainInput = false
+    export let size:"medium"|"large" = "medium"
+    export let height:string = ""
+    export let width:Width = ""
+    export let margin:Margin = "m-2"
     export let onChange: ()=>void = ()=>{}
+    export let onInput: ()=>void = ()=>{}
+    const padding = "p-1"
     let rows:number
     const maxStringPerLine = 30
-    const rotatizer = Math.random() * 100
     beforeUpdate(()=> {
         if (type === "textarea") {
             let roundedRows = Math.round(inputValue.length/maxStringPerLine);
@@ -18,9 +23,62 @@
     })
 </script>
 {#if type === "textarea"}
-    <textarea class = "p-1 {mainInput ? "m-5 text-2xl" : "m-5 text-xl"} {rotatizer < 33 ? "" : rotatizer < 66 ? "rotate-3" : "-rotate-3" } rounded-xl border-low-emphasis focus:border-medium-emphasis text-no-emphasis placeholder-no-emphasis border-2 bg-dark-background font-sans text-center" {id} {name} {rows} cols={maxStringPerLine} required bind:value={inputValue} {placeholder} autocomplete='new-password' on:change={onChange}></textarea>
-{:else if type === "text"}
-    <input class = "p-1 {mainInput ? "m-5 text-2xl" : "m-5 text-xl"} {rotatizer < 33 ? "" : rotatizer < 66 ? "rotate-3" : "-rotate-3" } rounded-xl border-low-emphasis focus:border-medium-emphasis focus:ring-1 focus:ring-medium-emphasis text-no-emphasis placeholder-no-emphasis border-2 bg-dark-background font-sans text-center" type="text" {id} {name}  required bind:value={inputValue} {placeholder} on:change={onChange}>
+    <textarea
+        class = "
+            {padding}
+            {margin}
+            {height}
+            {size === "large" ? "text-2xl" : "text"}  
+            {width}
+            resize-none
+            rounded-t rounded-b-sm
+            border-b border-primary 
+            focus:border-none
+            focus:outline-none
+            focus:ring-1 focus:ring-secondary-variant
+            font-sans text-center text-primary-variant placeholder-primary-variant 
+            bg-white bg-opacity-10
+        " 
+        {id} {name} rows=0 cols=0 required bind:value={inputValue} {placeholder} autocomplete='new-password' 
+        on:change={onChange} on:input={onInput}
+    ></textarea>
+
+{:else if type === "text" }
+    <input 
+        class = "
+            {padding}
+            {margin}
+            {size === "large" ? "text-2xl" : "text"} 
+            {width}
+            rounded-t rounded-b-sm
+            border-b border-primary 
+            focus:border-none
+            focus:outline-none
+            focus:ring-1 focus:ring-secondary-variant
+            font-sans text-center text-primary-variant placeholder-primary-variant 
+            bg-white bg-opacity-10
+        "
+        type="text" 
+        {id} {name} required bind:value={inputValue} {placeholder} 
+        on:change={onChange} on:input={onInput}
+    >
 {:else if type === "password"}
-    <input class = "p-1 {mainInput ? "m-5 text-2xl" : "m-5 text-xl"} {rotatizer < 33 ? "" : rotatizer < 66 ? "rotate-3" : "-rotate-3" } rounded-xl border-low-emphasis focus:border-medium-emphasis focus:ring-1 focus:ring-medium-emphasis text-no-emphasis placeholder-no-emphasis border-2 bg-dark-background font-sans text-center" type="password" {id} {name}  required bind:value={inputValue} {placeholder} on:change={onChange} autocomplete={type === "password" ? 'new-password':null}>
+    <input
+        class = "
+            {padding}
+            {margin}
+            {size === "large" ? "text-2xl" : "text"} 
+            {width}
+            rounded-t rounded-b-sm
+            border-b border-primary 
+            focus:border-none
+            focus:outline-none
+            focus:ring-1 focus:ring-secondary-variant
+            font-sans text-center text-primary-variant placeholder-primary-variant 
+            bg-white bg-opacity-10
+        "
+        type="password"
+        {id} {name} required bind:value={inputValue} {placeholder} autocomplete={type === "password" ? 'new-password':null}
+        on:change={onChange}
+    >
 {/if}

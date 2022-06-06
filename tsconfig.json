@@ -4,7 +4,8 @@
   "compilerOptions": {
     "strict": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports":true
+    "allowSyntheticDefaultImports":true,
+    "types": ["node", "svelte","youtube"]
   },
   "exclude": ["node_modules/*", "__sapper__/*", "public/*"]
 }

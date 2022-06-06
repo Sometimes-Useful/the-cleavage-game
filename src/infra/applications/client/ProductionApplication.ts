@@ -14,6 +14,7 @@ import type { ClientApplicationServices } from '../../../domain/ports/Applicatio
 import { PrimaryClientController } from '../../../domain/ports/primary/PrimaryClientController'
 import type { ProductionClientApplicationGateways } from '../../../domain/ports/secondary/gateways/ApplicationGateways'
 import type { ProductionClientApplicationRepositories } from '../../../domain/ports/secondary/repositories/ApplicationRepositories'
+import { intervalInSeconds } from '../../../generic/interval'
 import { applicationEventStore } from '../../../ui/stores/stores'
 
 export class ProductionClientApplication {
@@ -24,28 +25,44 @@ export class ProductionClientApplication {
 
     public start ():Promise<void> {
         console.log('Application starting...')
-        return this.gateways.interface.load()
-            .then(() => {
-                const applicationServices:ClientApplicationServices = {
-                    streamers: new StreamersApplicationService(this.gateways.streamers),
-                    videoExtract: new VideoExtractApplicationService(this.repositories.videoExtracts, this.gateways.interface, this.gateways.random),
-                    chat: new ChatApplicationService(this.gateways.chat, this.gateways.interface),
-                    event: new EventApplicationService(this.gateways.event),
-                    cleavage: new CleavageApplicationService(this.repositories.publicCleavageDrawPile, this.gateways.globalCleavageDrawPile, this.repositories.currentCleavage, this.gateways.chat, this.repositories.gamePhase),
-                    interface: new InterfaceApplicationService(this.gateways.interface),
-                    player: new PlayerApplicationService(this.repositories.player, this.gateways.event),
-                    autoplay: new AutoplayApplicationService(this.repositories.autoplay, this.gateways.date),
-                    bar: new BarApplicationService(this.repositories.bar, this.gateways.event, this.gateways.uuid)
-                }
-                this.gateways.event.configureController(new PrimaryClientController(applicationServices))
-                applicationEventStore.subscribe(event => { if (event) this.gateways.event.sendEvent(event) })
-                applicationEventStore.set(new ApplicationStartEvent())
-                console.log('Application started.')
-                const checkAutoPlayIntervalSeconds = (seconds:number) => seconds * 1000
-                setInterval(() => this.gateways.event.sendEvent(new CheckAutoplayEvent()), checkAutoPlayIntervalSeconds(5))
-                return Promise.resolve()
-            })
-            .catch(error => console.error(error))
+        return this.applicationStarted
+            ? Promise.resolve()
+            : this.gateways.interface.load()
+                .then(() => {
+                    this.configureController()
+                    this.configureApplicationEventStore()
+                    setInterval(() => this.gateways.event.sendEvent(new CheckAutoplayEvent()), intervalInSeconds(5))
+                    console.log('Application started.')
+                    return Promise.resolve()
+                })
+                .then(() => {
+                    this.applicationStarted = true
+                    return Promise.resolve()
+                })
+                .catch(error => {
+                    this.applicationStarted = false
+                    return Promise.reject(error)
+                })
+    }
+
+    private configureApplicationEventStore () {
+        applicationEventStore.subscribe(event => { (event && this.gateways.event.sendEvent(event)) })
+        applicationEventStore.set(new ApplicationStartEvent())
+    }
+
+    private configureController () {
+        const applicationServices: ClientApplicationServices = {
+            streamers: new StreamersApplicationService(this.gateways.streamers),
+            videoExtract: new VideoExtractApplicationService(this.repositories.videoExtracts, this.gateways.interface, this.gateways.random),
+            chat: new ChatApplicationService(this.gateways.chat, this.gateways.interface),
+            event: new EventApplicationService(this.gateways.event),
+            cleavage: new CleavageApplicationService(this.repositories.publicCleavageDrawPile, this.gateways.globalCleavageDrawPile, this.repositories.currentCleavage, this.gateways.chat, this.repositories.gamePhase),
+            interface: new InterfaceApplicationService(this.gateways.interface),
+            player: new PlayerApplicationService(this.repositories.player, this.gateways.event),
+            autoplay: new AutoplayApplicationService(this.repositories.autoplay, this.gateways.date),
+            bar: new BarApplicationService(this.repositories.bar, this.gateways.event, this.gateways.uuid)
+        }
+        this.gateways.event.configureController(new PrimaryClientController(applicationServices))
     }
 
     public addingViewToDom (htmlElement: HTMLElement): Promise<void> {
@@ -55,4 +72,6 @@ export class ProductionClientApplication {
     public changeResolution (resolution:Size): Promise<void> {
         return this.gateways.interface.changeResolution(resolution)
     }
+
+    private applicationStarted: boolean = false
 }

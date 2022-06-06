@@ -1,6 +1,6 @@
 import type { Bar } from '../../../entities/Bar'
 import type { Table } from '../../../tests/Table'
-import type { Direction } from '../../../applicationServices/Direction'
+import type { Direction } from '../../../entities/Direction'
 import type { Stool } from '../../../entities/Stool'
 import type { OccupiedStool } from '../../../applicationServices/BarApplicationService'
 

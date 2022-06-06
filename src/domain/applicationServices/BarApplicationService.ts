@@ -15,7 +15,7 @@ import type { UuidGateway } from '../ports/secondary/gateways/UuidGateway'
 import type { BarRepository } from '../ports/secondary/repositories/BarRepository'
 import type { PhysicalEntity } from '../tests/PhysicalEntity'
 import type { Table } from '../tests/Table'
-import { Direction } from './Direction'
+import { Direction } from '../entities/Direction'
 import { GamePhase } from '../entities/GamePhase'
 import { ChangeGamePhaseEvent } from '../events/changeGamePhase/ChangeGamePhaseEvent'
 import { InstallNewStoolsOnTableEvent } from '../events/installNewStoolsOnTable/InstallNewStoolsOnTableEvent'
@@ -32,6 +32,12 @@ export interface OccupiedStool {
 }
 
 export class BarApplicationService {
+    constructor (
+        private barRepository:BarRepository,
+        private eventGateway:EventGatewaySecondary,
+        private uuidGateway: UuidGateway
+    ) {}
+
     removePlayerFromBarStool (username: string): Promise<void> {
         return this.barRepository.freeBarStool(username)
             .then(() => this.eventGateway.sendEvent(new EraseEvent(username)))
@@ -59,8 +65,12 @@ export class BarApplicationService {
                 uuids.forEach((uuid, index) => { stools[index].id = uuid })
                 return Promise.all(stools.map(stool => this.barRepository.addAvailableBarStool(stool)))
             })
-            .then(results => this.eventGateway.sendEvents(stools.map(stool => new DrawEvent(stool.id, { position: stool.position, spriteType: SpriteType.STOOL, size: stool.size }))))
+            .then(results => this.eventGateway.sendEvents(stools.map(this.drawStoolEvent)))
             .catch(error => Promise.reject(error))
+    }
+
+    private drawStoolEvent (stool: Stool): DrawEvent {
+        return new DrawEvent(stool.id, { position: stool.position, spriteType: SpriteType.STOOL, size: stool.size })
     }
 
     makeBarStools ():Stool[] {
@@ -105,12 +115,6 @@ export class BarApplicationService {
     askForNewTable (): Promise<void> {
         return this.eventGateway.sendEvent(new InstallNewTableEvent())
     }
-
-    constructor (
-        private barRepository:BarRepository,
-        private eventGateway:EventGatewaySecondary,
-        private uuidGateway: UuidGateway
-    ) {}
 
     installPlayerFromBarStoolToTableStool (occupiedStool: OccupiedStool): Promise<void> {
         return this.barRepository.freeBarStool(occupiedStool.username)
@@ -242,17 +246,12 @@ export class BarApplicationService {
                 y: this.precisionRound(entity1.position.y + yOffsetEntity1, 3)
             }
         }
-        for (const entity of entities) {
-            const isOnX = entity1Target.position.x <= entity.position.x + entity.size.width && entity1Target.position.x + entity1Target.size.width >= entity.position.x
-            const isOnY = entity1Target.position.y <= entity.position.y + entity.size.height && entity1Target.position.y + entity1Target.size.height >= entity.position.y
-            // console.log(`${JSON.stringify(entity1Target)} ${JSON.stringify(entities)} ${isOnX} ${isOnY}`)
-            if (isOnY && isOnX) return false
-        }
+        for (const entity of entities)
+            if (this.isOnY(entity1Target, entity) && this.isOnX(entity1Target, entity)) return false
         return true
     }
 
     private installTable (table:Table): Promise<void> {
-        console.log(JSON.stringify(table))
         return this.barRepository.addTable(table)
             .then(() => this.eventGateway.sendEvents([
                 new InstallNewStoolsOnTableEvent(table.id),
@@ -278,11 +277,7 @@ export class BarApplicationService {
 
     installPlayerOnTableStool (username:string): Promise<void> {
         return this.barRepository.nextAvailableTableStool()
-            .then(stool => Promise.all([
-                this.barRepository.setOccupiedTableStool(username, stool),
-                this.eventGateway.sendEvent(new PlayerMoveEvent(username, stool.position))
-            ]))
-            .then(results => Promise.resolve())
+            .then(stool => this.occupyTableStool(stool, username))
             .catch(error => Promise.reject(error))
     }
 
@@ -290,8 +285,17 @@ export class BarApplicationService {
         return this.barRepository.hasAvailableTableStool()
     }
 
-    hasAvailableBarStool () {
+    hasAvailableBarStool ():Promise<boolean> {
         return this.barRepository.hasAvailableBarStool()
+    }
+
+    private isOnY (entity1: PhysicalEntity, entity2: PhysicalEntity) {
+        return entity1.position.y <= entity2.position.y + entity2.size.height &&
+            entity1.position.y + entity1.size.height >= entity2.position.y
+    }
+
+    private isOnX (entity1: PhysicalEntity, entity2: PhysicalEntity) {
+        return entity1.position.x <= entity2.position.x + entity2.size.width && entity1.position.x + entity1.size.width >= entity2.position.x
     }
 
     private readonly stoolRowsPerTables = 2

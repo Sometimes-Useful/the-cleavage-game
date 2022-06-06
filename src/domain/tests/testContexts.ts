@@ -20,6 +20,8 @@ export const player1 = (position?:Position) => new Player({ username: 'Billy', p
 export const player2 = (position?:Position) => new Player({ username: 'Bob', position, size: defaultPlayerSize })
 export const player3 = (position?:Position) => new Player({ username: 'Henry', position, size: defaultPlayerSize })
 export const player4 = (position?:Position) => new Player({ username: 'Stéphanie', position, size: defaultPlayerSize })
+export const playerPositionOnStool1A:Position = { x: -0.1, y: -2.9 }
+export const playerPositionOnStool1B:Position = { x: 0.7, y: -2.9 }
 export const cleavageTitle1 = 'Les mouchoirs en tissu'
 export const cleavageTitle2 = 'Les glaciers de l\'Ile d\'Oléron'
 export const integrationTestMessage = 'Integration Test Message'

@@ -12,8 +12,8 @@
     })
 </script>
 <div class="flex w-full flex-row">
-    <Cleave choiceType="Left" bind:text={cleaveLeftChoice.name} color="Red" cleave = {cleaveLeftChoice.players.length} {totalCleave}/>
+    <Cleave choiceType="Left" bind:text={cleaveLeftChoice.name} cleave = {cleaveLeftChoice.players.length} {totalCleave}/>
     <CleavageInformation {players} {cleaveLeftChoice} {cleaveRightChoice} />
-    <Cleave choiceType="Right" bind:text={cleaveRightChoice.name} color="Blue" cleave = {cleaveRightChoice.players.length} {totalCleave}/>
+    <Cleave choiceType="Right" bind:text={cleaveRightChoice.name} cleave = {cleaveRightChoice.players.length} {totalCleave}/>
 </div>
 

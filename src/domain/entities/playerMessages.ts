@@ -2,10 +2,10 @@ import { applicationMessagePrefix } from './applicationMessagePrefix'
 import { AuthorizedMessage } from './AuthorizedMessage'
 import type { Cleavage } from './Cleavage'
 export const missingTitleMessage = 'Il manque le titre ma gueule!'
-export const dontKnowWhatToDoWithThatMessage = (username: string): string => `I don't know what to do with that ${username}.`
-export const waitForCleavageLaunchMessage = 'Wait for cleavage launch! 👀'
-export const cleavageSuggested = (username:string, cleavageTitle:string): string => `Cleavage '${cleavageTitle}' suggested to streamer.\n You rocks ${username}! 👍`
-export const cleavageAlreadySuggested = 'Cleavage already suggested.'
+export const dontKnowWhatToDoWithThatMessage = (username: string): string => `C'est pas clair ${username}. Penses à faire -h pour obtenir de l'aide.`
+export const waitForCleavageLaunchMessage = 'Attends que le clivage soit lancé! 👀'
+export const cleavageSuggested = (username:string, cleavageTitle:string): string => `Le clivage '${cleavageTitle}' sera proposé au streamer.\n Merci ${username} 👍`
+export const cleavageAlreadySuggested = 'Le clivage a déjà été proposé.'
 export const multipleCleaveOptionsAvailable = (cleavage: Cleavage): string => `C'est pas clair... Voila les choix possibles '${cleavage.leftChoice.name}', '${cleavage.rightChoice.name}'.`
 export const helpMessage:string =
 `Le jeu du clivage!

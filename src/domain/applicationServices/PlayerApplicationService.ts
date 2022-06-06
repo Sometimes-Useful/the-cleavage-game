@@ -10,21 +10,18 @@ import type { PlayerRepository } from '../ports/secondary/repositories/PlayerRep
 import { defaultPlayerSize } from '../tests/testContexts'
 
 export class PlayerApplicationService {
-    playerByUsername (username: string):Promise<Player> {
-        return this.playerRepository.playerByUsername(username)
-    }
-
     constructor (
         private playerRepository:PlayerRepository,
         private eventGateway:EventGatewaySecondary
     ) {}
 
+    playerByUsername (username: string):Promise<Player> {
+        return this.playerRepository.playerByUsername(username)
+    }
+
     updatePosition (username: string, position: Position, size:Size): Promise<void> {
         return this.playerRepository.playerByUsername(username)
-            .then(player => {
-                player.position = position
-                return this.playerRepository.save(player)
-            })
+            .then(player => this.playerRepository.save(new Player({ ...player.toDto(), position })))
             .then(() => this.eventGateway.sendEvent(new DrawEvent(username, { position, size, spriteType: SpriteType.PLAYER })))
             .catch(error => Promise.reject(error))
     }
@@ -43,13 +40,9 @@ export class PlayerApplicationService {
             .catch(error => Promise.reject(error))
     }
 
-    private onNewPlayer (username: string): void | PromiseLike<void> {
-        const player:Player = new Player({
-            username,
-            size: defaultPlayerSize
-        })
-        return this.playerRepository.save(player)
-            .then(() => this.eventGateway.sendEvent(new PlayerJoinBarEvent(player.username)))
+    private onNewPlayer (username: string): Promise<void> {
+        return this.playerRepository.save(new Player({ username, size: defaultPlayerSize }))
+            .then(() => this.eventGateway.sendEvent(new PlayerJoinBarEvent(username)))
             .catch(error => Promise.reject(error))
     }
 }

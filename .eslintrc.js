@@ -1,6 +1,10 @@
 module.exports = {
+    globals: {
+        NodeJS: true
+    },
     env: {
         browser: true,
+        node: true,
         es2021: true
     },
     extends: [

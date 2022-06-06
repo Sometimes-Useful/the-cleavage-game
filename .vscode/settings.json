@@ -8,5 +8,8 @@
     "files.autoSave": "onFocusChange",
     "eslint.validate": [
         "typescript"
-    ]
+    ],
+    "[svelte]": {
+        "editor.defaultFormatter": "svelte.svelte-vscode"
+      },
 }

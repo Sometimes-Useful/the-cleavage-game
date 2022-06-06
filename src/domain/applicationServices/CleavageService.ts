@@ -32,9 +32,7 @@ export class CleavageApplicationService {
     }
 
     saveGlobalCleavage (cleavage: Cleavage): Promise<void> {
-        const currentClevageDto = cleavage.toDto()
-        currentClevageDto.players = []
-        return this.globalCleavageDrawPileGateway.save(new Cleavage(currentClevageDto))
+        return this.globalCleavageDrawPileGateway.save(new Cleavage({ ...cleavage.toDto(), players: [] }))
     }
 
     removePlayerOnCleavage (player:Player):Promise<void> {
@@ -48,14 +46,14 @@ export class CleavageApplicationService {
             .catch(error => Promise.reject(error))
     }
 
-    public addPlayerOnCleavage (player:Player): Promise<void> {
+    /* public addPlayerOnPlayingCleavage (player:Player): Promise<void> {
         return this.loadCurrentCleavage()
             .then(cleavage => {
                 cleavage.players.push(player.username)
                 return this.saveCleavage(cleavage)
             })
             .catch(error => Promise.reject(error))
-    }
+    } */
 
     isPublicCleavageExist (cleavage: Cleavage):Promise<boolean> {
         return this.publicCleavageDrawPileRepository.isCleavageExistByTitle(cleavage)
@@ -84,11 +82,15 @@ export class CleavageApplicationService {
     }
 
     private onCleave (cleavage: Cleavage, event: PlayerCleaveEvent): Promise<void> {
-        if (!cleavage.players.some(player => player === event.username))cleavage.players.push(event.username)
+        if (!this.isPlayerOnCleavage(cleavage, event.username))cleavage.players.push(event.username)
         const playerPreviousCleave = this.previousPlayerCleave(cleavage, event)
         return playerPreviousCleave !== PlayerCleave.NOTHING
             ? this.onPlayerAlreadyCleave(event, playerPreviousCleave, cleavage)
             : this.cleave(event, cleavage)
+    }
+
+    private isPlayerOnCleavage (cleavage: Cleavage, username: string) {
+        return cleavage.players.some(player => player === username)
     }
 
     private previousPlayerCleave (cleavage: Cleavage, event: PlayerCleaveEvent):PlayerCleave {

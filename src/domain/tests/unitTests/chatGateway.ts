@@ -6,6 +6,7 @@ import type { Message } from '../../entities/message'
 import type { MessageForPlayer } from '../../entities/MessageForPlayer'
 import { isGiven } from './unitTests'
 import type { Gherkin } from '../Gherkin'
+import { uniqueOrArrayToArray } from '../../../generic/array'
 
 export const theChatGatewayHasExpectedStatus = (gherkinPrefix: Gherkin, chatStatus: ChatStatus) => (application:FakeClientApplication): Test =>
     it(`${gherkinPrefix} the chat is '${chatStatus}'.`, () => {
@@ -14,7 +15,7 @@ export const theChatGatewayHasExpectedStatus = (gherkinPrefix: Gherkin, chatStat
     })
 
 export const theChatGatewaySendMessageToPlayer = (gherkinPrefix:Gherkin, expectedMessagesForPlayer:MessageForPlayer|MessageForPlayer[]) => (application:FakeClientApplication) : Test => {
-    const messagesForPlayer = Array.isArray(expectedMessagesForPlayer) ? expectedMessagesForPlayer : [expectedMessagesForPlayer]
+    const messagesForPlayer = uniqueOrArrayToArray(expectedMessagesForPlayer)
     return it(`${gherkinPrefix} the chat gateway has messages for player: ${JSON.stringify(messagesForPlayer)}`, () =>
         expect(application.gateways.chat.messagesForPlayer).deep.equal(messagesForPlayer)
     )
@@ -27,7 +28,7 @@ export const theChatGatewaDontSendMessageToPlayer = (gherkinPrefix:Gherkin) => (
 }
 
 export const theChatGatewaySendMessage = (gherkinPrefix:Gherkin, expectedMessages:Message|Message[]) => (application:FakeClientApplication):Test => {
-    const messages = Array.isArray(expectedMessages) ? expectedMessages : [expectedMessages]
+    const messages = uniqueOrArrayToArray(expectedMessages)
     return it(`${gherkinPrefix} the chat gateway has messages : ${JSON.stringify(messages)}`, () =>
         expect(application.gateways.chat.messages).deep.equal(messages)
     )
