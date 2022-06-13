@@ -8,16 +8,16 @@ export const cleavageSuggested = (username:string, cleavageTitle:string): string
 export const cleavageAlreadySuggested = 'Le clivage a déjà été proposé.'
 export const multipleCleaveOptionsAvailable = (cleavage: Cleavage): string => `C'est pas clair... Voila les choix possibles '${cleavage.leftChoice.name}', '${cleavage.rightChoice.name}'.`
 export const helpMessage:string =
-`Le jeu du clivage!
-Un jeu pour tout la famille.
-En tant que joueur tu peux:
-- [ ${applicationMessagePrefix + AuthorizedMessage.HELP} ] Afficher l'aide (tu viens de le faire XD).
-- [ ${applicationMessagePrefix + AuthorizedMessage.SHORT_HELP} ] Afficher l'aide (tu viens de le faire XD).
-- [ ${applicationMessagePrefix + AuthorizedMessage.SUGGEST_CLEAVAGE} {Nom du clivage} ] Proposer un clivage.
-- [ ${applicationMessagePrefix + AuthorizedMessage.LEFT} ] Cliver à Gôche.
-- [ ${applicationMessagePrefix + AuthorizedMessage.RIGHT} ] Cliver à Drouate.
-- [ ${applicationMessagePrefix + AuthorizedMessage.SHORT_APPLAUSE} ] Applaudir.
-- [ ${applicationMessagePrefix + AuthorizedMessage.SHORT_HYPERLIKE} ] Kiffer.
-- [ ${applicationMessagePrefix + AuthorizedMessage.SHORT_SHOOT} ] Huer.
-- [ ${applicationMessagePrefix + AuthorizedMessage.SHORT_WHISTLE} ] Siffler.
-Attention... ça va cliver!`
+`<span class="text-xl text-primary-variant">AIDE</span><br>
+En tant que joueur tu as différentes<br>
+commandes dans le chat:
+<ul class="list-disc">
+<li><span class="font-bold text-primary-variant">${applicationMessagePrefix + AuthorizedMessage.SUGGEST_CLEAVAGE} Nom du clivage</span> Proposer un clivage.</li>
+<li><span class="font-bold text-primary-variant">${applicationMessagePrefix + AuthorizedMessage.LEFT}</span> Cliver à Gôche.</li>
+<li><span class="font-bold text-primary-variant">${applicationMessagePrefix + AuthorizedMessage.RIGHT}</span> Cliver à Drouate.</li>
+<li><span class="font-bold text-primary-variant">${applicationMessagePrefix + AuthorizedMessage.SHORT_APPLAUSE}</span> Applaudir.</li>
+<li><span class="font-bold text-primary-variant">${applicationMessagePrefix + AuthorizedMessage.SHORT_HYPERLIKE}</span> Kiffer.</li>
+<li><span class="font-bold text-primary-variant">${applicationMessagePrefix + AuthorizedMessage.SHORT_SHOOT}</span> Huer.</li>
+<li><span class="font-bold text-primary-variant">${applicationMessagePrefix + AuthorizedMessage.SHORT_WHISTLE}</span> Siffler.</li>
+</ul>
+Attention... ça va cliver.`

@@ -12,6 +12,8 @@ import type { StreamerDto } from '../../../entities/StreamerDto'
 import type { VideoExtract } from '../../../entities/VideoExtract'
 
 export interface InterfaceGateway {
+    helpDisabled(): Promise<void>
+    helpEnabled(helpMessage:string): Promise<void>
     updateStreamerRegistered(isRegistered:boolean): Promise<void>
     updateListOfRegisteredStreamers(streamers: StreamerDto[]): Promise<void>
     updateCleavageDrawpileQuantity(cleavageDrawpileQuantity: number): Promise<void>

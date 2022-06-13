@@ -2,7 +2,6 @@ import { EventType } from '../../events/EventType'
 import type { ApplicationEvent } from '../../events/GameEvent'
 import { eventNotSupported } from '../../messages/messages'
 import { ApplicationStartUseCase } from '../../usecases/ApplicationStartUseCase'
-import { AskForHelpUseCase } from '../../usecases/AskForHelpUseCase'
 import { CancelCleavageUseCase } from '../../usecases/CancelCleavageUseCase'
 import { ChangeGamePhaseUseCase } from '../../usecases/ChangeGamePhaseUseCase'
 import { ChangeMusicVolumeUseCase } from '../../usecases/ChangeMusicVolumeUseCase'
@@ -42,6 +41,8 @@ import type { UseCase } from '../../usecases/UseCase'
 import { VideoExtractStartUseCase } from '../../usecases/VideoExtractStartUseCase'
 import { VideoExtractStopUseCase } from '../../usecases/VideoExtractStopUseCase'
 import type { ClientApplicationServices } from '../ApplicationServices'
+import { HelpDisabledUseCase } from '../../usecases/HelpDisabledUseCase'
+import { HelpEnabledUseCase } from '../../usecases/HelpEnabledUseCase'
 
 export class PrimaryClientController {
     constructor (private applicationServices: ClientApplicationServices) {
@@ -53,7 +54,7 @@ export class PrimaryClientController {
         this.useCases.set(EventType.PLAYER_CLEAVE, new PlayerCleaveUseCase(this.applicationServices))
         this.useCases.set(EventType.DRAW_CLEAVAGE, new DrawCleavageUseCase(this.applicationServices))
         this.useCases.set(EventType.PLAYER_SUGGEST_CLEAVAGE, new SuggestCleavageUseCase(this.applicationServices))
-        this.useCases.set(EventType.PLAYER_ASK_FOR_HELP, new AskForHelpUseCase(this.applicationServices))
+        // this.useCases.set(EventType.PLAYER_ASK_FOR_HELP, new AskForHelpUseCase(this.applicationServices))
         this.useCases.set(EventType.CANCEL_CLEAVAGE, new CancelCleavageUseCase(this.applicationServices))
         this.useCases.set(EventType.PLAYER_APPLAUSE, new PlayerApplauseUseCase(this.applicationServices))
         this.useCases.set(EventType.PLAYER_HYPERLIKE, new PlayerHyperLikeUseCase(this.applicationServices))
@@ -84,6 +85,8 @@ export class PrimaryClientController {
         this.useCases.set(EventType.REGISTER_STREAMER, new RegisterStreamerUseCase(this.applicationServices))
         this.useCases.set(EventType.REFRESH_REGISTERED_STREAMERS, new RefreshRegisteredStreamersUseCase(this.applicationServices))
         this.useCases.set(EventType.CHECK_REGISTERED_STREAMER, new CheckRegisteredStreamerUseCase(this.applicationServices))
+        this.useCases.set(EventType.HELP_ENABLED, new HelpEnabledUseCase(this.applicationServices))
+        this.useCases.set(EventType.HELP_DISABLED, new HelpDisabledUseCase(this.applicationServices))
     }
 
     executeEvent (event: ApplicationEvent): Promise<void> {

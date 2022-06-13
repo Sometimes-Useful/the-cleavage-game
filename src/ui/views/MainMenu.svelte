@@ -17,11 +17,11 @@ import { RefreshCleavageDrawpileQuantityEvent } from "../../domain/events/refres
     <div class="flex flex-col items-center">
         <Title/>
         <Subtitle subtitle="El famoso!
-        Le jeu du clivage où on décide ENFIN si quelque chose est finalement de gauche ou de droite.
-        Un super jeu politique pour fight entre amis ou en famille. Attention, mamie c'est le boss final...
-        Version streamer!
-        Tellement digital! Tellement handspinner! Le plaisir.
-        Parfait pour préparer l'élection présidentielle de 2022 ou quand on s'emmerde..."/>
+        Cette version du jeu permet à un streameur de jouer avec sa communauté.
+        Le streameur va choisir le clivage qui lui plait.
+        Ensuite, lui et sa communauté peuvent cliver au travers du chat.
+        La communauté peut lui proposer de nouveaux clivages également dans le chat.
+        "/>
     </div>
     <div class="flex flex-col items-center">
         <Subtitle subtitle={`Déjà ${$cleavageDrawPileQuantityStore} clivages de dispo!`}/>

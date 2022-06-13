@@ -14,7 +14,7 @@ import { SpriteType } from '../../../domain/entities/SpriteType'
 import type { StreamerDto } from '../../../domain/entities/StreamerDto'
 import type { VideoExtract } from '../../../domain/entities/VideoExtract'
 import type { InterfaceGateway } from '../../../domain/ports/secondary/gateways/InterfaceGateway'
-import { autoplayStore, cleavageDrawPileQuantityStore, currentCleavageStore, gamePhaseStore, interfaceViewStore, musicVolumeStore, listOfRegisteredStreamersStore, soundVolumeStore, videoExtractStore, videoExtractVolumeStore, isStreamerRegisteredStore } from '../../../ui/stores/stores'
+import { autoplayStore, cleavageDrawPileQuantityStore, currentCleavageStore, gamePhaseStore, interfaceViewStore, musicVolumeStore, listOfRegisteredStreamersStore, soundVolumeStore, videoExtractStore, videoExtractVolumeStore, isStreamerRegisteredStore, isHelpEnabledStore } from '../../../ui/stores/stores'
 import { defaultMusicVolumeLevel, defaultSoundVolumeLevel } from './defaultVolumeLevels'
 import { PixiApplicationCommon } from './PixiApplicationCommon'
 
@@ -31,6 +31,16 @@ export class SvelteTonePixiInterfaceGateway extends PixiApplicationCommon implem
         private pixiApplication: Application,
         private textureSources: Map<SpriteType, string>
     ) { super() }
+
+    helpEnabled (helpMessage: string): Promise<void> {
+        isHelpEnabledStore.set(helpMessage)
+        return Promise.resolve()
+    }
+
+    helpDisabled (): Promise<void> {
+        isHelpEnabledStore.set(undefined)
+        return Promise.resolve()
+    }
 
     updateStreamerRegistered (isRegistered: boolean): Promise<void> {
         isStreamerRegisteredStore.set(isRegistered)
@@ -122,7 +132,6 @@ export class SvelteTonePixiInterfaceGateway extends PixiApplicationCommon implem
         pixiEntity.pixiSprite.x = absolutePosition.x
         pixiEntity.pixiSprite.y = absolutePosition.y
         pixiEntity.pixiSprite.zIndex = pixiEntity.spriteType === SpriteType.PLAYER ? 1 : 0
-        if (pixiEntity.spriteType === SpriteType.PLAYER) console.log(pixiEntity.position)
         return Promise.resolve()
     }
 

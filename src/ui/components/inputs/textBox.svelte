@@ -36,7 +36,7 @@ import type { Margin, Width } from "../tailwindClasses";
             focus:border-none
             focus:outline-none
             focus:ring-1 focus:ring-secondary-variant
-            font-sans text-center text-primary-variant placeholder-primary-variant 
+            font-sans text-center text-primary-variant placeholder-primary 
             bg-white bg-opacity-10
         " 
         {id} {name} rows=0 cols=0 required bind:value={inputValue} {placeholder} autocomplete='new-password' 

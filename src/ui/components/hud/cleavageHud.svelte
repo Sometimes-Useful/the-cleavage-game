@@ -7,7 +7,7 @@
 </script>
 <div id={cleavageHudId} class="flex flex-col p-1 w-full items-center">
     {#if $currentCleavageStore}
-        <Title title={$currentCleavageStore.title} rotate={false}/>
+        <Title title={$currentCleavageStore.title}/>
         <CleavageModule cleaveLeftChoice={$currentCleavageStore.leftChoice} cleaveRightChoice={$currentCleavageStore.rightChoice} players={$currentCleavageStore.players.length}/>
     {:else}
         <Title/>
