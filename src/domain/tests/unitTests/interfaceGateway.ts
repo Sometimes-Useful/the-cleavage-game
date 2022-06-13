@@ -157,3 +157,9 @@ export const theInterfaceGatewayDontHaveStreamerRegistered = (gherkinPrefix: Ghe
         if (isGiven(gherkinPrefix)) application.gateways.interface.isStreamerRegistered = false
         expect(application.gateways.interface.isStreamerRegistered).deep.equal(false)
     })
+
+export const theInterfaceGatewayHasHelpIsEnabled = (gherkinPrefix:Gherkin, isHelpEnabled: string|undefined) => (application: FakeClientApplication): Test =>
+    it(`${gherkinPrefix} the interface gateway has help ${isHelpEnabled ? 'enabled' : 'disabled'}.`, () => {
+        if (isGiven(gherkinPrefix)) application.gateways.interface.isHelpEnabled = isHelpEnabled
+        expect(application.gateways.interface.isHelpEnabled).deep.equal(isHelpEnabled)
+    })

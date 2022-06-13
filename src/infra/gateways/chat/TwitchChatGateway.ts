@@ -20,7 +20,7 @@ export class TwitchChatGateway implements ChatGateway {
             ? Promise.reject(new Error(channelUndefinedErrorMessage(message.message)))
             : !this.isClientConnected
                 ? Promise.reject(new Error(twitchClientNotConnectedErrorMessage))
-                : this.sendTmiMessage(this.tmiClient, this.channel, message)
+                : this.sendTmiMessageOnChannel(this.tmiClient, this.channel, message)
     }
 
     connect (username: string, password: string, channel: string): Promise<void> {
@@ -52,10 +52,17 @@ export class TwitchChatGateway implements ChatGateway {
             ? Promise.reject(new Error(channelUndefinedErrorMessage(messageForPlayer.message)))
             : !this.isClientConnected
                 ? Promise.reject(new Error(twitchClientNotConnectedErrorMessage))
-                : this.sendTmiMessage(this.tmiClient, this.channel, messageForPlayer)
+                : this.sendTmiPrivateMessage(this.tmiClient, messageForPlayer)
     }
 
-    private sendTmiMessage (tmiClient:Client, channel:string, message: MessageForPlayer|Message): Promise<void> {
+    private sendTmiPrivateMessage (tmiClient:Client, message: MessageForPlayer): Promise<void> {
+        const messages = message.message.split('\n')
+        return Promise.all(messages.map(privateMessage => tmiClient.whisper(message.username, privateMessage)))
+            .then(results => Promise.resolve())
+            .catch(error => Promise.reject(error))
+    }
+
+    private sendTmiMessageOnChannel (tmiClient:Client, channel:string, message: MessageForPlayer|Message): Promise<void> {
         const messages = message.message.split('\n')
         if (message instanceof MessageForPlayer)
             messages[0] = formatTwitchUserMessage(new MessageForPlayer(message.username, messages[0]))

@@ -5,6 +5,7 @@ import type { InterfaceView } from '../entities/InterfaceView'
 import type { Music } from '../entities/music/Music'
 import type { ApplicationNotification } from '../entities/notification/Notification'
 import { noCleavageAvailableNotification } from '../entities/notification/notifications'
+import { helpMessage } from '../entities/playerMessages'
 import { Sound } from '../entities/sound'
 import { SupportedSound } from '../entities/SoundType'
 import type { StreamerDto } from '../entities/StreamerDto'
@@ -12,6 +13,15 @@ import type { InterfaceGateway } from '../ports/secondary/gateways/InterfaceGate
 
 export class InterfaceApplicationService {
     constructor (private interfaceGateway:InterfaceGateway) {}
+
+    helpDisabled (): Promise<void> {
+        return this.interfaceGateway.helpDisabled()
+    }
+
+    helpEnabled (): Promise<void> {
+        return this.interfaceGateway.helpEnabled(helpMessage)
+    }
+
     updateStreamerRegistered (isStreamerRegistered: boolean): any {
         return this.interfaceGateway.updateStreamerRegistered(isStreamerRegistered)
     }

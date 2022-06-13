@@ -1,4 +1,4 @@
-import express, { json, Response } from 'express'
+import express, { json, NextFunction, Response } from 'express'
 import { BACKEND_API_URL } from '../api/Backend_API_URL'
 import { Cleavage, type CleavageDTO } from '../domain/entities/Cleavage'
 import type { StreamerDto } from '../domain/entities/StreamerDto'
@@ -49,33 +49,21 @@ export class WebServer {
     private loadQueryApis () {
         this.expressInstance.get(BACKEND_API_URL.GLOBAL_CLEAVAGE_DRAWPILE_DRAW, (req, res: Response<CleavageDTO | undefined>, next) => this.serverApplication.queryController.drawGlobalCleavageDrawPile()
             .then(result => res.send(result instanceof Cleavage ? result.toDto() : result))
-            .catch(error => {
-                console.log(error)
-                return next(error)
-            })
+            .catch(error => onError(error, next))
         )
         this.expressInstance.get(BACKEND_API_URL.GLOBAL_CLEAVAGE_DRAWPILE_QUANTITY, (req, res: Response<string>, next) => this.serverApplication.queryController.retrieveCleavageDrawpileQuantity()
             .then(result => res.send(result.toString()))
-            .catch(error => {
-                console.log(error)
-                return next(error)
-            })
+            .catch(error => onError(error, next))
         )
         this.expressInstance.get(`${BACKEND_API_URL.STREAMERS}`, (req, res: Response<StreamerDto[]>, next) =>
             this.serverApplication.queryController.retrieveAllRegisteredStreamers()
                 .then(result => res.send(result))
-                .catch(error => {
-                    console.log(error)
-                    return next(error)
-                })
+                .catch(error => onError(error, next))
         )
         this.expressInstance.get(`${BACKEND_API_URL.STREAMERS}/:username`, (req, res: Response<StreamerDto>, next) =>
             this.serverApplication.queryController.retrieveRegisteredStreamerByUsername(req.params.username)
                 .then(result => res.send(result))
-                .catch(error => {
-                    console.log(error)
-                    return next(error)
-                })
+                .catch(error => onError(error, next))
         )
     }
 
@@ -91,4 +79,8 @@ export class WebServer {
 
     private expressInstance = express();
     private webServer: Server | undefined = undefined;
+}
+function onError (error: Error, next:NextFunction) {
+    console.log(error)
+    return next(error)
 }

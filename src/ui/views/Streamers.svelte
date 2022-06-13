@@ -9,14 +9,11 @@
     import Title from "../components/text/title.svelte";
     import { applicationEventStore,listOfRegisteredStreamersStore } from "../stores/stores";
     onMount(()=>applicationEventStore.set(new RefreshRegisteredStreamersEvent()))
-    const getArrChunks = (list:StreamerDto[], maxPerRow:number) => {
-        let ret:StreamerDto[][] = [];
-        let max = Math.floor(list.length / maxPerRow);
-        if ((list.length % maxPerRow) > 0) max++;
-        for (let i = list.length - maxPerRow; i > -maxPerRow; i -= maxPerRow) {
-            ret[(max--)-1] = list.splice(i, maxPerRow);
-        }
-        return ret;
+    const getArrChunks = (streamers:StreamerDto[], maxPerRow:number) => {
+        const chunked:StreamerDto[][] = [];
+        let i = 0
+        while(i<streamers.length) chunked.push(streamers.slice(i,i +=maxPerRow))
+        return chunked;
     };
     const maxStreamersPerRow = 5
 </script>
@@ -27,12 +24,11 @@
     </div>
     <div class="flex flex-col w-full items-center">
         {#each getArrChunks($listOfRegisteredStreamersStore,maxStreamersPerRow) as rowOfStreamers}
-            <div class="flex flex-row w-full justify-evenly">
+            <div class="flex flex-row w-3/4 justify-between">
                 {#each rowOfStreamers as streamer}
-                    <div class="text-primary">{streamer.username}</div>
+                    <div class="text-primary text-center p-2 m-2 w-1/5 bg-white rounded-xl bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-10 border border-white border-opacity-20 drop-shadow">{streamer.username}</div>
                 {/each}
             </div>
-            
         {/each}
     </div>
     <div class="flex flex-col w-full  items-center">

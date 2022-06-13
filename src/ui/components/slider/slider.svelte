@@ -7,8 +7,8 @@
     export let onInput:svelte.JSX.FormEventHandler<HTMLInputElement>
     export let value:number
 </script>
-<div class="flex flex-col w-full items-center p-3">
-  <label for={id} class="form-label text-primary font-sans mb-2">{text} - {value}</label>
+<div class="flex flex-row w-full items-center justify-between">
+  <label for={id} class="form-label text-primary align-middle font-sans">{text} - {@html `<span class="font-bold text-primary-variant">${value}</span>`}</label>
   <input
     type="range" 
     class="

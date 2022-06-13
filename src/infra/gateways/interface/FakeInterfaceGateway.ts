@@ -10,6 +10,16 @@ import type { VideoExtract } from '../../../domain/entities/VideoExtract'
 import type { StreamerDto } from '../../../domain/entities/StreamerDto'
 
 export class FakeInterfaceGateway implements InterfaceGateway {
+    helpDisabled (): Promise<void> {
+        this.isHelpEnabled = undefined
+        return Promise.resolve()
+    }
+
+    helpEnabled (helpMessage:string): Promise<void> {
+        this.isHelpEnabled = helpMessage
+        return Promise.resolve()
+    }
+
     updateStreamerRegistered (isRegistered: boolean): Promise<void> {
         this.isStreamerRegistered = isRegistered
         return Promise.resolve()
@@ -125,4 +135,5 @@ export class FakeInterfaceGateway implements InterfaceGateway {
     cleavageDrawpileQuantity: number = 0
     registeredStreamers: StreamerDto[] = []
     isStreamerRegistered: boolean = false
+    isHelpEnabled: string|undefined = undefined
 }
