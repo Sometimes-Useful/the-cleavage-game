@@ -3,13 +3,13 @@ import { GlobalStreamersApplicationService } from '../../../domain/applicationSe
 import type { ServerApplicationServices } from '../../../domain/ports/ApplicationServices'
 import { PrimaryServerCommandController } from '../../../domain/ports/primary/PrimaryServerController'
 import { PrimaryServerQueryController } from '../../../domain/ports/primary/PrimaryServerQueryController'
-import type { ProductionServerApplicationGateways } from '../../../domain/ports/secondary/gateways/ApplicationGateways'
-import type { ProductionServerApplicationRepositories } from '../../../domain/ports/secondary/repositories/ApplicationRepositories'
+import type { ServerApplicationGateways } from '../../../domain/ports/secondary/gateways/ApplicationGateways'
+import type { ServerApplicationRepositories } from '../../../domain/ports/secondary/repositories/ApplicationRepositories'
 
 export class ProductionServerApplication {
     constructor (
-        public gateways:ProductionServerApplicationGateways,
-        public repositories:ProductionServerApplicationRepositories
+        public gateways:ServerApplicationGateways,
+        public repositories:ServerApplicationRepositories
 
     ) {
         const applicationService:ServerApplicationServices = {

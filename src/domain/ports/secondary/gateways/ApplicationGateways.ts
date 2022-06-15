@@ -55,7 +55,8 @@ export interface ProductionClientApplicationGateways extends ClientApplicationGa
 }
 
 export interface ServerApplicationGateways {
-
+    event: InMemoryProductionServerEventGateway
+    random: RandomGateway
 }
 export interface FakeServerApplicationGateways extends ServerApplicationGateways {
     event: FakeServerEventGateway

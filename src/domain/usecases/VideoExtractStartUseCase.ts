@@ -20,10 +20,10 @@ export class VideoExtractStartUseCase extends UseCase {
     constructor (private applicationServices:VideoExtractStartUseCaseApplicationServices) { super() }
     execute (event: VideoExtractStartEvent): Promise<void> {
         return this.applicationServices.cleavage.hasCurrentCleavage()
-            .then(hasCleavage => hasCleavage ? this.onCleavage() : this.withoutCleavage())
+            .then(hasCleavage => hasCleavage ? this.onCleavage(event) : this.withoutCleavage())
     }
 
-    private onCleavage (): Promise<void> {
+    private onCleavage (event:VideoExtractStartEvent): Promise<void> {
         return this.applicationServices.cleavage.loadCurrentCleavage()
             .then(cleavage => Promise.all([
                 this.applicationServices.autoplay.hasAutoplay(),
@@ -31,14 +31,14 @@ export class VideoExtractStartUseCase extends UseCase {
                 cleavage
             ]))
             .then(([isAutoplay, hasVideoExtract, cleavage]) => hasVideoExtract
-                ? this.onVideoExtract(cleavage, isAutoplay, hasVideoExtract)
+                ? this.onVideoExtract(cleavage, isAutoplay, hasVideoExtract, event)
                 : this.sendNextEvents(isAutoplay, hasVideoExtract)
             )
             .catch(error => Promise.reject(error))
     }
 
-    private onVideoExtract (cleavage: Cleavage, isAutoplay: boolean, hasVideoExtract:boolean): Promise<void> {
-        return this.applicationServices.videoExtract.applyVideoExtractOnInterface(cleavage)
+    private onVideoExtract (cleavage: Cleavage, isAutoplay: boolean, hasVideoExtract:boolean, event:VideoExtractStartEvent): Promise<void> {
+        return this.applicationServices.videoExtract.applyVideoExtractOnInterface(cleavage, event.properties.fullRandom)
             .then(() => this.sendNextEvents(isAutoplay, hasVideoExtract))
             .catch(error => Promise.reject(error))
     }

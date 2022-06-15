@@ -8,6 +8,7 @@ import { theAutoPlayRepositoryDontHaveNextCleavageDate, theAutoPlayRepositoryHas
 import { theCurrentCleavageRepositoryHasCleavage } from '../../tests/unitTests/cleavageRepository'
 import { theEventIsSent, whenEventOccurs } from '../../tests/unitTests/eventGateway'
 import { theInterfaceGatewayHasCurrentMusicMuted, theInterfaceGatewayHasCurrentMusicNotMuted, theInterfaceGatewayHasCurrentVideo, theInterfaceGatewayHasNoCurrentVideo } from '../../tests/unitTests/interfaceGateway'
+import { theRandomGatewayHasNextRandomNumber } from '../../tests/unitTests/randomGateway'
 import { theVideoExtractRepositoryHasExtracts, theVideoExtractRepositoryHasNoExtracts } from '../../tests/unitTests/videoExtractRepository'
 import { ChangeGamePhaseEvent } from '../changeGamePhase/ChangeGamePhaseEvent'
 import { DrawCleavageEvent } from '../drawCleavage/DrawCleavageEvent'
@@ -19,7 +20,7 @@ feature(EventType.VIDEO_EXTRACT_START, [
         theAutoPlayRepositoryDontHaveNextCleavageDate(Gherkin.GIVEN),
         theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, new Cleavage({ title: 'Billy', leftChoice: { name: 'Oui', players: [player1().username] }, rightChoice: { name: 'Non', players: [] }, players: [player1().username] })),
         theVideoExtractRepositoryHasNoExtracts(Gherkin.AND_GIVEN),
-        whenEventOccurs(new VideoExtractStartEvent()),
+        whenEventOccurs(new VideoExtractStartEvent({ fullRandom: false })),
         theEventIsSent(Gherkin.THEN, new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE)),
         theInterfaceGatewayHasNoCurrentVideo(Gherkin.AND_THEN)
     ]),
@@ -27,7 +28,7 @@ feature(EventType.VIDEO_EXTRACT_START, [
         theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_GIVEN, new Date()),
         theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, new Cleavage({ title: 'Billy', leftChoice: { name: 'Oui', players: [player1().username] }, rightChoice: { name: 'Non', players: [] }, players: [player1().username] })),
         theVideoExtractRepositoryHasNoExtracts(Gherkin.AND_GIVEN),
-        whenEventOccurs(new VideoExtractStartEvent()),
+        whenEventOccurs(new VideoExtractStartEvent({ fullRandom: false })),
         theEventIsSent(Gherkin.THEN, [
             new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE),
             new DrawCleavageEvent()
@@ -38,7 +39,7 @@ feature(EventType.VIDEO_EXTRACT_START, [
         theAutoPlayRepositoryDontHaveNextCleavageDate(Gherkin.GIVEN),
         theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, new Cleavage({ title: 'Billy', leftChoice: { name: 'Oui', players: [player1().username] }, rightChoice: { name: 'Non', players: [] }, players: [player1().username] })),
         theVideoExtractRepositoryHasExtracts(Gherkin.AND_GIVEN, [oui100VideoExtract, non100VideoExtract]),
-        whenEventOccurs(new VideoExtractStartEvent()),
+        whenEventOccurs(new VideoExtractStartEvent({ fullRandom: false })),
         theEventIsSent(Gherkin.THEN, new ChangeGamePhaseEvent(GamePhase.PLAY_VIDEO)),
         theInterfaceGatewayHasCurrentVideo(Gherkin.AND_THEN, oui100VideoExtract)
     ]),
@@ -46,7 +47,7 @@ feature(EventType.VIDEO_EXTRACT_START, [
         theAutoPlayRepositoryDontHaveNextCleavageDate(Gherkin.GIVEN),
         theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, new Cleavage({ title: 'Billy', leftChoice: { name: 'Oui', players: [] }, rightChoice: { name: 'Non', players: [player1().username] }, players: [player1().username] })),
         theVideoExtractRepositoryHasExtracts(Gherkin.AND_GIVEN, [oui100VideoExtract, non100VideoExtract]),
-        whenEventOccurs(new VideoExtractStartEvent()),
+        whenEventOccurs(new VideoExtractStartEvent({ fullRandom: false })),
         theEventIsSent(Gherkin.THEN, new ChangeGamePhaseEvent(GamePhase.PLAY_VIDEO)),
         theInterfaceGatewayHasCurrentVideo(Gherkin.AND_THEN, non100VideoExtract)
     ]),
@@ -54,7 +55,7 @@ feature(EventType.VIDEO_EXTRACT_START, [
         theAutoPlayRepositoryDontHaveNextCleavageDate(Gherkin.GIVEN),
         theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, new Cleavage({ title: 'Billy', leftChoice: { name: 'Oui', players: [player1().username, player2().username, player3().username] }, rightChoice: { name: 'Non', players: [player4().username] }, players: [player1().username, player2().username, player3().username, player4().username] })),
         theVideoExtractRepositoryHasExtracts(Gherkin.AND_GIVEN, [oui100VideoExtract, oui60VideoExtract, non100VideoExtract]),
-        whenEventOccurs(new VideoExtractStartEvent()),
+        whenEventOccurs(new VideoExtractStartEvent({ fullRandom: false })),
         theEventIsSent(Gherkin.THEN, new ChangeGamePhaseEvent(GamePhase.PLAY_VIDEO)),
         theInterfaceGatewayHasCurrentVideo(Gherkin.AND_THEN, oui60VideoExtract)
     ]),
@@ -62,7 +63,7 @@ feature(EventType.VIDEO_EXTRACT_START, [
         theAutoPlayRepositoryDontHaveNextCleavageDate(Gherkin.GIVEN),
         theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, new Cleavage({ title: 'Billy', leftChoice: { name: 'Oui', players: [player1().username, player2().username] }, rightChoice: { name: 'Non', players: [player3().username, player4().username] }, players: [player1().username, player2().username, player3().username, player4().username] })),
         theVideoExtractRepositoryHasExtracts(Gherkin.AND_GIVEN, [oui100VideoExtract, oui60VideoExtract, non100VideoExtract, egalite50VideoExtract, egalite50VideoExtract2]),
-        whenEventOccurs(new VideoExtractStartEvent()),
+        whenEventOccurs(new VideoExtractStartEvent({ fullRandom: false })),
         theEventIsSent(Gherkin.THEN, new ChangeGamePhaseEvent(GamePhase.PLAY_VIDEO)),
         theInterfaceGatewayHasCurrentVideo(Gherkin.AND_THEN, egalite50VideoExtract)
     ]),
@@ -70,7 +71,7 @@ feature(EventType.VIDEO_EXTRACT_START, [
         theAutoPlayRepositoryDontHaveNextCleavageDate(Gherkin.GIVEN),
         theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, new Cleavage({ title: 'Billy', leftChoice: { name: 'Oui', players: [player1().username, player2().username] }, rightChoice: { name: 'Non', players: [player3().username, player4().username] }, players: [player1().username, player2().username, player3().username, player4().username] })),
         theVideoExtractRepositoryHasExtracts(Gherkin.AND_GIVEN, [oui100VideoExtract, oui60VideoExtract, non100VideoExtract, egalite50VideoExtract2, egalite50VideoExtract]),
-        whenEventOccurs(new VideoExtractStartEvent()),
+        whenEventOccurs(new VideoExtractStartEvent({ fullRandom: false })),
         theEventIsSent(Gherkin.THEN, new ChangeGamePhaseEvent(GamePhase.PLAY_VIDEO)),
         theInterfaceGatewayHasCurrentVideo(Gherkin.AND_THEN, egalite50VideoExtract2)
     ]),
@@ -78,7 +79,7 @@ feature(EventType.VIDEO_EXTRACT_START, [
         theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_GIVEN, new Date()),
         theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, new Cleavage({ title: 'Billy', leftChoice: { name: 'Oui', players: [player1().username] }, rightChoice: { name: 'Non', players: [] }, players: [player1().username] })),
         theVideoExtractRepositoryHasExtracts(Gherkin.AND_GIVEN, [oui100VideoExtract]),
-        whenEventOccurs(new VideoExtractStartEvent()),
+        whenEventOccurs(new VideoExtractStartEvent({ fullRandom: false })),
         theEventIsSent(Gherkin.THEN, [
             new ChangeGamePhaseEvent(GamePhase.PLAY_VIDEO)
         ]),
@@ -88,7 +89,7 @@ feature(EventType.VIDEO_EXTRACT_START, [
         theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, new Cleavage({ title: 'Billy', leftChoice: { name: 'Oui', players: [player1().username] }, rightChoice: { name: 'Non', players: [] }, players: [player1().username] })),
         theVideoExtractRepositoryHasExtracts(Gherkin.AND_GIVEN, [oui100VideoExtract]),
         theInterfaceGatewayHasCurrentMusicNotMuted(Gherkin.AND_GIVEN),
-        whenEventOccurs(new VideoExtractStartEvent()),
+        whenEventOccurs(new VideoExtractStartEvent({ fullRandom: false })),
         theEventIsSent(Gherkin.THEN, [
             new ChangeGamePhaseEvent(GamePhase.PLAY_VIDEO)
         ]),
@@ -104,8 +105,34 @@ feature(EventType.VIDEO_EXTRACT_START, [
             { choice: 'Gôche', percentage: 80, youtubeVideoId: 'BJFPfTNwILo', startExtractSeconds: 68.2, endExtractSeconds: 79.8 },
             { choice: 'Gôche', percentage: 55, youtubeVideoId: 'Fi1RkSesW-g', startExtractSeconds: 45.3, endExtractSeconds: 58.8 }
         ]),
-        whenEventOccurs(new VideoExtractStartEvent()),
+        whenEventOccurs(new VideoExtractStartEvent({ fullRandom: false })),
         theEventIsSent(Gherkin.THEN, new ChangeGamePhaseEvent(GamePhase.PLAY_VIDEO)),
         theInterfaceGatewayHasCurrentVideo(Gherkin.AND_THEN, { choice: 'Gôche', percentage: 100, youtubeVideoId: '6Q5-qVUMqfQ' })
+    ]),
+    clientScenario('Scenario 8 : Full random video extract 1', [
+        theVideoExtractRepositoryHasExtracts(Gherkin.GIVEN, [
+            { choice: 'Gôche', percentage: 100, youtubeVideoId: '6Q5-qVUMqfQ' },
+            { choice: 'Gôche', percentage: 90, youtubeVideoId: 'zRunanIYOp4', startExtractSeconds: 0, endExtractSeconds: 8 },
+            { choice: 'Gôche', percentage: 80, youtubeVideoId: 'BJFPfTNwILo', startExtractSeconds: 68.2, endExtractSeconds: 79.8 },
+            { choice: 'Gôche', percentage: 55, youtubeVideoId: 'Fi1RkSesW-g', startExtractSeconds: 45.3, endExtractSeconds: 58.8 }
+        ]),
+        theRandomGatewayHasNextRandomNumber(Gherkin.GIVEN, 3),
+        theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, new Cleavage({ title: 'Billy', leftChoice: { name: 'Gôche', players: [player1().username] }, rightChoice: { name: 'Non', players: [] }, players: [player1().username, player2().username, player3().username] })),
+        whenEventOccurs(new VideoExtractStartEvent({ fullRandom: true })),
+        theEventIsSent(Gherkin.THEN, new ChangeGamePhaseEvent(GamePhase.PLAY_VIDEO)),
+        theInterfaceGatewayHasCurrentVideo(Gherkin.AND_THEN, { choice: 'Gôche', percentage: 80, youtubeVideoId: 'BJFPfTNwILo', startExtractSeconds: 68.2, endExtractSeconds: 79.8 })
+    ]),
+    clientScenario('Scenario 9 : Full random video extract 2', [
+        theVideoExtractRepositoryHasExtracts(Gherkin.GIVEN, [
+            { choice: 'Gôche', percentage: 100, youtubeVideoId: '6Q5-qVUMqfQ' },
+            { choice: 'Gôche', percentage: 90, youtubeVideoId: 'zRunanIYOp4', startExtractSeconds: 0, endExtractSeconds: 8 },
+            { choice: 'Gôche', percentage: 80, youtubeVideoId: 'BJFPfTNwILo', startExtractSeconds: 68.2, endExtractSeconds: 79.8 },
+            { choice: 'Gôche', percentage: 55, youtubeVideoId: 'Fi1RkSesW-g', startExtractSeconds: 45.3, endExtractSeconds: 58.8 }
+        ]),
+        theRandomGatewayHasNextRandomNumber(Gherkin.GIVEN, 4),
+        theCurrentCleavageRepositoryHasCleavage(Gherkin.AND_GIVEN, new Cleavage({ title: 'Billy', leftChoice: { name: 'Gôche', players: [player1().username] }, rightChoice: { name: 'Non', players: [] }, players: [player1().username, player2().username, player3().username] })),
+        whenEventOccurs(new VideoExtractStartEvent({ fullRandom: true })),
+        theEventIsSent(Gherkin.THEN, new ChangeGamePhaseEvent(GamePhase.PLAY_VIDEO)),
+        theInterfaceGatewayHasCurrentVideo(Gherkin.AND_THEN, { choice: 'Gôche', percentage: 55, youtubeVideoId: 'Fi1RkSesW-g', startExtractSeconds: 45.3, endExtractSeconds: 58.8 })
     ])
 ])

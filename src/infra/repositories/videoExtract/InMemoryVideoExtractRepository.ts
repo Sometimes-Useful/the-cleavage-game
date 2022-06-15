@@ -2,6 +2,10 @@ import type { VideoExtract } from '../../../domain/entities/VideoExtract'
 import type { VideoExtractRepository } from '../../../domain/ports/secondary/repositories/VideoExtractRepository'
 
 export class InMemoryVideoExtractRepository implements VideoExtractRepository {
+    retreiveAllExtracts (): Promise<VideoExtract[]> {
+        return Promise.resolve(this.videoExtracts)
+    }
+
     retreiveEqualityVideoExtracts (): Promise<VideoExtract[]> {
         return Promise.resolve(this.videoExtracts.filter(videoExtract => videoExtract.choice === this.equalityVideoChoice))
     }

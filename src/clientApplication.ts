@@ -119,7 +119,6 @@ const videoExtracts:VideoExtract[] = [
     { choice: 'Gentille', percentage: 100, youtubeVideoId: 'dfgdfgdf' },
     { choice: 'Méchante', percentage: 100, youtubeVideoId: 'dfgdf' },
     { choice: 'equality', percentage: 100, youtubeVideoId: 'dfgdfgdfg' } */
-
 ]
 
 const videoExtractRepository = new InMemoryVideoExtractRepository()

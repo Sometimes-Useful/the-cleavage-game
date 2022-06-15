@@ -1,5 +1,7 @@
 
 import type { InterfaceApplicationService } from '../applicationServices/InterfaceApplicationService'
+import { Sound } from '../entities/sound'
+import { SupportedSound } from '../entities/SoundType'
 import type { ApplicationEvent } from '../events/GameEvent'
 import { UseCase } from './UseCase'
 
@@ -13,5 +15,7 @@ export class HelpEnabledUseCase extends UseCase {
 
     execute (event: ApplicationEvent): Promise<void> {
         return this.applicationServices.interface.helpEnabled()
+            .then(() => this.applicationServices.interface.playSound(new Sound(SupportedSound.TICK)))
+            .catch(error => Promise.reject(error))
     }
 }
