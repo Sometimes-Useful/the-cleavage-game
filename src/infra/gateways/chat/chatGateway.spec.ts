@@ -44,13 +44,13 @@ describe('Integration Test - Chat Gateway', () => {
                 it('When connect occurs.', () => environnement.adapter.connect(environnement.username, environnement.token, environnement.channel))
                 it('Then the adapter is connected.', () => environnement.adapter.isConnected().then(isConnected => expect(isConnected).to.be.true))
             })
-            describe('Send Message to player', () => {
+            describe('Send Message', () => {
                 const messageForPlayer = new MessageForPlayer(player1().username, integrationTestMessage)
                 it('Given the adapter is connected.', () => environnement.adapter.isConnected().then(isConnected => { expect(isConnected).to.be.true }))
-                it('When sendMessageToPlayer occurs.', () => environnement.adapter.sendMessageToPlayer(messageForPlayer)).timeout(2000)
+                it('When sendMessage occurs.', () => environnement.adapter.sendMessage(messageForPlayer)).timeout(2000)
                 it('Then the chat has the message.', (done) => {
                     if (environnement.adapter instanceof FakeChatGateway) {
-                        expect(environnement.adapter.messagesForPlayer).deep.equal([messageForPlayer])
+                        expect(environnement.adapter.messages).deep.equal([messageForPlayer])
                         done()
                     }
                     if (environnement.adapter instanceof TwitchChatGateway)

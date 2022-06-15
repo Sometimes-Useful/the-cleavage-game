@@ -17,8 +17,8 @@ const gcpDatastore = new GcpDatastore({
     gcpPrivateKey: gcpPrivateKey,
     gcpKindPrefix: ''
 })
-const repositories: ProductionServerApplicationRepositories = {
+export const productionRepositories: ProductionServerApplicationRepositories = {
     globalRegisteredStreamers: new GcpGlobalRegisteredStreamersRepository(gcpDatastore),
     globalCleavageDrawPileRepository: new GcpGlobalCleavageDrawPileRepository(gcpDatastore)
 }
-export const serverApplication = new ProductionServerApplication(gateways, repositories)
+export const serverApplication = new ProductionServerApplication(gateways, productionRepositories)
