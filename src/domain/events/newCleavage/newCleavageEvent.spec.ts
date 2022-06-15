@@ -31,7 +31,7 @@ feature(EventType.NEW_CLEAVAGE, [
         theInterfaceGatewayHasCurrentCleavage(Gherkin.AND_GIVEN, new Cleavage({ title: cleavageTitle1, leftChoice: { name: 'Gôche', players: [] }, rightChoice: { name: 'Drouate', players: [] }, players: [] })),
         theChatGatewayHasExpectedStatus(Gherkin.AND_GIVEN, ChatStatus.CONNECTED),
         whenEventOccurs(new NewCleavageEvent()),
-        theEventIsSent(Gherkin.THEN, new VideoExtractStartEvent()),
+        theEventIsSent(Gherkin.THEN, new VideoExtractStartEvent({ fullRandom: true })),
         theInterfaceGatewayHasCurrentView(Gherkin.AND_THEN, InterfaceView.GAME),
         theInterfaceGatewayDontHaveCleavage(Gherkin.AND_THEN)
     ]),
@@ -40,14 +40,14 @@ feature(EventType.NEW_CLEAVAGE, [
         theInterfaceGatewayHasCurrentView(Gherkin.AND_GIVEN, InterfaceView.GAME),
         theAutoPlayRepositoryHasNextCleavageDate(Gherkin.AND_GIVEN, new Date()),
         whenEventOccurs(new NewCleavageEvent()),
-        theEventIsSent(Gherkin.THEN, new VideoExtractStartEvent())
+        theEventIsSent(Gherkin.THEN, new VideoExtractStartEvent({ fullRandom: true }))
     ]),
     clientScenario('Scenario 4 : on autoplay disabled.', [
         theChatGatewayHasExpectedStatus(Gherkin.GIVEN, ChatStatus.CONNECTED),
         theInterfaceGatewayHasCurrentView(Gherkin.AND_GIVEN, InterfaceView.GAME),
         theAutoPlayRepositoryDontHaveNextCleavageDate(Gherkin.AND_GIVEN),
         whenEventOccurs(new NewCleavageEvent()),
-        theEventIsSent(Gherkin.THEN, new VideoExtractStartEvent())
+        theEventIsSent(Gherkin.THEN, new VideoExtractStartEvent({ fullRandom: true }))
     ]),
     clientScenario('Scenario 5 : BUG no view change when main menu', [
         theChatGatewayHasExpectedStatus(Gherkin.GIVEN, ChatStatus.CONNECTED),

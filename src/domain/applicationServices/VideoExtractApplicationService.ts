@@ -21,11 +21,27 @@ export class VideoExtractApplicationService {
             .catch(error => Promise.reject(error))
     }
 
-    applyVideoExtractOnInterface (cleavage:Cleavage):Promise<void> {
+    applyVideoExtractOnInterface (cleavage:Cleavage, fullRandom:boolean):Promise<void> {
+        if (fullRandom) return this.onFullRandom()
         const majorChoice = cleavage.majorChoice()
         return majorChoice
             ? this.onMajorChoice(majorChoice, cleavage)
             : this.onNoMajorChoice()
+    }
+
+    private onFullRandom (): Promise<void> {
+        return this.videoExtractRepository.retreiveAllExtracts()
+            .then(extracts => Promise.all([
+                extracts,
+                this.randomGateway.randomIntegerOnRange(1, extracts.length)
+            ]))
+            .then(([extracts, randomChoice]) => {
+                const index = randomChoice - 1
+                const extract = extracts.at(index)
+                return extract
+                    ? this.playVideo(extract)
+                    : Promise.reject(new Error(noVideoAtIndex(index)))
+            })
     }
 
     private onMajorChoice (majorChoice: string, cleavage:Cleavage): Promise<void> {
@@ -54,10 +70,11 @@ export class VideoExtractApplicationService {
                 this.randomGateway.randomIntegerOnRange(1, videoExtracts.length)
             ]))
             .then(([videoExtracts, randomVideoNumber]) => {
-                const videoExtract = videoExtracts.at(randomVideoNumber - 1)
+                const index = randomVideoNumber - 1
+                const videoExtract = videoExtracts.at(index)
                 return videoExtract
                     ? this.playVideo(videoExtract)
-                    : Promise.reject(new Error(`There is no video extract at index ${randomVideoNumber - 1}.`))
+                    : Promise.reject(new Error(noVideoAtIndex(index)))
             })
             .catch(error => Promise.reject(error))
     }
@@ -68,3 +85,4 @@ export class VideoExtractApplicationService {
             : this.videoExtractRepository.hasEqualityVideoExtract()
     }
 }
+const noVideoAtIndex = (index: number): string => `There is no video extract at index ${index}.`

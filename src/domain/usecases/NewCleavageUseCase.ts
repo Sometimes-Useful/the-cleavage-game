@@ -37,7 +37,7 @@ export class NewCleavageUseCase extends UseCase {
                 this.applicationServices.cleavage.retrieveCurrentGamePhase()
             ]))
             .then(([currentView, currentGamePhase]) => this.applicationServices.event.sentEvents([
-                ...currentGamePhase === GamePhase.NEW_CLEAVAGE ? [] : currentView !== InterfaceView.GAME ? [new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE)] : [new VideoExtractStartEvent()],
+                ...currentGamePhase === GamePhase.NEW_CLEAVAGE ? [] : currentView !== InterfaceView.GAME ? [new ChangeGamePhaseEvent(GamePhase.NEW_CLEAVAGE)] : [new VideoExtractStartEvent({ fullRandom: true })],
                 ...currentView !== InterfaceView.GAME ? [new NavigateEvent(InterfaceView.GAME)] : []
             ]))
             .catch(error => Promise.reject(error))
