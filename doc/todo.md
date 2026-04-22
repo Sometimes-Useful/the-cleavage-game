@@ -4,3 +4,7 @@
 - clivages Choix multiples
 - Options
     - Mapping commandes chat twitch
+- Le jeu du clivage en fonction des députés:
+    - représentation hémicicle
+    - 
+- Le jeu du clivage statistiques INSEE

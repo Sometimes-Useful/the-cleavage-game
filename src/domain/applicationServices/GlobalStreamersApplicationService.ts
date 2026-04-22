@@ -11,14 +11,14 @@ export class GlobalStreamersApplicationService {
         return this.registeredStreamersRepository.isExistByUsername(username)
             .then(isStreamerExistByUsername => isStreamerExistByUsername
                 ? this.registeredStreamersRepository.retrieveByUsername(username)
-                : Promise.resolve(undefined)
+                : undefined
             )
     }
 
     registerStreamer (streamer:StreamerDto): Promise<void> {
         return this.registeredStreamersRepository.isExistByUsername(streamer.username)
             .then(isStreamerExistByUsername => isStreamerExistByUsername
-                ? Promise.resolve()
+                ? undefined
                 : this.registeredStreamersRepository.save(streamer)
             )
     }

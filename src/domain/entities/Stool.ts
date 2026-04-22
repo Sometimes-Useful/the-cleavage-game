@@ -1,3 +1,3 @@
-import type { PhysicalEntity } from '../tests/PhysicalEntity'
+import type { PhysicalEntity } from './PhysicalEntity'
 
 export interface Stool extends PhysicalEntity {}

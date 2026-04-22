@@ -13,7 +13,7 @@ import { TableStoolAvailableEvent } from '../events/tableStoolAvailable/TableSto
 import type { EventGatewaySecondary } from '../ports/secondary/gateways/EventGatewaySecondary'
 import type { UuidGateway } from '../ports/secondary/gateways/UuidGateway'
 import type { BarRepository } from '../ports/secondary/repositories/BarRepository'
-import type { PhysicalEntity } from '../tests/PhysicalEntity'
+import type { PhysicalEntity } from '../entities/PhysicalEntity'
 import type { Table } from '../tests/Table'
 import { Direction } from '../entities/Direction'
 import { GamePhase } from '../entities/GamePhase'
